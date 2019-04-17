@@ -105,5 +105,3 @@ CREATE TABLE If not exists user_access(
     REFERENCES term_classes(term_class_id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT);
-
---this is a test
