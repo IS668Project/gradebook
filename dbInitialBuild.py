@@ -134,19 +134,19 @@ def createInitialData():
             assignments(term_class_id=dbtest.getFkValue(term_classes,
                                                         term_classes.subsection,
                                                         '001'),
-                        max_points=25, description='Discussions'),
+                        name='Discussion', max_points=25, description='Discussions'),
             assignments(term_class_id=dbtest.getFkValue(term_classes,
                                                         term_classes.subsection,
                                                         '001'),
-                        max_points=25, description='Midterm'),
+                        name='Midterm', max_points=25, description='Midterm'),
             assignments(term_class_id=dbtest.getFkValue(term_classes,
                                                         term_classes.subsection,
                                                         '001'),
-                        max_points=25, description='Project'),
+                        name='Project', max_points=25, description='Project'),
             assignments(term_class_id=dbtest.getFkValue(term_classes,
                                                         term_classes.subsection,
                                                         '001'),
-                        max_points=25, description='Final')])
+                        name='Final', max_points=25, description='Final')])
         dbtest.session.commit()
         dbtest.session.add_all([
             user_access(user_id=dbtest.getFkValue(users, users.first_name, 'John'),

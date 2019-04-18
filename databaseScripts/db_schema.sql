@@ -1,3 +1,17 @@
+-- wipe out all user defined tables for rebuild
+set foreign_key_checks=0;
+drop table assignment;
+drop table class_roster;
+drop table classes;
+drop table majors;
+drop table semester;
+drop table student;
+drop table term_classes;
+drop table user;
+drop table user_access;
+drop table user_types;
+set foreign_key_checks=1;
+
 CREATE TABLE If not exists majors(
     major_id int not null auto_increment primary key,
     major_name varchar(100));
@@ -7,7 +21,7 @@ CREATE TABLE If not exists student(
     first_name varchar(100),
     last_name varchar(100),
     major_id int,
-    email_address varchar(100),
+    email_address varchar(100) UNIQUE,
     FOREIGN KEY fk_major(major_id)
     REFERENCES majors(major_id)
     ON UPDATE CASCADE
@@ -32,21 +46,22 @@ CREATE TABLE If not exists user(
     user_id int not null auto_increment primary key,
     first_name varchar(100),
     last_name varchar(100),
-    user_name varchar(40),
+    user_name varchar(40) UNIQUE,
     user_password varchar(40),
     user_type int not null,
-    email_address varchar(100),
+    email_address varchar(100) UNIQUE,
     FOREIGN KEY fk_utype(user_type)
     REFERENCES user_types(user_type)
     ON UPDATE CASCADE
     ON DELETE RESTRICT);
 
 CREATE TABLE If not exists term_classes(
-    term_class_id int not null auto_increment primary key,
-    class_id int,
-    semester_id int,
+    term_class_id int not null auto_increment,
+    class_id int not null,
+    semester_id int not null,
     subsection varchar(30),
     comments varchar(3000),
+    PRIMARY KEY (term_class_id, class_id),
     FOREIGN KEY fk_class(class_id)
     REFERENCES class(class_id)
     ON UPDATE CASCADE
@@ -72,6 +87,7 @@ CREATE TABLE If not exists class_roster(
 CREATE TABLE If not exists assignment(
     assignment_id int not null auto_increment primary key,
     term_class_id int not null,
+    name varchar(40) not null,
     max_points int,
     description varchar(400),
     FOREIGN KEY fk_term_class(term_class_id)
