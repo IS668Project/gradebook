@@ -1,11 +1,13 @@
 """
     File for interactions with MySQL database instance in PythonAnywhere.
-    We are using sqlalchemy for everything, inlcuding initial build
+    We are using flask_sqlalchemy for everything, inlcuding initial build
     and population. See dbInitialBuild.py for 
     table creation and initial data population
     usage: no direct usage, meant for import only
 """
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, \
+     check_password_hash
 
 db = SQLAlchemy()
 
@@ -96,13 +98,26 @@ class users(db.Model):
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     user_name = db.Column(db.String(40), nullable=False, unique=True)
-    user_password = db.Column(db.String(40), nullable=False)
+    user_password = db.Column(db.String(128), nullable=False)
     user_type = db.Column(db.Integer, db.ForeignKey('user_types.user_type_id',
                                                        onupdate='CASCADE',
                                                        ondelete='RESTRICT'))
     email_address = db.Column(db.String(100), nullable=False, unique=True)
     user_access = db.relationship('user_access', backref='users',
                                   lazy=True)
+    def __init__(self, firs_name, last_name, user_name, user_password, user_type):
+        self.user_id = user_id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.user_name = user_name
+        self.set_password(user_password)
+        self.user_type = user_type
+
+    def set_password(self, password):
+        self.user_password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.user_password, password)
 
     def __repr__(self):
         return ("<users('user_id'={}, 'first_name'={}, 'last_name'={},\

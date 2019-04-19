@@ -1,12 +1,13 @@
 from flask import Flask
-from database.appsSharedModels import *
-from database.databaseConfig import testDBEndPoint, prodDBEndPoint
+from appsSharedModels import *
+from databaseConfig import testDBEndPoint, prodDBEndPoint
 
 tools = dbTools()
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
     app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     return app
 
@@ -166,10 +167,10 @@ def createInitialData():
         db.session.commit()
 
 if __name__ == '__main__':
-    print('WARNING, this script wipes out everything in the db before\
-          recreating tables and populating with initial data found\
+    print('WARNING, this script wipes out everything in the db before \n \
+          recreating tables and populating with initial data found\n \
           in this file, think before you proceed.')
-    proceed = int(input('Do you want to proceed with the wipe and rebuild?\
+    proceed = int(input('Do you want to proceed with the wipe and rebuild?\n \
                         (type 1 for yes): '))
     if proceed == 1:
         create_app().app_context().push()
