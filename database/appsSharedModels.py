@@ -49,7 +49,7 @@ class students(db.Model):
     assignment_grades = db.relationship('assignment_grades',
                                         backref='students',
                                         lazy=True)
-    class_roster = db.relationship('class_roster', backref='students',
+    class_roster = db.relationship('class_rosters', backref='students',
                                    lazy=True)
 
     def __repr__(self):
