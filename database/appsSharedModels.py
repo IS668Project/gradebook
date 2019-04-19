@@ -26,7 +26,7 @@ class dbTools:
                                       used as FK value
         """
         pk = table.__mapper__.primary_key[0]
-        fkVal = self.session.query(pk).filter(att_name==value).first()
+        fkVal = db.session.query(pk).filter(att_name==value).first()
         return fkVal
 
 class majors(db.Model):
