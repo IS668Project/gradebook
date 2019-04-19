@@ -49,6 +49,28 @@ class db():
         fkVal = self.session.query(pk).filter(att_name==value).first()
         return fkVal
 
+    def insertRows(self, table, postDict):
+        attributes = [str(key) for keys in postDict.keys()]
+        values = [str(value) for values in postDict.values()]
+        insertStatement = 'insert into {} ({}) values ({})'.format(table, ','.join(attributes),
+                                                                   ','.join(values))
+        self.connection.execute(insertStatement)
+        self.session.commit()
+
+    def deleteRows(self, table, postDict):
+        attributes = [str(key) for keys in postDict.keys()]
+        values = [str(value) for values in postDict.values()]
+        whereStatement = 'where '
+        for key, value in postDict.items():
+            whereStatement += '{}={} and '.format(str(key), str(value))
+        whereStatement = whereStatement.rstrip('and ')
+        insertStatement = 'update {} set '
+        pass #pick up here.
+
+    def updateRows(self, table, postDict):
+        attributes = [str(key) for keys in postDict.keys()]
+        values = [str(value) for values in postDict.values()]
+        pass
 
 class majors(base):
     __tablename__ = 'majors'
@@ -58,8 +80,7 @@ class majors(base):
 
     def __repr__(self):
         return ("<majors('major_name'={0})>".format(self.major_name))
-
-    #students = sql.orm.relationship('students', back_populates='majors')
+    students = sql.orm.relationship('students', back_populates='majors')
 
 class students(base):
     __tablename__ = 'students'
@@ -71,8 +92,8 @@ class students(base):
                           onupdate='CASCADE', ondelete='RESTRICT'),
                           nullable=False)
     email_address = sql.Column(sql.String(100), nullable=False)
+    major = sql.orm.relationship('majors', back_populates='students')
 
-    #major = sql.orm.relationship('majors', back_populates='students')
     def __repr__(self):
     """
         sqlalchemy.ext.declarative.declarative_base object
@@ -292,6 +313,7 @@ class assignments(base):
     term_class_id = sql.Column(sql.Integer,
                                sql.ForeignKey('term_classes.term_class_id',
                                onupdate='CASCADE', ondelete='RESTRICT'))
+    name = sql.column(sql.String(40), nullable=False)
     max_points = sql.Column(sql.Integer, default=0, nullable=False)
     description = sql.Column(sql.String(400))
 
@@ -306,10 +328,10 @@ class assignments(base):
         @return string      : showing the object with object values
                               in the attributes
     """
-        return ("<assignments('assignment_id'={}, 'term_class_id'={}\
-                 'max_points'={},\
+        return ("<assignments('assignment_id'={}, 'term_class_id'={},\
+                 'name'={},'max_points'={},\
                  'description'={})>".format(self.assignment_id,
-                 self.term_class_id, self.max_points, self.description))
+                 self.term_class_id, self.name, self.max_points, self.description))
 
 class assignment_grades(base):
     """
