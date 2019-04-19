@@ -7,7 +7,9 @@
 """
 from flask_sqlalchemy import SQLAlchemy
 
-class db(SQLAlchemy):
+db = SQLAlchemy()
+
+class dbTools(Object):
     def getFkValue(self, table, att_name, value):
         """
             Function to return the primary key id for a table
