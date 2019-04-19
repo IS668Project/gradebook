@@ -1,8 +1,6 @@
 from flask import Flask
-from appsSharedModels import *
-
-testDBEndPoint ='mysql://IS668ProjectGrad:youGetAnA2019!@IS668ProjectGradeBook.mysql.pythonanywhere-services.com/IS668ProjectGrad$gradebook_test'
-prodDBEndPoint = 'mysql://IS668ProjectGrad:youGetAnA2019!@IS668ProjectGradeBook.mysql.pythonanywhere-services.com/IS668ProjectGrad$gradebook'
+from database.appsSharedModels import *
+from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 
 tools = dbTools()
 def create_app():
