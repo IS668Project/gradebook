@@ -1,13 +1,15 @@
 from flask import Flask
-import appsSharedModels
+from appsSharedModels import db
 
 testDBEndPoint ='mysql://IS668ProjectGrad:youGetAnA2019!@IS668ProjectGradeBook.mysql.pythonanywhere-services.com/IS668ProjectGrad$gradebook_test'
 prodDBEndPoint = 'mysql://IS668ProjectGrad:youGetAnA2019!@IS668ProjectGradeBook.mysql.pythonanywhere-services.com/IS668ProjectGrad$gradebook'
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
-app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
-db.init_app(app)
+def create_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
+    app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
+    db.init_app(app)
+    return app
 
 def createInitialData():
         db.session.add_all([
@@ -171,6 +173,7 @@ if __name__ == '__main__':
     proceed = int(input('Do you want to proceed with the wipe and rebuild?\
                         (type 1 for yes): '))
     if proceed == 1:
+        create_app().app_context().push()
         db.drop_all()
         db.create_all()
         createInitialData()

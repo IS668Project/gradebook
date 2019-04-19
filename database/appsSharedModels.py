@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class dbTools(Object):
+class dbTools:
     def getFkValue(self, table, att_name, value):
         """
             Function to return the primary key id for a table
@@ -154,7 +154,7 @@ class assignments(db.Model):
     term_class_id = db.Column(db.Integer,
                                db.ForeignKey('term_classes.term_class_id',
                                onupdate='CASCADE', ondelete='RESTRICT'))
-    name = db.column(db.String(40), nullable=False)
+    name = db.Column(db.String(40), nullable=False)
     max_points = db.Column(db.Integer, default=0, nullable=False)
     description = db.Column(db.String(400))
     assignment_grades = db.relationship('assignment_grades',
