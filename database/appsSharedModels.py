@@ -38,7 +38,7 @@ class dbTools:
     def dbTransaction(func):
         def wrapper(*args, **kwargs):
             attemptCount=1
-            while attemptCount > 4
+            while attemptCount > 4:
                 try:
                     func(args, kwargs)
                     db.session.commit()
