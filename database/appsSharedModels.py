@@ -5,6 +5,8 @@
     table creation and initial data population
     usage: no direct usage, meant for import only
 """
+import functools
+
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, \
      check_password_hash
@@ -36,19 +38,37 @@ class dbTools:
         return fkVal
 
     def dbTransaction(func):
+        @functools.wraps(func)
         def wrapper(*args, **kwargs):
             attemptCount=1
-            while attemptCount > 4:
+            while attemptCount < 4:
                 try:
-                    func(args, kwargs)
+                    func(*args, **kwargs)
                     db.session.commit()
-                    return func(args, kwargs)
+                    return
                 except OperationalError as oe:
                     db.session.rollback()
                     attemptCount += 1
                     sleep(2)
                     continue
         return wrapper
+
+    @dbTransaction
+    def insertRow(model, **kwargs):
+        insert = model(**kwargs)
+        db.session.add(insertRow)
+
+    @dbTransaction
+    def updateRow(model, rowId, **kwargs):
+        update = model.query.get(rowId)
+        for key, value in kwargs.items():
+            setattr(update, key, value)
+
+    @dbTransaction
+    def deleteRow(model, rowId):
+        deletion = model.query.get(rowId)
+        db.session.delete(deletion)
+
 
 class majors(db.Model):
     major_id = db.Column(db.Integer, primary_key=True)
