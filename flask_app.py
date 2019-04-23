@@ -1,5 +1,5 @@
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
@@ -16,8 +16,25 @@ db.init_app(app)
 def hello_world():
     return 'Hello from Flask!'
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        user = users.query.filter_by(user_name=request.args.get('username')).first
+        if user.check_password(request.args.get('password')):
+            session['logged_in'] = True
+            #redirect to user dashboard here
+        else:
+            flash('Incorrect password, please try again')
+
+def checkLogin():
+    if not session.get('logged_in'):
+        return render_template('login.html')
+
 @app.route('/student', methods=["GET", "POST"])
 def studentView():
+    checkLogin()
     if request.method == "GET":
         majorData = majors.query.order_by(majors.major_name.desc()).all()
         if request.args.get('student_id'):
