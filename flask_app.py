@@ -68,7 +68,7 @@ def studentView():
     if request.method == "GET":
         majorData = Major.query.order_by(Major.major_name.desc()).all()
         if request.args.get('student_id'):
-            studentData = students.query.filter_by(student_id=request.args.get('student_id')).first()
+            studentData = Student.query.filter_by(student_id=request.args.get('student_id')).first()
         else:
             studentData = Student()
         return render_template('student.html', studentData=studentData, majorData=majorData)

@@ -7,8 +7,7 @@
 """
 import functools
 
-from flask_sqlalchemy import SQLAlchemy
-from flask_sqlalchemy.sqlalchemy import exc
+from flask_sqlalchemy import SQLAlchemy, sqlalchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, \
      check_password_hash
@@ -44,7 +43,7 @@ class dbTools:
                 try:
                     func(*args, **kwargs)
                     return
-                except exc.OperationalError as oe:
+                except sqlalchemy.exc.OperationalError as oe:
                     db.session.rollback()
                     attemptCount += 1
                     sleep(2)
@@ -133,12 +132,11 @@ class User(UserMixin, db.Model):
     user_access = db.relationship('UserAccess', backref='User',
                                   lazy=True)
 
-    def __init__(self, first_name, last_name, user_name, user_password, user_type, email_address):
+    def __init__(self, first_name, last_name, user_name, user_password, email_address):
         self.first_name = first_name
         self.last_name = last_name
         self.user_name = user_name
         self.set_password(user_password)
-        self.user_type = user_type
         self.email_address = email_address
 
     def set_password(self, password):
@@ -223,12 +221,12 @@ class UserAccess(db.Model):
                                                      onupdate='CASCADE',
                                                      ondelete='CASCADE'),
                                                      primary_key=True)
-    term_class_id = db.Column(db.Integer,
+    class_id = db.Column(db.Integer,
                                db.ForeignKey('classes.class_id',
                                onupdate='CASCADE', ondelete='CASCADE'),
                                primary_key=True)
 
     def __repr__(self):
         return ("<user_access('user_id'={},\
-                 'term_class_id'={})>".format(self.user_id,
-                 self.term_class_id))
+                 'class_id'={})>".format(self.user_id,
+                 self.class_id))
