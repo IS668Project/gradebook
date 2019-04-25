@@ -12,6 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = True
+app.secret_key = "E*2kd+2sMPSt<VgN,26y!"
 login_manager = LoginManager()
 login_manager.init_app(app)
 db.init_app(app)
@@ -43,23 +44,23 @@ def checkLogin():
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    pass
+    return 'place holder for logout'
 
 @app.route('/changePassword', methods=['GET', 'POST'])
 def changePassword():
-    pass
+    return 'place holder for changePassword'
 
 @app.route('/dashboard', methods=["GET", "POST"])
 def dashboardView():
-    pass
+    return 'place holder for dashboardView'
 
 @app.route('/class', methods=["GET", "POST"])
 def classView():
-    pass
+    return 'place holder for classView'
 
 @app.route('/gradebook', methods=["GET", "POST"])
 def gradebookView():
-    pass
+    return 'place holder for gradebookView'
 
 @app.route('/student', methods=["GET", "POST"])
 def studentView():
