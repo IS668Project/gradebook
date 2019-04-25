@@ -8,15 +8,13 @@
 import functools
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.sqlalchemy import exc
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, \
      check_password_hash
 from time import sleep
 
 db = SQLAlchemy()
-
-class OperationalError(Exception):
-    pass
 
 class dbTools:
     def getFkValue(self, table, att_name, value):
@@ -45,9 +43,8 @@ class dbTools:
             while attemptCount < 4:
                 try:
                     func(*args, **kwargs)
-                    db.session.commit()
                     return
-                except OperationalError as oe:
+                except exc.OperationalError as oe:
                     db.session.rollback()
                     attemptCount += 1
                     sleep(2)
@@ -58,17 +55,20 @@ class dbTools:
     def insertRow(model, **kwargs):
         insert = model(**kwargs)
         db.session.add(insertRow)
+        db.session.commit()
 
     @dbTransaction
     def updateRow(model, rowId, **kwargs):
         update = model.query.get(rowId)
         for key, value in kwargs.items():
             setattr(update, key, value)
+        db.session.commit()
 
     @dbTransaction
     def deleteRow(model, rowId):
         deletion = model.query.get(rowId)
         db.session.delete(deletion)
+        db.session.commit()
 
 
 class Major(db.Model):
@@ -109,36 +109,19 @@ class Class(db.Model):
     class_name = db.Column(db.String(100), nullable=True)
     class_abbrv = db.Column(db.String(20))
     class_description = db.Column(db.String(3000))
-    term_classes = db.relationship('TermClass', backref='Class',
-                                   lazy=True)
+    class_semester = db.Column(db.String(50))
+    class_year = db.Column(db.Integer)
+    assignment = db.relationship('Assignment', backref='Class', lazy=True)
+    class_roster = db.relationship('ClassRoster', backref='Class', lazy=True)
 
     def __repr__(self):
         return ("<classes('class_name'={}, class_abbrv={}, \
+                 class_semester={},\
                  class_description={})>".format(self.class_name,
-                 self.class_abbrv, self.class_description))
+                                                self.class_abbrv, 
+                                                self.class_semester,
+                                                self.class_description))
 
-class Semester(db.Model):
-    __tablename__ = 'semesters'
-    semester_id = db.Column(db.Integer, primary_key=True)
-    semester = db.Column(db.String(40), nullable=False)
-    year = db.Column(db.Integer, nullable=False)
-    term_classes = db.relationship('TermClass', backref='Semester',
-                                   lazy=True)
-
-    def __repr__(self):
-        return ("<semesters('semester_id'={}, semester={},\
-                 'year'={})>".format(self.semester_id, self.semester,
-                  self.year))
-
-class UserType(db.Model):
-    __tablename__ = 'user_types'
-    user_type_id = db.Column(db.Integer, primary_key=True)
-    user_role = db.Column(db.String(50), nullable=False)
-    user = db.relationship('User', backref='UserType', lazy=True)
-
-    def __repr__(self):
-        return ("<user_types('user_type_id'={},\
-                 'user_role'={})>".format(self.user_type_id, self.user_role))
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
@@ -146,9 +129,6 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     user_name = db.Column(db.String(40), nullable=False, unique=True)
     user_password = db.Column(db.String(128), nullable=False)
-    user_type = db.Column(db.Integer, db.ForeignKey('user_types.user_type_id',
-                                                       onupdate='CASCADE',
-                                                       ondelete='RESTRICT'))
     email_address = db.Column(db.String(100), nullable=False, unique=True)
     user_access = db.relationship('UserAccess', backref='User',
                                   lazy=True)
@@ -177,31 +157,7 @@ class User(UserMixin, db.Model):
                  self.last_name, self.user_name,
                  self.user_type, self.user_password, self.email_address))
 
-class TermClass(db.Model):
-    __tablename__ = 'term_classes'
-    term_class_id = db.Column(db.Integer, primary_key=True)
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.class_id',
-                                                      onupdate='CASCADE',
-                                                      ondelete='CASCADE'))
-    semester_id = db.Column(db.Integer, 
-                             db.ForeignKey('semesters.semester_id',
-                                            onupdate='CASCADE',
-                                            ondelete='CASCADE'))
-    subsection = db.Column(db.String(30))
-    comments = db.Column(db.String(3000))
-    assignment = db.relationship('Assignment', backref='TermClass',
-                                  lazy=True)
-    class_roster = db.relationship('ClassRoster', backref='TermClass',
-                                   lazy=True)
-    user_access = db.relationship('UserAccess', backref='TermClass',
-                                   lazy=True)
 
-    def __repr__(self):
-
-        return ("<term_classes('term_class_id'={}, 'class_id'={}\
-                 'semester_id'={}, 'subsection'={},\
-                 'comments'={})>".format(self.term_class_id, self.class_id,
-                 self.semester_id, self.subsection, self.comments))
 
 class ClassRoster(db.Model):
     __tablename__ = 'class_rosters'
@@ -209,8 +165,8 @@ class ClassRoster(db.Model):
                                                         onupdate='CASCADE',
                                                         ondelete='CASCADE'),
                                                         primary_key=True)
-    term_classes = db.Column(db.Integer, 
-                              db.ForeignKey('term_classes.term_class_id',
+    class_id = db.Column(db.Integer, 
+                              db.ForeignKey('classes.class_id',
                                              onupdate='CASCADE',
                                              ondelete='CASCADE'),
                                              primary_key=True)
@@ -218,14 +174,14 @@ class ClassRoster(db.Model):
     def __repr__(self):
 
         return ("<class_rosters('student_id'={},\
-                 'term_classes'={})>".format(self.student_id, 
-                                             self.term_classes))
+                 'class_id'={})>".format(self.student_id, 
+                                             self.class_id))
 
 class Assignment(db.Model):
     __tablename__ = 'assignments'
     assignment_id = db.Column(db.Integer, primary_key=True)
-    term_class_id = db.Column(db.Integer,
-                               db.ForeignKey('term_classes.term_class_id',
+    class_id = db.Column(db.Integer,
+                               db.ForeignKey('classes.class_id',
                                onupdate='CASCADE', ondelete='CASCADE'))
     name = db.Column(db.String(40), nullable=False)
     max_points = db.Column(db.Integer, default=0, nullable=False)
@@ -252,6 +208,7 @@ class AssignmentGrade(db.Model):
                                               onupdate='CASCADE',
                                               ondelete='CASCADE'),
                                               primary_key=True)
+    comments = db.Column(db.String(400))
     score = db.Column(db.Float(2), default=0, nullable=False)
 
     def __repr__(self):
@@ -267,7 +224,7 @@ class UserAccess(db.Model):
                                                      ondelete='CASCADE'),
                                                      primary_key=True)
     term_class_id = db.Column(db.Integer,
-                               db.ForeignKey('term_classes.term_class_id',
+                               db.ForeignKey('classes.class_id',
                                onupdate='CASCADE', ondelete='CASCADE'),
                                primary_key=True)
 
