@@ -84,9 +84,9 @@ def createInitialData():
                   email_address='test@umbc.edu')])
         db.session.commit()
         db.session.add_all([
-            TermClass(class_id=tools.getFkValue(classes, classes.class_abbrv,
+            TermClass(class_id=tools.getFkValue(Class, Class.class_abbrv,
                                                     'IS668'),
-                         semester_id=tools.getFkValue(semesters, semesters.semester,
+                         semester_id=tools.getFkValue(Semester, Semester.semester,
                                                        'Spring'),
                          subsection='001',
                          comments='This is our first class in the test db')])
