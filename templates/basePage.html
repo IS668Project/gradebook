@@ -4,8 +4,9 @@
     <title>{% block title %}{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     {% block css %}{% endblock %}
     {% block js %}{% endblock %}
 </head>
@@ -16,10 +17,10 @@
                 <a class="navbar-brand" href="#">JS*2 Gradebook</a>
             </div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{{url_for('l=dashboard')}}">Dashboard</a></li>
-                <li><a href="{{url_for('class')}}">Class</a></li>
-                <li><a href="{{url_for('student')}}">Student</a></li>
-                <li><a href="{{url_for('gradebook')}}">Gradebook</a></li>
+                <li class="active"><a href="{{url_for('dashboardView')}}">Dashboard</a></li>
+                <li><a href="{{url_for('classView')}}">Class</a></li>
+                <li><a href="{{url_for('studentView')}}">Student</a></li>
+                <li><a href="{{url_for('gradebookView')}}">Gradebook</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
@@ -29,6 +30,8 @@
                         <li><a href="{{url_for('login')}}">Log in</a></li>
                     {% endif %}
             </ul>
+        </div>
+    </nav>
 {% block body %}{% endblock %}
 </body>
 </html>

@@ -1,4 +1,4 @@
-{% extends "basePage.hmtl" %}
+{% extends "basePage.html" %}
 {% block title %}Student{% endblock %}
 {% block body %}
     <div id="studentInfo">
@@ -16,7 +16,7 @@
                         {% endfor %}
                     </datalist>
             Email <input type="text" name="email_address" required="True" value={{studentData.email_address | replace("None","")}}><br>
-            Save <input type="submit"><br>
+            <input type="submit"><br>
         </form>
     </div>
 {% endblock %}

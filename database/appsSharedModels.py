@@ -8,6 +8,7 @@
 import functools
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, \
      check_password_hash
 from time import sleep
@@ -138,7 +139,7 @@ class UserType(db.Model):
     def __repr__(self):
         return ("<user_types('user_type_id'={},\
                  'user_role'={})>".format(self.user_type_id, self.user_role))
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
@@ -165,6 +166,9 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.user_password, password)
+
+    def get_id(self):
+        return self.user_name
 
     def __repr__(self):
         return ("<users('user_id'={}, 'first_name'={}, 'last_name'={},\
