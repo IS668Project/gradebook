@@ -74,7 +74,7 @@ class Major(db.Model):
     __tablename__ = 'majors'
     major_id = db.Column(db.Integer, primary_key=True)
     major_name = db.Column(db.String(100), nullable=False)
-    students = db.relationship('students', backref='majors',
+    students = db.relationship('Student', backref='Major',
                                lazy=True)
 
     def __repr__(self):
@@ -89,10 +89,10 @@ class Student(db.Model):
                           onupdate='CASCADE', ondelete='RESTRICT'),
                           nullable=False)
     email_address = db.Column(db.String(100), nullable=False)
-    assignment_grades = db.relationship('assignment_grades',
-                                        backref='students',
+    assignment_grades = db.relationship('AssignmentGrade',
+                                        backref='Student',
                                         lazy=True)
-    class_roster = db.relationship('class_rosters', backref='students',
+    class_roster = db.relationship('ClassRoster', backref='Student',
                                    lazy=True)
 
     def __repr__(self):
@@ -121,7 +121,7 @@ class Semester(db.Model):
     semester_id = db.Column(db.Integer, primary_key=True)
     semester = db.Column(db.String(40), nullable=False)
     year = db.Column(db.Integer, nullable=False)
-    term_classes = db.relationship('term_classes', backref='semesters',
+    term_classes = db.relationship('TermClass', backref='Semester',
                                    lazy=True)
 
     def __repr__(self):
@@ -133,7 +133,7 @@ class UserType(db.Model):
     __tablename__ = 'user_types'
     user_type_id = db.Column(db.Integer, primary_key=True)
     user_role = db.Column(db.String(50), nullable=False)
-    user = db.relationship('users', backref='user_types', lazy=True)
+    user = db.relationship('User', backref='UserType', lazy=True)
 
     def __repr__(self):
         return ("<user_types('user_type_id'={},\
@@ -149,7 +149,7 @@ class User(db.Model):
                                                        onupdate='CASCADE',
                                                        ondelete='RESTRICT'))
     email_address = db.Column(db.String(100), nullable=False, unique=True)
-    user_access = db.relationship('user_access', backref='users',
+    user_access = db.relationship('UserAccess', backref='User',
                                   lazy=True)
     def __init__(self, first_name, last_name, user_name, user_password, user_type, email_address):
         self.first_name = first_name
@@ -184,8 +184,9 @@ class TermClass(db.Model):
                                             ondelete='CASCADE'))
     subsection = db.Column(db.String(30))
     comments = db.Column(db.String(3000))
-    assignments = db.relationship('assignments', backref='term_classes',
+    assignments = db.relationship('Assignment', backref='TermClass',
                                   lazy=True)
+    Class = db.relationship('Class', backref='TermClass', lazy=True)
 
     def __repr__(self):
 
@@ -205,6 +206,8 @@ class ClassRoster(db.Model):
                                              onupdate='CASCADE',
                                              ondelete='CASCADE'),
                                              primary_key=True)
+    student = db.relationship('Student', backref='ClassRoster', lazy=True)
+    termClass = db.relationship('TermClass', backref='ClassRoster', lazy=True)
 
     def __repr__(self):
 
@@ -221,8 +224,8 @@ class Assignment(db.Model):
     name = db.Column(db.String(40), nullable=False)
     max_points = db.Column(db.Integer, default=0, nullable=False)
     description = db.Column(db.String(400))
-    assignment_grades = db.relationship('assignment_grades',
-                                        backref='assignments',
+    assingmentGrade = db.relationship('AssignmentGrade',
+                                        backref='Assignment',
                                         lazy = True)
 
     def __repr__(self):
@@ -244,6 +247,7 @@ class AssignmentGrade(db.Model):
                                               ondelete='CASCADE'),
                                               primary_key=True)
     score = db.Column(db.Float(2), default=0, nullable=False)
+    assignment = db.relationship('Assignment', backref='AssignmentGrade', lazy=True)
 
     def __repr__(self):
 
@@ -261,8 +265,9 @@ class UserAccess(db.Model):
                                db.ForeignKey('term_classes.term_class_id',
                                onupdate='CASCADE', ondelete='CASCADE'),
                                primary_key=True)
-    term_classes = db.relationship('term_classes', backref='user_access',
+    termClass = db.relationship('TermClass', backref='UserAccess',
                                    lazy=True)
+    user = db.relationship('User', backref='UserAccess', lazy=True)
 
     def __repr__(self):
         return ("<user_access('user_id'={},\
