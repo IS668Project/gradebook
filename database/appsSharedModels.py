@@ -70,7 +70,8 @@ class dbTools:
         db.session.delete(deletion)
 
 
-class majors(db.Model):
+class Major(db.Model):
+    __tablename__ = 'majors'
     major_id = db.Column(db.Integer, primary_key=True)
     major_name = db.Column(db.String(100), nullable=False)
     students = db.relationship('students', backref='majors',
@@ -79,7 +80,8 @@ class majors(db.Model):
     def __repr__(self):
         return ("<majors('major_name'={0})>".format(self.major_name))
 
-class students(db.Model):
+class Student(db.Model):
+    __tablename__ = 'students'
     student_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
@@ -100,7 +102,8 @@ class students(db.Model):
                                               self.major_id, 
                                               self.email_address))
 
-class classes(db.Model):
+class Class(db.Model):
+    __tablename__ = 'classes'
     class_id = db.Column(db.Integer, primary_key=True)
     class_name = db.Column(db.String(100), nullable=True)
     class_abbrv = db.Column(db.String(20))
@@ -113,7 +116,8 @@ class classes(db.Model):
                  class_description={})>".format(self.class_name,
                  self.class_abbrv, self.class_description))
 
-class semesters(db.Model):
+class Semester(db.Model):
+    __tablename__ = 'semesters'
     semester_id = db.Column(db.Integer, primary_key=True)
     semester = db.Column(db.String(40), nullable=False)
     year = db.Column(db.Integer, nullable=False)
@@ -125,7 +129,8 @@ class semesters(db.Model):
                  'year'={})>".format(self.semester_id, self.semester,
                   self.year))
 
-class user_types(db.Model):
+class UserType(db.Model):
+    __tablename__ = 'user_types'
     user_type_id = db.Column(db.Integer, primary_key=True)
     user_role = db.Column(db.String(50), nullable=False)
     user = db.relationship('users', backref='user_types', lazy=True)
@@ -133,7 +138,8 @@ class user_types(db.Model):
     def __repr__(self):
         return ("<user_types('user_type_id'={},\
                  'user_role'={})>".format(self.user_type_id, self.user_role))
-class users(db.Model):
+class User(db.Model):
+    __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
@@ -166,7 +172,8 @@ class users(db.Model):
                  self.last_name, self.user_name,
                  self.user_type, self.user_password, self.email_address))
 
-class term_classes(db.Model):
+class TermClass(db.Model):
+    __tablename__ = 'term_classes'
     term_class_id = db.Column(db.Integer, primary_key=True)
     class_id = db.Column(db.Integer, db.ForeignKey('classes.class_id',
                                                       onupdate='CASCADE',
@@ -187,7 +194,8 @@ class term_classes(db.Model):
                  'comments'={})>".format(self.term_class_id, self.class_id,
                  self.semester_id, self.subsection, self.comments))
 
-class class_rosters(db.Model):
+class ClassRoster(db.Model):
+    __tablename__ = 'class_rosters'
     student_id = db.Column(db.Integer, db.ForeignKey('students.student_id',
                                                         onupdate='CASCADE',
                                                         ondelete='CASCADE'),
@@ -204,7 +212,8 @@ class class_rosters(db.Model):
                  'term_classes'={})>".format(self.student_id, 
                                              self.term_classes))
 
-class assignments(db.Model):
+class Assignment(db.Model):
+    __tablename__ = 'assignments'
     assignment_id = db.Column(db.Integer, primary_key=True)
     term_class_id = db.Column(db.Integer,
                                db.ForeignKey('term_classes.term_class_id',
@@ -222,7 +231,8 @@ class assignments(db.Model):
                  'description'={})>".format(self.assignment_id,
                  self.term_class_id, self.name, self.max_points, self.description))
 
-class assignment_grades(db.Model):
+class AssignmentGrade(db.Model):
+    __tablename__ = 'assignment_grades'
     student_id = db.Column(db.Integer, 
                             db.ForeignKey('students.student_id',
                                            onupdate='CASCADE',
@@ -241,7 +251,8 @@ class assignment_grades(db.Model):
                  'score'={})>".format(self.student_id, self.assignment_id,
                  self.score))
 
-class user_access(db.Model):
+class UserAccess(db.Model):
+    __tablename__ = 'user_access'
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id',
                                                      onupdate='CASCADE',
                                                      ondelete='CASCADE'),

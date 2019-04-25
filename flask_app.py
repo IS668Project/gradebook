@@ -28,9 +28,10 @@ def login():
         else:
             flash('Incorrect password, please try again')
 
+@app.route('/login', methods=['GET', 'POST'])
 def checkLogin():
     if not session.get('logged_in'):
-        return render_template('login.html')
+        return redirect(url_for('login'))
 
 @app.route('/student', methods=["GET", "POST"])
 def studentView():
