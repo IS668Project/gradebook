@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Student</title>
-    <meta charset="utf-8">
-</head>
-<body>
+{% extends "basePage.hmtl" %}
+{% block title %}Student{% endblock %}
+{% block body %}
     <div id="studentInfo">
         <form id="studentInfo" action="https://IS668ProjectGradeBook.pythonanywhere.com/student" method="POST" target="_self">
             First Name <input type="text" name="first_name" required="True" value={{studentData.first_name | replace("None","")}}><br>
@@ -23,5 +19,4 @@
             Save <input type="submit"><br>
         </form>
     </div>
-</body>
-</html>
+{% endblock %}
