@@ -36,6 +36,16 @@ class dbTools:
         return fkVal
 
     def dbTransaction(func):
+        """
+            mySQL is throwing operational errors quite frequenlty
+            This is intended as a decorator, takes the sql action
+            and tries to complete. If it fails due to session being down
+            (OperationalError) waits 2 seconds and then retries. Will try
+            4 times.
+            @param func : function to be run
+            @return wrapper: wrapper funciton containing the executed
+            function
+        """
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             attemptCount=1
@@ -50,6 +60,7 @@ class dbTools:
                     continue
         return wrapper
 
+    #transaction helper functions
     @dbTransaction
     def insertRow(model, **kwargs):
         insert = model(**kwargs)
@@ -78,7 +89,7 @@ class Major(db.Model):
                                lazy=True)
 
     def __repr__(self):
-        return ("<majors('major_name'={0})>".format(self.major_name))
+        return ("<majors('major_id'={}, 'major_name'={}, 'students'={})>".format(self.major_id, self.major_name, self.students))
 
 class Student(db.Model):
     __tablename__ = 'students'
@@ -97,10 +108,12 @@ class Student(db.Model):
 
     def __repr__(self):
         return ("<students('first_name'={}, 'last_name'={},\
-                 'major_id'={},\
-                 'email_address'={})>".format(self.first_name, self.last_name,
+                 'major_id'={}, 'email_address'={}, 'assignment_grades'={}\
+                 'class_roster'={})>".format(self.first_name, self.last_name,
                                               self.major_id, 
-                                              self.email_address))
+                                              self.email_address,
+                                              self.assignment_grades,
+                                              self.class_roster))
 
 class Class(db.Model):
     __tablename__ = 'classes'
@@ -115,11 +128,13 @@ class Class(db.Model):
 
     def __repr__(self):
         return ("<classes('class_name'={}, class_abbrv={}, \
-                 class_semester={},\
-                 class_description={})>".format(self.class_name,
+                 class_semester={}, class_description={}, 'assignment'={}\
+                 'class_roster'={})>".format(self.class_name,
                                                 self.class_abbrv, 
                                                 self.class_semester,
-                                                self.class_description))
+                                                self.class_description,
+                                                self.assignment,
+                                                self.class_roster))
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -140,21 +155,36 @@ class User(UserMixin, db.Model):
         self.email_address = email_address
 
     def set_password(self, password):
+        """Takes in string and sets password in salted hash"""
         self.user_password = generate_password_hash(password)
 
     def check_password(self, password):
+        """
+            takes in string, converts to salted hash, compares to salted hash in db, 
+            returns true/false
+        """
         return check_password_hash(self.user_password, password)
 
     def get_id(self):
-        return self.user_name
+        return self.user_id
 
     def __repr__(self):
         return ("<users('user_id'={}, 'first_name'={}, 'last_name'={},\
-                 'user_name'={}, 'user_type'={}, 'user_password' = {}\
-                 'email_address'={})>".format(self.user_id, self.first_name,
-                 self.last_name, self.user_name,
-                 self.user_type, self.user_password, self.email_address))
+                 'user_name'={}, 'user_access' = {}, 'user_password' = {}\
+                 'email_address'={},\
+                 'user_access'={})>".format(self.user_id, self.first_name,
+                                            self.last_name, self.user_name,
+                                            self.user_access, 
+                                            self.user_password, 
+                                            self.email_address, 
+                                            self.user_access))
 
+    def canIsee(self, classId):
+        """to be used to check user access permission on page level"""
+        for access in self.user_access:
+            if access.class_id = classId
+            return True
+        return False
 
 
 class ClassRoster(db.Model):
@@ -170,7 +200,6 @@ class ClassRoster(db.Model):
                                              primary_key=True)
 
     def __repr__(self):
-
         return ("<class_rosters('student_id'={},\
                  'class_id'={})>".format(self.student_id, 
                                              self.class_id))
@@ -179,8 +208,8 @@ class Assignment(db.Model):
     __tablename__ = 'assignments'
     assignment_id = db.Column(db.Integer, primary_key=True)
     class_id = db.Column(db.Integer,
-                               db.ForeignKey('classes.class_id',
-                               onupdate='CASCADE', ondelete='CASCADE'))
+                         db.ForeignKey('classes.class_id',
+                                       onupdate='CASCADE', ondelete='CASCADE'))
     name = db.Column(db.String(40), nullable=False)
     max_points = db.Column(db.Integer, default=0, nullable=False)
     description = db.Column(db.String(400))
@@ -190,9 +219,13 @@ class Assignment(db.Model):
 
     def __repr__(self):
         return ("<assignments('assignment_id'={}, 'term_class_id'={},\
-                 'name'={},'max_points'={},\
-                 'description'={})>".format(self.assignment_id,
-                 self.term_class_id, self.name, self.max_points, self.description))
+                 'name'={},'max_points'={}, 'description'={},\
+                 assingment_grade={})>".format(self.assignment_id,
+                                               self.term_class_id, 
+                                               self.name, 
+                                               self.max_points,
+                                               self.description,
+                                               self.assingment_grade))
 
 class AssignmentGrade(db.Model):
     __tablename__ = 'assignment_grades'

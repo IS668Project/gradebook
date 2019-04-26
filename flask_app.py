@@ -1,4 +1,6 @@
-
+"""
+    Gradebook Flask app file. Used to host website, manage server side computations.
+"""
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, LoginManager, logout_user
 from flask_sqlalchemy import SQLAlchemy
@@ -6,7 +8,7 @@ from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
 from datetime import datetime
 
-
+#app set up
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
@@ -23,7 +25,7 @@ def hello_world():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.filter_by(user_name=user_id).first()
+    return User.query.get(user_id)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -42,7 +44,8 @@ def checkLogin():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
-@app.route('/logout', methods=['GET'])
+@app.route('/logout')
+@login_required
 def logout():
     return 'place holder for logout'
 
@@ -51,18 +54,22 @@ def changePassword():
     return 'place holder for changePassword'
 
 @app.route('/dashboard', methods=["GET", "POST"])
+@login_required
 def dashboardView():
     return 'place holder for dashboardView'
 
 @app.route('/class', methods=["GET", "POST"])
+@login_required
 def classView():
     return 'place holder for classView'
 
 @app.route('/gradebook', methods=["GET", "POST"])
+@login_required
 def gradebookView():
     return 'place holder for gradebookView'
 
 @app.route('/student', methods=["GET", "POST"])
+@login_required
 def studentView():
     checkLogin()
     if request.method == "GET":
