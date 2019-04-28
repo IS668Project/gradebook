@@ -1,7 +1,7 @@
 {% extends "formPopup.html" %}
 {% block title %}Students{% endblock %}
     {% block formContent %}
-    <form id="studentInfo" action="/student" method="POST" target="_self">
+    <form action="/student" method="POST">
         First Name <input type="text" name="first_name" required="True" value={{studentData.first_name | replace("None","")}}><br>
         Last Name<input type="text" name="last_name" required="True" value={{studentData.last_name | replace("None","")}}><br>
         Major <select name="major_id"><br>
