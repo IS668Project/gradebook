@@ -1,0 +1,22 @@
+{% extends "basePage.html" %}
+{% block title %}Student{% endblock %}
+{% block body %}
+    <div id="studentInfo">
+        <form id="studentInfo" action="https://IS668ProjectGradeBook.pythonanywhere.com/student" method="POST" target="_self">
+            First Name <input type="text" name="first_name" required="True" value={{studentData.first_name | replace("None","")}}><br>
+            Last Name<input type="text" name="last_name" required="True" value={{studentData.last_name | replace("None","")}}><br>
+            Major <input list="majors"><br>
+                    <datalist id="majors">
+                        {% for major in majorData %}
+                            {% if studentData.major_id == major.id %}
+                                <option selected value={{major.major_name}}>{{major.major}} </option>
+                            {% else %}
+                                <option value={{major.major_name}}>{{major.major}} </option>
+                            {% endif %}
+                        {% endfor %}
+                    </datalist>
+            Email <input type="text" name="email_address" required="True" value={{studentData.email_address | replace("None","")}}><br>
+            <input type="submit"><br>
+        </form>
+    </div>
+{% endblock %}
