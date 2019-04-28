@@ -71,15 +71,24 @@ def gradebookView():
 @app.route('/student', methods=["GET", "POST"])
 @login_required
 def studentView():
-    checkLogin()
     if request.method == "GET":
-        majorData = Major.query.order_by(Major.major_name.desc()).all()
+        majorData = Major.query.order_by('major_name').all()
         if request.args.get('student_id'):
-            studentData = Student.query.filter_by(student_id=request.args.get('student_id')).first()
+            studentData = getStudentData(request.args.get('student_id'))
         else:
             studentData = Student()
-        return render_template('student.html', studentData=studentData, majorData=majorData)
+        return render_template('student.html', 
+                               studentData=studentData,
+                               students=Student.getStudents(),
+                               majorData=majorData)
     else:
+        dbTools.insertRow(Student,
+                          first_name=request.form['first_name'],
+                          last_name=request.form['last_name'],
+                          email_address=request.form['email_address'],
+                          major_id=request.form['majors']
+
+            )
         requestContents.append(request.form['contents'])
         return redirect(url_for('studentView'))
 

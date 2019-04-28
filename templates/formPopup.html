@@ -1,0 +1,18 @@
+{% extends "basePage.html" %}
+{% block css %}
+    <link rel="stylesheet" href="css/gradebook.css">
+{% endblock %}
+{% block js %}
+    <script src="js/gradebook.js"></script>
+{% endblock %}
+{% block body %}
+<div class="hover_bkgr_fricc">
+    <span class="helper"></span>
+    <div>
+        <div class="popupCloseButton">X</div>
+        <div class="formContent">
+        {% block formContent %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

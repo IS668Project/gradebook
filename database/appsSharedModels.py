@@ -85,11 +85,13 @@ class Major(db.Model):
     __tablename__ = 'majors'
     major_id = db.Column(db.Integer, primary_key=True)
     major_name = db.Column(db.String(100), nullable=False)
-    students = db.relationship('Student', backref='Major',
-                               lazy=True)
+    students = db.relationship('Student', back_populates='majors')
 
     def __repr__(self):
-        return ("<majors('major_id'={}, 'major_name'={}, 'students'={})>".format(self.major_id, self.major_name, self.students))
+        return ("<majors('major_id'={}, 'major_name'={0},\
+                'students'={})>".format(self.major_id,
+                                        self.major_name,
+                                        self.students))
 
 class Student(db.Model):
     __tablename__ = 'students'
@@ -105,15 +107,27 @@ class Student(db.Model):
                                         lazy=True)
     class_roster = db.relationship('ClassRoster', backref='Student',
                                    lazy=True)
+    majors = db.relationship('Major', back_populates='students')
 
     def __repr__(self):
         return ("<students('first_name'={}, 'last_name'={},\
-                 'major_id'={}, 'email_address'={}, 'assignment_grades'={}\
-                 'class_roster'={})>".format(self.first_name, self.last_name,
-                                              self.major_id, 
-                                              self.email_address,
-                                              self.assignment_grades,
-                                              self.class_roster))
+                 'major_id'={}, 'email_address'={},\
+                 'assignment_grades'={}, class_roster={}\
+                 'majors'={})>".format(self.first_name,
+                                       self.last_name,
+                                       self.major_id, 
+                                       self.email_address,
+                                       self.assignment_grades,
+                                       self.class_roster,
+                                       self.majors))
+
+    def getStudents(self):
+        results = self.query.order_by('last_name', 'first_name').all()
+        return results
+
+    def getStudentData(self, studentId):
+        result = self.query.filter_by(student_id=studentId).first()
+        return result
 
 class Class(db.Model):
     __tablename__ = 'classes'
@@ -182,8 +196,8 @@ class User(UserMixin, db.Model):
     def canIsee(self, classId):
         """to be used to check user access permission on page level"""
         for access in self.user_access:
-            if access.class_id = classId
-            return True
+            if access.class_id == classId:
+                return True
         return False
 
 
