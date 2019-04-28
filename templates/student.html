@@ -1,24 +1,23 @@
 {% extends "formPopup.html" %}
 {% block title %}Students{% endblock %}
-{% block body %}
     {% block formContent %}
-    <form id="studentInfo" action="https://IS668ProjectGradeBook.pythonanywhere.com/student" method="POST" target="_self">
+    <form id="studentInfo" action="/student" method="POST" target="_self">
         First Name <input type="text" name="first_name" required="True" value={{studentData.first_name | replace("None","")}}><br>
         Last Name<input type="text" name="last_name" required="True" value={{studentData.last_name | replace("None","")}}><br>
-        Major <input list="majors"><br>
-                <datalist id="majors">
-                    {% for major in majorData %}
-                        {% if studentData.major_id == major.id %}
-                            <option selected value={{major.major_id}}>{{major.major}} </option>
-                        {% else %}
-                            <option value={{major.major_id}}>{{major.major}} </option>
-                        {% endif %}
-                    {% endfor %}
-                </datalist>
+        Major <select name="major_id"><br>
+                {% for major in majorData %}
+                    {% if studentData.major_id == major.id %}
+                        <option value={{major.major_id}} selected>{{major.major_name}}</option>
+                    {% else %}
+                        <option value={{major.major_id}}>{{major.major_name}}</option>
+                    {% endif %}
+                {% endfor %}
+                </select><br>
         Email <input type="text" name="email_address" required="True" value={{studentData.email_address | replace("None","")}}><br>
         <input type="submit"><br>
     </form>
     {% endblock %}
+{% block pagebody %}
     <div class="container">
         <table class="table">
             <thead>
@@ -43,4 +42,5 @@
             </tbody>
         </table>
     </div>
+    <a class="trigger_popup_fricc">Add New Student</a>
 {% endblock %}

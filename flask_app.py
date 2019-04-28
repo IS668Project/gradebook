@@ -7,13 +7,14 @@ from flask_sqlalchemy import SQLAlchemy
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
 from datetime import datetime
+from time import sleep
 
 #app set up
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['DEBUG'] = True
+app.config['DEBUG'] = False
 app.secret_key = "E*2kd+2sMPSt<VgN,26y!"
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -24,8 +25,9 @@ def hello_world():
     return 'Hello from Flask!'
 
 @login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
+@dbQuery
+def load_user(user_name):
+    return User.query.filter_by(user_name=user_name).first()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -37,9 +39,9 @@ def login():
             return render_template('login.html', error=True)
         else:
             login_user(user)
+            session['logged_in'] = True
             return redirect(url_for('dashboardView'))
 
-@app.route('/login', methods=['GET', 'POST'])
 def checkLogin():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -54,9 +56,11 @@ def changePassword():
     return 'place holder for changePassword'
 
 @app.route('/dashboard', methods=["GET", "POST"])
-@login_required
 def dashboardView():
-    return 'place holder for dashboardView'
+    if session['logged_in']:
+        return 'place holder for dashboardView'
+    else:
+        return'back to drawing board'
 
 @app.route('/class', methods=["GET", "POST"])
 @login_required
@@ -69,26 +73,23 @@ def gradebookView():
     return 'place holder for gradebookView'
 
 @app.route('/student', methods=["GET", "POST"])
-@login_required
+#@login_required
 def studentView():
+    majorData = dbQuery(Major.query.order_by('major_name').all())
     if request.method == "GET":
-        majorData = Major.query.order_by('major_name').all()
         if request.args.get('student_id'):
             studentData = getStudentData(request.args.get('student_id'))
         else:
             studentData = Student()
         return render_template('student.html', 
                                studentData=studentData,
-                               students=Student.getStudents(),
+                               students=studentData.getStudents(),
                                majorData=majorData)
     else:
-        dbTools.insertRow(Student,
+        insertRow(Student,
                           first_name=request.form['first_name'],
                           last_name=request.form['last_name'],
                           email_address=request.form['email_address'],
-                          major_id=request.form['majors']
-
-            )
-        requestContents.append(request.form['contents'])
+                          major_id=request.form['major_id'])
         return redirect(url_for('studentView'))
 

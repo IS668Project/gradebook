@@ -11,6 +11,7 @@ def create_app():
     db.init_app(app)
     return app
 
+@dbTransaction
 def createInitialData():
         db.session.add_all([
             Major(major_name='Information Systems'),

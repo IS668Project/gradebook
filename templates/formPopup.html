@@ -1,9 +1,9 @@
 {% extends "basePage.html" %}
 {% block css %}
-    <link rel="stylesheet" href="css/gradebook.css">
+    <link rel="stylesheet" href="/static/css/gradebook.css">
 {% endblock %}
 {% block js %}
-    <script src="js/gradebook.js"></script>
+    <script src="/static/js/gradebook.js"></script>
 {% endblock %}
 {% block body %}
 <div class="hover_bkgr_fricc">
@@ -15,4 +15,5 @@
         </div>
     </div>
 </div>
+{% block pagebody %}{% endblock %}
 {% endblock %}

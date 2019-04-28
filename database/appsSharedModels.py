@@ -15,6 +15,66 @@ from time import sleep
 
 db = SQLAlchemy()
 
+#global transaction helper functions
+def dbTransaction(func):
+    """
+        mySQL is throwing operational errors quite frequenlty
+        This is intended as a decorator, takes the sql action
+        and tries to complete. If it fails due to session being down
+        (OperationalError) waits 2 seconds and then retries. Will try
+        4 times.
+        @param func : function to be run
+        @return wrapper: wrapper funciton containing the executed
+        function
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        attemptCount=1
+        while attemptCount < 4:
+            try:
+                func(*args, **kwargs)
+                return
+            except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
+                db.session.rollback()
+                attemptCount += 1
+                sleep(2)
+                continue
+    return wrapper
+
+def dbQuery(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        attemptCount=1
+        while attemptCount < 4:
+            try:
+                func(*args, **kwargs)
+                return func(*args, **kwargs)
+            except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
+                db.session.rollback()
+                attemptCount += 1
+                sleep(2)
+                continue
+    return wrapper.__wrapped__
+
+@dbTransaction
+def insertRow(model, **kwargs):
+    insert = model(**kwargs)
+    db.session.add(insert)
+    db.session.commit()
+
+@dbTransaction
+def updateRow(model, rowId, **kwargs):
+    update = model.query.get(rowId)
+    for key, value in kwargs.items():
+        setattr(update, key, value)
+    db.session.commit()
+
+@dbTransaction
+def deleteRow(model, rowId):
+    deletion = model.query.get(rowId)
+    db.session.delete(deletion)
+    db.session.commit()
+
 class dbTools:
     def getFkValue(self, table, att_name, value):
         """
@@ -35,52 +95,6 @@ class dbTools:
         fkVal = db.session.query(pk).filter(att_name==value).first()
         return fkVal
 
-    def dbTransaction(func):
-        """
-            mySQL is throwing operational errors quite frequenlty
-            This is intended as a decorator, takes the sql action
-            and tries to complete. If it fails due to session being down
-            (OperationalError) waits 2 seconds and then retries. Will try
-            4 times.
-            @param func : function to be run
-            @return wrapper: wrapper funciton containing the executed
-            function
-        """
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            attemptCount=1
-            while attemptCount < 4:
-                try:
-                    func(*args, **kwargs)
-                    return
-                except sqlalchemy.exc.OperationalError as oe:
-                    db.session.rollback()
-                    attemptCount += 1
-                    sleep(2)
-                    continue
-        return wrapper
-
-    #transaction helper functions
-    @dbTransaction
-    def insertRow(model, **kwargs):
-        insert = model(**kwargs)
-        db.session.add(insertRow)
-        db.session.commit()
-
-    @dbTransaction
-    def updateRow(model, rowId, **kwargs):
-        update = model.query.get(rowId)
-        for key, value in kwargs.items():
-            setattr(update, key, value)
-        db.session.commit()
-
-    @dbTransaction
-    def deleteRow(model, rowId):
-        deletion = model.query.get(rowId)
-        db.session.delete(deletion)
-        db.session.commit()
-
-
 class Major(db.Model):
     __tablename__ = 'majors'
     major_id = db.Column(db.Integer, primary_key=True)
@@ -88,7 +102,7 @@ class Major(db.Model):
     students = db.relationship('Student', back_populates='majors')
 
     def __repr__(self):
-        return ("<majors('major_id'={}, 'major_name'={0},\
+        return ("<majors('major_id'={}, 'major_name'={},\
                 'students'={})>".format(self.major_id,
                                         self.major_name,
                                         self.students))
