@@ -2,7 +2,7 @@
     Gradebook Flask app file. Used to host website, manage server side computations.
 """
 from flask import Flask, flash, redirect, render_template, request, session, url_for
-from flask_login import current_user, login_required, login_user, LoginManager, logout_user
+from flask_login import current_user, login_fresh, login_required, login_user, LoginManager, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
@@ -17,12 +17,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = False
 app.secret_key = "E*2kd+2sMPSt<VgN,26y!"
 login_manager = LoginManager()
+login_manager.unauthorized.login_view = 'https://is668projectgradebook.pythonanywhere.com/login'
 login_manager.init_app(app)
 db.init_app(app)
 
 @app.route('/')
-def hello_world():
-    return redirect(url_for('dashboardView'))
+def home():
+    return 'placeholder for home page'
 
 @login_manager.user_loader
 @dbQuery
@@ -32,18 +33,14 @@ def load_user(username):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html', error=False)
+        return render_template('IS668_Login.html', error=False)
     else:
         user = load_user(request.form['username'])
         if not user or not user.check_password(request.form['password']):
-            return render_template('login.html', error=True)
+            return render_template('IS668_Login.html', error=True)
         else:
             login_user(user)
-            return redirect(url_for('dashboardView'))
-
-def checkLogin():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
+            return redirect(url_for('home'))
 
 @app.route('/logout')
 @login_required
@@ -83,11 +80,23 @@ def studentView():
                                studentData=studentData,
                                students=studentData.getStudents(),
                                majorData=majorData)
-    else:
+
+    if request.form['send'] == "Add Student":
         insertRow(Student,
-                          first_name=request.form['first_name'],
-                          last_name=request.form['last_name'],
-                          email_address=request.form['email_address'],
-                          major_id=request.form['major_id'])
-        return redirect(url_for('studentView'))
+                  first_name=request.form['first_name'],
+                  last_name=request.form['last_name'],
+                  email_address=request.form['email_address'],
+                  major_id=request.form['major_id'])
+
+    elif request.form['send'] == "Update Student":
+        updateRow(Student, int(request.form['student_id']), 
+                  first_name=request.form['first_name'],
+                  last_name=request.form['last_name'],
+                  email_address=request.form['email_address'],
+                  major_id=request.form['major_id'])
+
+    elif request.form['send'] == "Delete Student":
+        deletRow(Student, int(request.form['student_id']))
+        
+    return redirect(url_for('studentView'))
 

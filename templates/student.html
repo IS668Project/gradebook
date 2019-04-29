@@ -1,21 +1,27 @@
 {% extends "formPopup.html" %}
 {% block title %}Students{% endblock %}
     {% block formContent %}
-    <form action="/student" method="POST">
-        First Name <input type="text" name="first_name" required="True" value={{studentData.first_name | replace("None","")}}><br>
-        Last Name<input type="text" name="last_name" required="True" value={{studentData.last_name | replace("None","")}}><br>
-        Major <select name="major_id"><br>
-                {% for major in majorData %}
-                    {% if studentData.major_id == major.id %}
-                        <option value={{major.major_id}} selected>{{major.major_name}}</option>
-                    {% else %}
-                        <option value={{major.major_id}}>{{major.major_name}}</option>
-                    {% endif %}
-                {% endfor %}
-                </select><br>
-        Email <input type="text" name="email_address" required="True" value={{studentData.email_address | replace("None","")}}><br>
-        <input type="submit"><br>
-    </form>
+        <form action="/student" method="POST">
+            First Name <input type="text" name="first_name" required="True" value={{studentData.first_name | replace("None","")}}><br>
+            Last Name<input type="text" name="last_name" required="True" value={{studentData.last_name | replace("None","")}}><br>
+            Major <select name="major_id"><br>
+                    {% for major in majorData %}
+                        {% if studentData.major_id == major.id %}
+                            <option value={{major.major_id}} selected>{{major.major_name}}</option>
+                        {% else %}
+                            <option value={{major.major_id}}>{{major.major_name}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </select><br>
+            Email <input type="text" name="email_address" required="True" value={{studentData.email_address | replace("None","")}}><br>
+            {% if not studentData.first_name %}
+                <input type="submit" name="send" value="Add Student">
+            {% else %}
+                <input type="submit" name="send" value="Update Student">
+                <input type="submit" name="send" value="Delete Student">
+            {% endif %}
+            <br>
+        </form>
     {% endblock %}
 {% block pagebody %}
     <div class="container">
