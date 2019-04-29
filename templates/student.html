@@ -19,14 +19,14 @@
     {% endblock %}
 {% block pagebody %}
     <div class="container">
-        <table class="table">
+        <table id="studentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
             <thead>
                 <tr>
-                    <th>Student ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email Address</th>
-                    <th>Major</th>
+                    <th data-field="student_id" data-sortable="true">Student ID</th>
+                    <th data-field="first_name" data-sortable="true">First Name</th>
+                    <th data-field="last_name" data-sortable="true">Last Name</th>
+                    <th data-field="email_address" data-sortable="true">Email Address</th>
+                    <th data-field="major" data-sortable="true">Major</th>
                 </tr>
             </thead>
             <tbody>
