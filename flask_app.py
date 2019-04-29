@@ -22,7 +22,7 @@ db.init_app(app)
 
 @app.route('/')
 def hello_world():
-    return 'Hello from Flask!'
+    return redirect(url_for('dashboardView'))
 
 @login_manager.user_loader
 @dbQuery
@@ -38,9 +38,7 @@ def login():
         if not user or not user.check_password(request.form['password']):
             return render_template('login.html', error=True)
         else:
-            login_user(user)
-            session['logged_in'] = True
-            return redirect(url_for('dashboardView'))
+            return login_user(user)
 
 def checkLogin():
     if not session.get('logged_in'):
@@ -56,6 +54,7 @@ def changePassword():
     return 'place holder for changePassword'
 
 @app.route('/dashboard', methods=["GET", "POST"])
+@login_required
 def dashboardView():
     if session['logged_in']:
         return 'place holder for dashboardView'
@@ -73,7 +72,7 @@ def gradebookView():
     return 'place holder for gradebookView'
 
 @app.route('/student', methods=["GET", "POST"])
-#@login_required
+@login_required
 def studentView():
     majorData = dbQuery(Major.query.order_by('major_name').all())
     if request.method == "GET":
