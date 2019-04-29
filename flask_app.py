@@ -51,6 +51,7 @@ def logout():
     return 'place holder for logout'
 
 @app.route('/changePassword', methods=['GET', 'POST'])
+@login_required
 def changePassword():
     return 'place holder for changePassword'
 
