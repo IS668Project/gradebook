@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = False
 app.secret_key = "E*2kd+2sMPSt<VgN,26y!"
 login_manager = LoginManager()
-login_manager.unauthorized.login_view = 'https://is668projectgradebook.pythonanywhere.com/login'
+login_manager.login_view = 'https://is668projectgradebook.pythonanywhere.com/login'
 login_manager.init_app(app)
 db.init_app(app)
 
