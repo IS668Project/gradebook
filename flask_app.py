@@ -33,11 +33,11 @@ def load_user(username):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('IS668_Login.html', error=False)
+        return render_template('login.html', error=False)
     else:
         user = load_user(request.form['username'])
         if not user or not user.check_password(request.form['password']):
-            return render_template('IS668_Login.html', error=True)
+            return render_template('login.html', error=True)
         else:
             login_user(user)
             return redirect(url_for('home'))
