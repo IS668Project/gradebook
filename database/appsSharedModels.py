@@ -194,7 +194,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.user_password, password)
 
     def get_id(self):
-        return self.user_id
+        return self.user_name
 
     def __repr__(self):
         return ("<users('user_id'={}, 'first_name'={}, 'last_name'={},\

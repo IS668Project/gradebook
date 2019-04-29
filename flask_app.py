@@ -26,8 +26,8 @@ def hello_world():
 
 @login_manager.user_loader
 @dbQuery
-def load_user(user_name):
-    return User.query.filter_by(user_name=user_name).first()
+def load_user(username):
+    return User.query.filter_by(user_name=username).first()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -38,7 +38,8 @@ def login():
         if not user or not user.check_password(request.form['password']):
             return render_template('login.html', error=True)
         else:
-            return login_user(user)
+            login_user(user)
+            return redirect(url_for('dashboardView'))
 
 def checkLogin():
     if not session.get('logged_in'):
@@ -56,10 +57,7 @@ def changePassword():
 @app.route('/dashboard', methods=["GET", "POST"])
 @login_required
 def dashboardView():
-    if session['logged_in']:
-        return 'place holder for dashboardView'
-    else:
-        return'back to drawing board'
+    return 'place holder for dashboardView'
 
 @app.route('/class', methods=["GET", "POST"])
 @login_required
