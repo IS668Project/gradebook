@@ -37,7 +37,7 @@
             </thead>
             <tbody>
                 {% for student in students %}
-                    <tr>
+                    <tr class="clickable-row" data-toggle="modal" data-targer="#editModal" style="cursor:pointer">
                         <td>{{student.student_id}}</td>
                         <td>{{student.first_name}}</td>
                         <td>{{student.last_name}}</td>
@@ -48,10 +48,58 @@
             </tbody>
         </table>
     </div>
+    <button type="botton" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" data-dismiss="modal"> <small>Back</small></a> <span id="myModalLabel" style="margin-left:20px;"><font size="+2"><b>Student View</b></font></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" method="POST" action="/student" >
+                        <fieldset id="modal_form">
+                            <div class="form-group">
+                                <input type="number" class="form-cont" id="student_id" name="student_id" style="display: none;">
+                            </div>
+                            <div class="form-group">
+                                <label for="first_name">First Name</label>
+                                <input type="text" class="form-cont" id="first_name" name="first_name" placeholder="Enter First Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" class="form-cont" id="last_name" name="last_name" placeholder="Enter Last Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email_address">Email Address</label>
+                                <input type="email" class="form-cont" id="email_address" name="email_address" placeholder="Enter Email Address">
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                                Dropdown button
+                            </button>
+                            <div class="dropdown-menu">
+                                {% for major in majorData %}
+                                    <a class="dropdown-item" href="#">{{major.major_name}}</a>
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="send" value="Add Student" class="btn btn-primary"></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"></button>
+                    <button type="submit" name="send" value="Update Student" class="btn btn-primary" style="display: none;"></button>
+                    <button type="submit" name="send" value="Delete Student" class="btn btn-primary" style="display: none;"></button>
+                </div>
+            </div>
+        </div>
     <a class="trigger_popup_fricc">Add New Student</a>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#studentTable').DataTable();
+            var table = $('#studentTable').DataTable();
+            $('#studentTable tbody').on('click', 'tr', function(){
+                var rowdata = table.row(this).data();
+                $("#studentModal").modal("show");
+            })
         } );
     </script>
 {% endblock %}
