@@ -1,0 +1,116 @@
+{% extends "formPopup.html" %}
+{% block title %}Class Assignments{% endblock %}
+{% block pagebody %}
+    <div class="jumbotron text-center">
+        Assignments for {{assignments.class_name}}: {{assignments.class_semester}}, {{assignments.class_year}}
+    </div>
+     <div class="container">
+        <table id="assignmentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
+            <thead>
+                <tr>
+                    <th data-field="assignment_id" data-sortable="true">Assignment ID</th>
+                    <th data-field="assignment_name" data-sortable="true">Assignment Name</th>
+                    <th data-field="max_points" data-sortable="true">Max Points</th>
+                    <th data-field="description" data-sortable="true">Assignment Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assignments.assignment %}
+                    <tr class="clickable-row" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                        <td>{{assignment.assignment_id}}</td>
+                        <td>{{assignment.name}}</td>
+                        <td>{{assignment.max_points}}</td>
+                        <td>{{assignment.description}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button class="btn btn-primary"><a class="trigger_modal">Add New Assignement</a></button>
+     <div class="modal fade" id="assignmentModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" data-dismiss="modal"> <small>Back</small></a> <span id="myModalLabel" style="margin-left:20px;"><font size="+2"><b>Assignment View</b></font></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" method="POST" action="/student" >
+                        <fieldset id="modal_form">
+                            <div class="form-group">
+                                <input type="number" class="form-cont" id="assignment_id" name="assignment_id" readonly value=0>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-cont" id="class_id" name="class_id" readonly value={{assignments.class_id}}>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="assignment_name">Assignment Name</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <input type="text" class="form-cont" id="assignment_name" name="assignment_name" placeholder="Enter Assignment Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4"><label for="max_points">Max Points</label></div>
+                                    <div class="col-md-5.ml-auto"><input type="number" class="form-cont" id="max_points" name="max_points" placeholder="Enter Max Points"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="assignment_description">Assignment Description</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <textarea class="form-cont" id="assignment_description" name="assignment_description" rows="5" cols="40"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <button type="submit" name="send" id="AddAssignment" value="AddAssignment" class="btn btn-primary">
+                            Add Assignment
+                        </button>
+                        <button type="submit" name="send" id="UpdateAssignment" value="UpdateAssignment" class="btn btn-primary">
+                            Update Assignment
+                        </button>
+                        <button type="submit" name="send" id="DeleteAssignment" value="DeleteAssignment" class="btn btn-primary">
+                            Delete Assignment
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#assignmentTable').DataTable();
+            $('td:nth-child(1), th:nth-child(1)').hide();
+            $('td:nth-child(4), th:nth-child(4)').hide();
+            $('#assignmentTable tbody').on('click', 'tr', function(){
+                var rowdata = table.row(this).data();
+                console.log(rowdata);
+                $("#assignment_id").val(table.row(this).data()[0]);
+                $("#assignment_name").val(table.row(this).data()[1]);
+                $("#max_points").val(table.row(this).data()[2]);
+                $("textarea#assignment_description").text(table.row(this).data()[3]);
+                $("#AddAssignment").hide();
+                $("#UpdateAssignment").show();
+                $("#DeleteAssignment").show();
+                $("#assignmentModal").modal("show");
+            })
+            $(".trigger_modal").click(function(){
+                $("#assignment_id").val('');
+                $("#assignment_name").val('');
+                $("#max_points").val('');
+                $("textarea#assignment_description").text('');
+                $("#AddAssignment").show();
+                $("#UpdateAssignment").hide();
+                $("#DeleteAssignment").hide();
+                $('#assignmentModal').modal("show");
+    });
+        } );
+    </script>
+{% endblock %}
