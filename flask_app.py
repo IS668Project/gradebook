@@ -62,9 +62,8 @@ def homeView():
 @login_required
 def classView():
     if request.method == "GET":
-        classInst = Class()
         return render_template('class.html',
-                               classes=classInst.getClasses())
+                               classes=getClasses())
     if request.form['send'] == "AddClass":
         insertRow(Class, class_name=request.form['class_name'],
                   class_abbrv=request.form['class_abbrv'],
@@ -119,4 +118,29 @@ def studentView():
     elif request.form['send'] == "DeleteStudent":
         deleteRow(Student, int(request.form['student_id']))
     return redirect(url_for('studentView'))
+
+@app.route('/assignments', methods=["GET", "POST"])
+@login_required
+def assignmentView():
+    if request.method == "GET":
+        if request.args.get('class_id'):
+            data = getClassAssignments(request.args.get('class_id'))
+            return render_template('classAssignments.html', assignments=data)
+    if request.form['send'] == "AddAssignment":
+        insertRow(Assignment,
+                  class_id=int(request.form['class_id']),
+                  assignment_name=request.form['assignment_name'],
+                  max_points=float(request.form['max_points']),
+                  assignment_description=request.form['assignment_description'])
+
+    elif request.form['send'] == "UpdateAssignment":
+        updateRow(Assignment, int(request.form['assignment_id']),
+                  class_id=int(request.form['class_id']),
+                  assignment_name=request.form['assignment_name'],
+                  max_points=float(request.form['max_points']),
+                  assignment_description=request.form['assignment_description'])
+
+    elif request.form['send'] == "DeleteAssignment":
+        deleteRow(Assignment, int(request.form['assignment_id']))
+    return redirect(url_for('assignmentView'))
 
