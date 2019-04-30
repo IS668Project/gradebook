@@ -1,22 +1,5 @@
 {% extends "formPopup.html" %}
 {% block title %}Students{% endblock %}
-    {% block formContent %}
-    <form action="/student" method="POST">
-        First Name <input type="text" name="first_name" required="True" value={{studentData.first_name | replace("None","")}}><br>
-        Last Name<input type="text" name="last_name" required="True" value={{studentData.last_name | replace("None","")}}><br>
-        Major <select name="major_id"><br>
-                {% for major in majorData %}
-                    {% if studentData.major_id == major.id %}
-                        <option value={{major.major_id}} selected>{{major.major_name}}</option>
-                    {% else %}
-                        <option value={{major.major_id}}>{{major.major_name}}</option>
-                    {% endif %}
-                {% endfor %}
-                </select><br>
-        Email <input type="text" name="email_address" required="True" value={{studentData.email_address | replace("None","")}}><br>
-        <input type="submit"><br>
-    </form>
-    {% endblock %}
 {% block pagebody %}
     <div class="container">
         <table id="studentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
@@ -31,7 +14,7 @@
             </thead>
             <tbody>
                 {% for student in students %}
-                    <tr>
+                    <tr class="clickable-row" data-toggle="modal" data-targer="#editModal" style="cursor:pointer">
                         <td>{{student.student_id}}</td>
                         <td>{{student.first_name}}</td>
                         <td>{{student.last_name}}</td>
@@ -42,5 +25,106 @@
             </tbody>
         </table>
     </div>
-    <a class="trigger_popup_fricc">Add New Student</a>
+    <button class="btn btn-primary"><a class="trigger_modal">Add New Student</a></button>
+    <button type="botton" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" data-dismiss="modal"> <small>Back</small></a> <span id="myModalLabel" style="margin-left:20px;"><font size="+2"><b>Student View</b></font></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" method="POST" action="/student" >
+                        <fieldset id="modal_form">
+                            <div class="form-group">
+                                <input type="number" class="form-cont" id="student_id" name="student_id" style="display: none;" value=0>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="first_name">First Name</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <input type="text" class="form-cont" id="first_name" name="first_name" placeholder="Enter First Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4"><label for="last_name">Last Name</label></div>
+                                    <div class="col-md-5.ml-auto"><input type="text" class="form-cont" id="last_name" name="last_name" placeholder="Enter Last Name"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="email_address">Email Address</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <input type="email" class="form-cont" id="email_address" name="email_address" placeholder="Enter Email Address">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="majors">Major</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <select class="form-control" id="major_id" name="major_id">
+                                            <option selected disabled>--Select Major--</option>
+                                            {% for major in majorData %}
+                                                <option value={{major.major_id}}>
+                                                    {{major.major_name}}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <button type="submit" name="send" id="AddStudent" value="AddStudent" class="btn btn-primary">
+                            Add Student
+                        </button>
+                        <button type="submit" name="send" id="UpdateStudent" value="UpdateStudent" class="btn btn-primary" style="display: none;">
+                            Update Student
+                        </button>
+                        <button type="submit" name="send" id="DeleteStudent" value="DeleteStudent" class="btn btn-primary" style="display: none;">
+                            Delete Student
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#studentTable').DataTable();
+            $('#studentTable tbody').on('click', 'tr', function(){
+                var rowdata = table.row(this).data();
+                console.log(table.row(this).data())
+                console.log(table.row(this))
+                $("#student_id").val(table.row(this).data()[0]);
+                $("#first_name").val(table.row(this).data()[1]);
+                $("#last_name").val(table.row(this).data()[2]);
+                $("#email_address").val(table.row(this).data()[3]);
+                var major = table.row(this).data()[4];
+                var i;
+                for(i=0; i < major_id.length; i++){
+                    if (major_id[i].text == major){
+                        major_id[i].selected = true;
+                        console.log(major_id[i]);
+                    }
+                }
+                $("#AddStudent").hide();
+                $("#UpdateStudent").show();
+                $("#DeleteStudent").show();
+                $("#studentModal").modal("show");
+            })
+            $(".trigger_modal").click(function(){
+                $('#studentModal').modal("show");
+    });
+        } );
+    </script>
 {% endblock %}

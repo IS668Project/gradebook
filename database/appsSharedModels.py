@@ -34,7 +34,8 @@ def dbTransaction(func):
             try:
                 func(*args, **kwargs)
                 return
-            except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
+            #except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
+            except:
                 db.session.rollback()
                 attemptCount += 1
                 sleep(2)
