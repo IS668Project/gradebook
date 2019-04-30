@@ -45,7 +45,8 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
-    return 'place holder for logout'
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/changePassword', methods=['GET', 'POST'])
 @login_required

@@ -135,7 +135,7 @@ class Student(db.Model):
                                        self.assignment_grades,
                                        self.class_roster,
                                        self.majors))
-
+    @dbQuery
     def getStudents(self):
         results = self.query.order_by('last_name', 'first_name').all()
         return results
@@ -164,6 +164,11 @@ class Class(db.Model):
                                                 self.class_description,
                                                 self.assignment,
                                                 self.class_roster))
+
+    @dbQuery
+    def getClasses(self):
+       results = self.query.order_by('class_abbrv').all()
+       return results
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
