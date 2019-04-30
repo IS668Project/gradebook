@@ -94,7 +94,7 @@ def getClasses():
 
 @dbQuery
 def getClassAssignments(classId):
-    results = Class.query.filter_by(class_id=classId).order_by('name').all()
+    results = Class.query.filter_by(class_id=classId).order_by('assignment.name').all()
     return results
 
 @dbQuery

@@ -37,10 +37,10 @@
                     <form class="form-horizontal" method="POST" action="/student" >
                         <fieldset id="modal_form">
                             <div class="form-group">
-                                <input type="number" class="form-cont" id="assignment_id" name="assignment_id" value=0 readonly>
+                                <input type="number" class="form-cont" id="assignment_id" name="assignment_id" readonly value=0>
                             </div>
                             <div class="form-group">
-                                <input type="number" class="form-cont" id="class_id" name="class_id" value={{assignment.class_id}} readonly>
+                                <input type="number" class="form-cont" id="class_id" name="class_id" readonly value={{assignments.class_id}}>
                             </div>
                             <div class="form-group">
                                 <div class="row">
@@ -99,7 +99,7 @@
                 $("#AddAssignment").hide();
                 $("#UpdateAssignment").show();
                 $("#DeleteAssignment").show();
-                $("#classModal").modal("show");
+                $("#assignmentModal").modal("show");
             })
             $(".trigger_modal").click(function(){
                 $("#assignment_id").val('');
@@ -109,7 +109,7 @@
                 $("#AddAssignment").show();
                 $("#UpdateAssignment").hide();
                 $("#DeleteAssignment").hide();
-                $('#classModal').modal("show");
+                $('#assignmentModal').modal("show");
     });
         } );
     </script>

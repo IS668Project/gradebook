@@ -92,13 +92,8 @@ def gradebookView():
 def studentView():
     majorData = dbQuery(Major.query.order_by('major_name').all())
     if request.method == "GET":
-        if request.args.get('student_id'):
-            studentData = getStudentData(request.args.get('student_id'))
-        else:
-            studentData = Student()
         return render_template('student.html',
-                               studentData=studentData,
-                               students=studentData.getStudents(),
+                               students=getStudents(),
                                majorData=majorData)
 
     if request.form['send'] == "AddStudent":
