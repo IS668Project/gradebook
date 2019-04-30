@@ -76,6 +76,32 @@ def deleteRow(model, rowId):
     db.session.delete(deletion)
     db.session.commit()
 
+#queries used by the flask app
+@dbQuery
+def getStudents():
+    results = Student.query.order_by('last_name', 'first_name').all()
+    return results
+
+@dbQuery
+def getStudentData(studentId):
+    result = Student.query.filter_by(student_id=studentId).first()
+    return result
+
+@dbQuery
+def getClasses():
+    results = Class.query.order_by('class_abbrv').all()
+    return results
+
+@dbQuery
+def getClassAssignments(classId):
+    results = Class.query.filter_by(class_id=classId).all()
+    return results
+
+@dbQuery
+def getClassRoster(classId):
+    results = Class.query.filter_by(class_id=classId).order_by('name').all()
+    return results
+
 class dbTools:
     def getFkValue(self, table, att_name, value):
         """
@@ -135,14 +161,6 @@ class Student(db.Model):
                                        self.assignment_grades,
                                        self.class_roster,
                                        self.majors))
-
-    def getStudents(self):
-        results = self.query.order_by('last_name', 'first_name').all()
-        return results
-
-    def getStudentData(self, studentId):
-        result = self.query.filter_by(student_id=studentId).first()
-        return result
 
 class Class(db.Model):
     __tablename__ = 'classes'
@@ -247,10 +265,10 @@ class Assignment(db.Model):
                                         lazy = True)
 
     def __repr__(self):
-        return ("<assignments('assignment_id'={}, 'term_class_id'={},\
+        return ("<assignments('assignment_id'={}, 'class_id'={},\
                  'name'={},'max_points'={}, 'description'={},\
                  assingment_grade={})>".format(self.assignment_id,
-                                               self.term_class_id, 
+                                               self.class_id, 
                                                self.name, 
                                                self.max_points,
                                                self.description,
