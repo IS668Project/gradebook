@@ -110,6 +110,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#classTable').DataTable();
+            $('td:nth-child(5), th:nth-child(5)').hide();
             $('#classTable tbody').on('click', 'tr', function(){
                 var rowdata = table.row(this).data();
                 console.log(rowdata);
@@ -118,14 +119,7 @@
                 $("#class_name").val(table.row(this).data()[2]);
                 $("#class_semester").val(table.row(this).data()[3]);
                 $("#class_year").val(table.row(this).data()[4]);
-                var i;
-                var classData = {{%classes%}};
-                for(i=0; i < classData.length; i++){
-                    if(classData[i].class_id == table.row(this).data()[0]){
-                        $("textarea#class_description").text(classData[i].class_description);
-                        break;
-                    }
-                }
+                $("textarea#class_description").text(table.row(this).data()[5]);
                 $("#AddClass").hide();
                 $("#UpdateClass").show();
                 $("#DeleteClass").show();

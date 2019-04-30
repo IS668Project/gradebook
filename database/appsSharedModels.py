@@ -252,10 +252,10 @@ class Assignment(db.Model):
                                         lazy = True)
 
     def __repr__(self):
-        return ("<assignments('assignment_id'={}, 'term_class_id'={},\
+        return ("<assignments('assignment_id'={}, 'class_id'={},\
                  'name'={},'max_points'={}, 'description'={},\
                  assingment_grade={})>".format(self.assignment_id,
-                                               self.term_class_id, 
+                                               self.class_id, 
                                                self.name, 
                                                self.max_points,
                                                self.description,
