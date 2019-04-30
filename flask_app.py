@@ -23,7 +23,7 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    return 'placeholder for home page'
+    return render_template('home.html')
 
 @login_manager.user_loader
 @dbQuery
@@ -76,7 +76,7 @@ def studentView():
             studentData = getStudentData(request.args.get('student_id'))
         else:
             studentData = Student()
-        return render_template('student.html', 
+        return render_template('student.html',
                                studentData=studentData,
                                students=studentData.getStudents(),
                                majorData=majorData)
@@ -89,7 +89,7 @@ def studentView():
                   major_id=request.form['major_id'])
 
     elif request.form['send'] == "UpdateStudent":
-        updateRow(Student, int(request.form['student_id']), 
+        updateRow(Student, int(request.form['student_id']),
                   first_name=request.form['first_name'],
                   last_name=request.form['last_name'],
                   email_address=request.form['email_address'],
