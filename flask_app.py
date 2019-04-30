@@ -61,7 +61,27 @@ def homeView():
 @app.route('/class', methods=["GET", "POST"])
 @login_required
 def classView():
-    return 'place holder for classView'
+    if request.method == "GET":
+        classInst = Class()
+        return render_template('class.html',
+                               classInst.getClasses())
+    if request.form['send'] == "AddClass":
+        insertRow(Class, class_name=request.form['class_name'],
+                  class_abbrv=request.form['class_abbrv'],
+                  class_description=request.form['class_description'],
+                  class_semester=request.form['class_semester'],
+                  class_year=request.form['class_year'])
+    elif request.form['send'] == "UpdateClass":
+        updateRow(Class, int(request.form['class_id']),
+                  class_name=request.form['class_name'],
+                  class_abbrv=request.form['class_abbrv'],
+                  class_description=request.form['class_description'],
+                  class_semester=request.form['class_semester'],
+                  class_year=request.form['class_year'])
+    elif request.form['send'] == "DeleteClass":
+        deleteRow(Class, int(request.form['class_id']))
+    return redirect(url_for('classtView'))
+
 
 @app.route('/gradebook', methods=["GET", "POST"])
 @login_required
