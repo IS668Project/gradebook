@@ -126,13 +126,11 @@ class Major(db.Model):
     __tablename__ = 'majors'
     major_id = db.Column(db.Integer, primary_key=True)
     major_name = db.Column(db.String(100), nullable=False)
-    students = db.relationship('Student', back_populates='majors')
 
     def __repr__(self):
-        return ("<majors('major_id'={}, 'major_name'={},\
-                'students'={})>".format(self.major_id,
-                                        self.major_name,
-                                        self.students))
+        return ("<majors('major_id'={}, \
+                'major_name'={},>".format(self.major_id, 
+                                          self.major_name))
 
 class Student(db.Model):
     __tablename__ = 'students'
@@ -148,7 +146,7 @@ class Student(db.Model):
                                         lazy=True)
     class_roster = db.relationship('ClassRoster', backref='Student',
                                    lazy=True)
-    majors = db.relationship('Major', back_populates='students')
+    majors = db.relationship('Major', backref='Student')
 
     def __repr__(self):
         return ("<students('first_name'={}, 'last_name'={},\
