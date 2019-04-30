@@ -82,7 +82,6 @@ def classView():
         deleteRow(Class, int(request.form['class_id']))
     return redirect(url_for('classView'))
 
-
 @app.route('/gradebook', methods=["GET", "POST"])
 @login_required
 def gradebookView():
@@ -139,5 +138,5 @@ def assignmentView(classId=''):
     elif request.form['send'] == "DeleteAssignment":
         deleteRow(Assignment, int(request.form['assignment_id']))
     messages = json.dumps({'class_id':request.args.get('class_id')})
-    return redirect(url_for('assignmentView'))
+    return redirect(url_for('assignmentView', messages=messages))
 
