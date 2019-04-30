@@ -23,7 +23,7 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    return 'placeholder for home page'
+    return render_template(home.html')
 
 @login_manager.user_loader
 @dbQuery
@@ -52,10 +52,10 @@ def logout():
 def changePassword():
     return 'place holder for changePassword'
 
-@app.route('/dashboard', methods=["GET", "POST"])
+@app.route('/home', methods=["GET", "POST"])
 @login_required
-def dashboardView():
-    return 'place holder for dashboardView'
+def homeView():
+    return render_template('home.html')
 
 @app.route('/class', methods=["GET", "POST"])
 @login_required
