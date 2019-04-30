@@ -1,6 +1,7 @@
 """
     Gradebook Flask app file. Used to host website, manage server side computations.
 """
+import json
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_fresh, login_required, login_user, LoginManager, logout_user
 from flask_sqlalchemy import SQLAlchemy
@@ -116,7 +117,7 @@ def studentView():
 
 @app.route('/assignments', methods=["GET", "POST"])
 @login_required
-def assignmentView():
+def assignmentView(classId=''):
     if request.method == "GET":
         if request.args.get('class_id'):
             data = getClassAssignments(request.args.get('class_id'))
@@ -137,5 +138,6 @@ def assignmentView():
 
     elif request.form['send'] == "DeleteAssignment":
         deleteRow(Assignment, int(request.form['assignment_id']))
+    messages = json.dumps({'class_id':request.args.get('class_id')})
     return redirect(url_for('assignmentView'))
 
