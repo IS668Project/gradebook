@@ -126,7 +126,7 @@ class Major(db.Model):
     __tablename__ = 'majors'
     major_id = db.Column(db.Integer, primary_key=True)
     major_name = db.Column(db.String(100), nullable=False)
-    students = db.relationship('Student', back_populates='majors')
+    major_students = db.relationship('Student', back_populates='majors')
 
     def __repr__(self):
         return ("<majors('major_id'={}, 'major_name'={},\
@@ -146,9 +146,8 @@ class Student(db.Model):
     assignment_grades = db.relationship('AssignmentGrade',
                                         backref='Student',
                                         lazy=True)
-    class_roster = db.relationship('ClassRoster', backref='Student',
-                                   lazy=True)
-    majors = db.relationship('Major', back_populates='students')
+    student_class_roster = db.relationship('ClassRoster', back_populates='students')
+    student_majors = db.relationship('Major', back_populates='students')
 
     def __repr__(self):
         return ("<students('first_name'={}, 'last_name'={},\
@@ -170,8 +169,8 @@ class Class(db.Model):
     class_description = db.Column(db.String(3000))
     class_semester = db.Column(db.String(50))
     class_year = db.Column(db.Integer)
-    assignment = db.relationship('Assignment', backref='Class', lazy=True)
-    class_roster = db.relationship('ClassRoster', backref='Class', lazy=True)
+    class_assignment = db.relationship('Assignment', back_populates='classess')
+    class_class_roster = db.relationship('ClassRoster', back_populates='classes')
 
     def __repr__(self):
         return ("<classes('class_name'={}, class_abbrv={}, \
@@ -191,8 +190,7 @@ class User(UserMixin, db.Model):
     user_name = db.Column(db.String(40), nullable=False, unique=True)
     user_password = db.Column(db.String(128), nullable=False)
     email_address = db.Column(db.String(100), nullable=False, unique=True)
-    user_access = db.relationship('UserAccess', backref='User',
-                                  lazy=True)
+    user_user_access = db.relationship('UserAccess', back_populates='users')
 
     def __init__(self, first_name, last_name, user_name, user_password, email_address):
         self.first_name = first_name
@@ -245,6 +243,8 @@ class ClassRoster(db.Model):
                                              onupdate='CASCADE',
                                              ondelete='CASCADE'),
                                              primary_key=True)
+    classRoster_student =db.relationship('Student', back_populates='class_rosters')
+    classRoster_class =db.relationship('Class', back_populates='class_rosters')
 
     def __repr__(self):
         return ("<class_rosters('student_id'={},\
@@ -260,9 +260,8 @@ class Assignment(db.Model):
     name = db.Column(db.String(40), nullable=False)
     max_points = db.Column(db.Integer, default=0, nullable=False)
     description = db.Column(db.String(400))
-    assingment_grade = db.relationship('AssignmentGrade',
-                                        backref='Assignment',
-                                        lazy = True)
+    assign_class = db.relationship('Class', back_populates='assignments')
+    assign_grades = db.relationship('AssignmentGrade', back_populates='assignments')
 
     def __repr__(self):
         return ("<assignments('assignment_id'={}, 'class_id'={},\
@@ -288,6 +287,8 @@ class AssignmentGrade(db.Model):
                                               primary_key=True)
     comments = db.Column(db.String(400))
     score = db.Column(db.Float(2), default=0, nullable=False)
+    assignGrade_student = db.relationship('Student', back_populates='assignment_grades')
+    assignGrade_assign = db.relationship('Assignment', back_populates='assignment_grades')
 
     def __repr__(self):
 
@@ -305,6 +306,8 @@ class UserAccess(db.Model):
                                db.ForeignKey('classes.class_id',
                                onupdate='CASCADE', ondelete='CASCADE'),
                                primary_key=True)
+    userAccess_user = db.relationship('Assignment', back_populates='user_access')
+    userAccess_class = db.relationship('Class', back_populates='user_access')
 
     def __repr__(self):
         return ("<user_access('user_id'={},\
