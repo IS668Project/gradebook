@@ -131,6 +131,7 @@ def assignmentView(classId=''):
         if request.args.get('class_id'):
             data = getClassAssignments(request.args.get('class_id'))
             return render_template('classAssignments.html', assignments=data)
+        return 'get with no args'
     if request.form['send'] == "AddAssignment":
         insertRow(Assignment,
                   class_id=int(request.form['class_id']),
@@ -144,9 +145,8 @@ def assignmentView(classId=''):
                   assignment_name=request.form['assignment_name'],
                   max_points=float(request.form['max_points']),
                   assignment_description=request.form['assignment_description'])
-
     elif request.form['send'] == "DeleteAssignment":
         deleteRow(Assignment, int(request.form['assignment_id']))
-    messages = json.dumps({'class_id':request.args.get('class_id')})
+    messages = json.dumps({'class_id':request.form['class_id']})
     return redirect(url_for('assignmentView', messages=messages))
 

@@ -1,6 +1,9 @@
 {% extends "formPopup.html" %}
 {% block title %}Classes{% endblock %}
 {% block pagebody %}
+    <div class="jumbotron text-center">
+        <h1>Classes</h1>
+    </div>
     <div class="container">
         <table id="classTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_abbrv" data-sort-order="desc">
             <thead>
@@ -24,8 +27,8 @@
                         <td>{{class.class_semester}}</td>
                         <td>{{class.class_year}}</td>
                         <td style="display:none;">{{class.class_description}}</td>
-                        <td><button class="btn btn-primary"><a href="/assignments?class_id={{class.class_id}}">Assignements</a></button></td>
-                        <td><button class="btn btn-primary"><a href="/class_roster?class_id={{class.class_id}}">Class Roster</a></button></td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/assignments?class_id={{class.class_id}}">Assignments</a></button></td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/class_roster?class_id={{class.class_id}}">Class Roster</a></button></td>
                     </tr>
                 {% endfor %}
             </tbody>

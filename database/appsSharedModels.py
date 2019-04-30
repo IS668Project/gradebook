@@ -94,12 +94,12 @@ def getClasses():
 
 @dbQuery
 def getClassAssignments(classId):
-    results = Class.query.filter_by(class_id=classId).all()
+    results = Class.query.filter_by(class_id=classId).first()
     return results
 
 @dbQuery
 def getClassRoster(classId):
-    results = Class.query.filter_by(class_id=classId).order_by('name').all()
+    results = Class.query.filter_by(class_id=classId).first()
     return results
 
 class dbTools:
