@@ -131,12 +131,14 @@ def assignmentView(classId=''):
         if request.args.get('class_id'):
             data = getClassAssignments(request.args.get('class_id'))
             return render_template('classAssignments.html', assignments=data)
+        return 'get with no args'
     if request.form['send'] == "AddAssignment":
         insertRow(Assignment,
                   class_id=int(request.form['class_id']),
                   name=request.form['assignment_name'],
                   max_points=float(request.form['max_points']),
                   description=request.form['assignment_description'])
+
     elif request.form['send'] == "UpdateAssignment":
         updateRow(Assignment, int(request.form['assignment_id']),
                   class_id=int(request.form['class_id']),
