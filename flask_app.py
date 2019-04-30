@@ -80,7 +80,7 @@ def classView():
                   class_year=request.form['class_year'])
     elif request.form['send'] == "DeleteClass":
         deleteRow(Class, int(request.form['class_id']))
-    return redirect(url_for('classtView'))
+    return redirect(url_for('classView'))
 
 
 @app.route('/gradebook', methods=["GET", "POST"])
