@@ -118,7 +118,14 @@
                 $("#class_name").val(table.row(this).data()[2]);
                 $("#class_semester").val(table.row(this).data()[3]);
                 $("#class_year").val(table.row(this).data()[4]);
-                $("textarea#class_description").text(table.row(this).data()[5]);
+                var i;
+                var classData = {{%classes%}};
+                for(i=0; i < classData.length; i++){
+                    if(classData[i].class_id == table.row(this).data()[0]){
+                        $("textarea#class_description").text(classData[i].class_description);
+                        break;
+                    }
+                }
                 $("#AddClass").hide();
                 $("#UpdateClass").show();
                 $("#DeleteClass").show();
