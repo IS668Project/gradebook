@@ -81,22 +81,21 @@ def studentView():
                                students=studentData.getStudents(),
                                majorData=majorData)
 
-    if request.form['send'] == "Add Student":
+    if request.form['send'] == "AddStudent":
         insertRow(Student,
                   first_name=request.form['first_name'],
                   last_name=request.form['last_name'],
                   email_address=request.form['email_address'],
                   major_id=request.form['major_id'])
 
-    elif request.form['send'] == "Update Student":
+    elif request.form['send'] == "UpdateStudent":
         updateRow(Student, int(request.form['student_id']), 
                   first_name=request.form['first_name'],
                   last_name=request.form['last_name'],
                   email_address=request.form['email_address'],
                   major_id=request.form['major_id'])
 
-    elif request.form['send'] == "Delete Student":
-        deletRow(Student, int(request.form['student_id']))
-        
+    elif request.form['send'] == "DeleteStudent":
+        deleteRow(Student, int(request.form['student_id']))
     return redirect(url_for('studentView'))
 
