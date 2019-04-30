@@ -59,6 +59,16 @@ def changePassword():
 def homeView():
     return render_template('home.html')
 
+@app.route('/contact_information', methods=["GET", "POST"])
+@login_required
+def contact_informationView():
+    return render_template('contact_information.html')
+
+@app.route('/training', methods=["GET", "POST"])
+@login_required
+def trainingView():
+    return render_template('training.html')
+
 @app.route('/class', methods=["GET", "POST"])
 @login_required
 def classView():
