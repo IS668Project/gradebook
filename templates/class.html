@@ -10,6 +10,7 @@
                     <th data-field="class_name" data-sortable="true">Class Name</th>
                     <th data-field="class_semester" data-sortable="true">Class Semester</th>
                     <th data-field="class_year" data-sortable="true">Class Year</th>
+                    <th data-field="class_description" data-sortable="true">Class Description</th>
                 </tr>
             </thead>
             <tbody>
@@ -62,7 +63,7 @@
                                         <label for="class_description">Class Description</label>
                                     </div>
                                     <div class="col-md-5.ml-auto">
-                                        <textarea class="form-cont" id="class_desc" name="class_desc" rows="5" cols="50">Class Description</textarea>
+                                        <textarea class="form-cont" id="class_description" name="class_description" rows="5" cols="50"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -116,14 +117,23 @@
                 $("#class_abbrv").val(table.row(this).data()[1]);
                 $("#class_name").val(table.row(this).data()[2]);
                 $("#class_semester").val(table.row(this).data()[3]);
-                $("#class_semester").val(table.row(this).data()[4]);
-                $("#class_description").val(table.row(this).data()[5]);
+                $("#class_year").val(table.row(this).data()[4]);
+                $("textarea#class_description").text(table.row(this).data()[5]);
                 $("#AddClass").hide();
                 $("#UpdateClass").show();
                 $("#DeleteClass").show();
                 $("#classModal").modal("show");
             })
             $(".trigger_modal").click(function(){
+                $("#class_id").val('');
+                $("#class_abbrv").val('');
+                $("#class_name").val('');
+                $("#class_semester").val('');
+                $("#class_year").val('');
+                $("textarea#class_description").text('');
+                $("#AddClass").show();
+                $("#UpdateClass").hide();
+                $("#DeleteClass").hide();
                 $('#classModal').modal("show");
     });
         } );

@@ -64,7 +64,7 @@ def classView():
     if request.method == "GET":
         classInst = Class()
         return render_template('class.html',
-                               classInst.getClasses())
+                               classes=classInst.getClasses())
     if request.form['send'] == "AddClass":
         insertRow(Class, class_name=request.form['class_name'],
                   class_abbrv=request.form['class_abbrv'],

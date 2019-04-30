@@ -121,6 +121,14 @@
                 $("#studentModal").modal("show");
             })
             $(".trigger_modal").click(function(){
+                $("#student_id").val('');
+                $("#first_name").val('');
+                $("#last_name").val('');
+                $("#email_address").val('');
+                major_id[0].selected = true;
+                $("#AddStudent").show();
+                $("#UpdateStudent").hide();
+                $("#DeleteStudent").hide();
                 $('#studentModal').modal("show");
     });
         } );
