@@ -84,7 +84,7 @@ def getStudents():
 
 @dbQuery
 def getStudentData(studentId):
-    result = Student.query.filter_by(student_id=studentId).first()
+    result = Student.query.get(studentId)
     return result
 
 @dbQuery
@@ -94,12 +94,12 @@ def getClasses():
 
 @dbQuery
 def getClassAssignments(classId):
-    results = Class.query.filter_by(class_id=classId).first()
+    results = Class.query.get(classId)
     return results
 
 @dbQuery
 def getClassRoster(classId):
-    results = Class.query.filter_by(class_id=classId).first()
+    results = Class.query.get(classId)
     return results
 
 class dbTools:

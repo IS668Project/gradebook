@@ -135,18 +135,17 @@ def assignmentView(classId=''):
     if request.form['send'] == "AddAssignment":
         insertRow(Assignment,
                   class_id=int(request.form['class_id']),
-                  assignment_name=request.form['assignment_name'],
+                  name=request.form['assignment_name'],
                   max_points=float(request.form['max_points']),
-                  assignment_description=request.form['assignment_description'])
+                  description=request.form['assignment_description'])
 
     elif request.form['send'] == "UpdateAssignment":
         updateRow(Assignment, int(request.form['assignment_id']),
                   class_id=int(request.form['class_id']),
-                  assignment_name=request.form['assignment_name'],
+                  name=request.form['assignment_name'],
                   max_points=float(request.form['max_points']),
-                  assignment_description=request.form['assignment_description'])
+                  description=request.form['assignment_description'])
     elif request.form['send'] == "DeleteAssignment":
         deleteRow(Assignment, int(request.form['assignment_id']))
-    messages = json.dumps({'class_id':request.form['class_id']})
-    return redirect(url_for('assignmentView', messages=messages))
+    return redirect(url_for('assignmentView', class_id=request.form['class_id']))
 
