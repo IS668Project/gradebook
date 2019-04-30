@@ -56,7 +56,7 @@
                                     <div class="col-md-4"><label for="class_name">Class Name</label></div>
                                     <div class="col-md-5.ml-auto"><input type="text" class="form-cont" id="class_name" name="class_name" placeholder="Enter Class Name"></div>
                                 </div>
-               s             </div>
+                            </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -110,7 +110,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#classTable').DataTable();
-            $('td:nth-child(5), th:nth-child(5)').hide();
+            $('td:nth-child(6), th:nth-child(6)').hide();
             $('#classTable tbody').on('click', 'tr', function(){
                 var rowdata = table.row(this).data();
                 console.log(rowdata);
