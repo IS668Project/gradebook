@@ -7,6 +7,7 @@ from flask_login import current_user, login_fresh, login_required, login_user, L
 from flask_sqlalchemy import SQLAlchemy
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
+from database.dbHelper import *
 from datetime import datetime
 from time import sleep
 
