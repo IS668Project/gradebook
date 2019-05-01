@@ -290,13 +290,6 @@ class Assignment(db.Model):
                                         backref='Assignment',
                                         lazy = True)
 
-    def __init__(self, class_id, name, max_points, description):
-        self.class_id = class_id
-        self.name = name
-        self.max_points = max_points
-        self.description = description
-        AssignmentGrade.populateAssignmentGrades(self.assignment_id, self.class_id)
-
     def __repr__(self):
         return ("<assignments('assignment_id'={}, 'class_id'={},\
                  'name'={},'max_points'={}, 'description'={},\
@@ -322,7 +315,6 @@ class AssignmentGrade(db.Model):
     score = db.Column(db.Float(2), default=0, nullable=False)
 
     def __repr__(self):
-
         return ("<assignment_grades('student_id'={}, 'assignment_id'={},\
                  'score'={})>".format(self.student_id, self.assignment_id,
                  self.score))

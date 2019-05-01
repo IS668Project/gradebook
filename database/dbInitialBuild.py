@@ -19,6 +19,7 @@ def createInitialData():
             Major(major_name='Computer Engineering'),
             Major(major_name='Cyber Security'),
             ])
+        db.session.commit()
         db.session.add_all([
             Student(first_name='John', last_name='Sullivan',
                      major_id=tools.getFkValue(Major, Major.major_name,
@@ -53,11 +54,13 @@ def createInitialData():
                      major_id=tools.getFkValue(Major, Major.major_name,
                                                 'Cyber Security'),
                      email_address='brithack@umbc.edu')])
+        db.session.commit()
         db.session.add_all([
             Class(class_name='Enterprise Computing', class_abbrv='IS668',
                     class_semester='Spring', class_year=2019,
                     class_description='Class on distributed systems and\
                                       the technology used to implement it')])
+        db.session.commit()
         db.session.add_all([
             User(first_name='John', last_name='Sullivan',
                   user_name='johnsu1', user_password='test',
@@ -68,6 +71,7 @@ def createInitialData():
             User(first_name='test', last_name='user',
                   user_name='test', user_password='test',
                   email_address='test@umbc.edu')])
+        db.session.commit()
         db.session.add_all([
             ClassRoster(student_id=tools.getFkValue(Student,
                                                        Student.first_name, 'Jessica'),
@@ -109,6 +113,7 @@ def createInitialData():
                         class_id=tools.getFkValue(Class,
                                                   Class.class_abbrv,
                                                   'IS668'))])
+        db.session.commit()
         db.session.add_all([
             Assignment(class_id=tools.getFkValue(Class,
                                                  Class.class_abbrv,
@@ -126,6 +131,7 @@ def createInitialData():
                                                  Class.class_abbrv,
                                                  'IS668'),
                         name='Final', max_points=25, description='Final')])
+        db.session.commit()
         db.session.add_all([
             UserAccess(user_id=tools.getFkValue(User, User.first_name, 'John'),
                         class_id=tools.getFkValue(Class,
@@ -139,10 +145,12 @@ def createInitialData():
                         class_id=tools.getFkValue(Class,
                                                  Class.class_abbrv,
                                                  'IS668'))])
+        db.session.commit()
 
-        rosters = dbQuery(ClassRoster.query.all())
-        for student in rosters:
-          addAssignmentsNewStudent(student.student_id, student.class_id)
+def populateGrades():
+    rosters = ClassRoster.query.all()
+    for student in rosters:
+        addAssignmentsNewStudent(student.student_id, student.class_id)
 
 if __name__ == '__main__':
     print('WARNING, this script wipes out everything in the db before \n \
@@ -155,5 +163,6 @@ if __name__ == '__main__':
         db.drop_all()
         db.create_all()
         createInitialData()
+        populateGrades()
 
     print('Script has completed, please review current DB and logs')
