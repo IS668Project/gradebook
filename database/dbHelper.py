@@ -1,7 +1,6 @@
 import functools
 from appsSharedModels import *
 from flask_sqlalchemy import SQLAlchemy, sqlalchemy
-     check_password_hash
 from time import sleep
 
 db = SQLAlchemy()
