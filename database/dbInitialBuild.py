@@ -73,47 +73,11 @@ def createInitialData():
                   user_name='test', user_password='test',
                   email_address='test@umbc.edu')])
         db.session.commit()
-        db.session.add_all([
-            ClassRoster(student_id=getFkValue(Student,
-                                              Student.first_name, 'Jessica'),
-                        class_id=getFkValue(Class,
-                                            Class.class_abbrv,
-                                            'IS668')),
-            ClassRoster(student_id=getFkValue(Student, Student.first_name,
-                                              'Jacob'),
-                        class_id=getFkValue(Class,
-                                            Class.class_abbrv,
-                                            'IS668')),
-            ClassRoster(student_id=getFkValue(Student, Student.first_name,
-                                             'Anabelle'),
-                        class_id=getFkValue(Class,
-                                            Class.class_abbrv,
-                                            'IS668')),
-            ClassRoster(student_id=getFkValue(Student, Student.first_name,
-                                              'Clay'),
-                        class_id=getFkValue(Class,
-                                            Class.class_abbrv,
-                                            'IS668')),
-            ClassRoster(student_id=getFkValue(Student, Student.first_name,
-                                              'Tom'),
-                        class_id=getFkValue(Class,
-                                            Class.class_abbrv,
-                                            'IS668')),
-            ClassRoster(student_id=getFkValue(Student, Student.first_name,
-                                              'Sally'),
-                        class_id=getFkValue(Class,
-                                            Class.class_abbrv,
-                                            'IS668')),
-            ClassRoster(student_id=getFkValue(Student, Student.first_name,
-                                              'Brittany'),
-                        class_id=getFkValue(Class,
-                                            Class.class_abbrv,
-                                            'IS668')),
-            ClassRoster(student_id=getFkValue(Student, Student.first_name,
-                                              'John'),
-                        class_id=getFkValue(Class,
-                                            Class.class_abbrv,
-                                            'IS668'))])
+        rosterAdd = []
+        for student in Student.query.all():
+            rosterAdd.append(ClassRoster(student_id=student.student_id,
+                        class_id=1))
+        db.session.add_all(rosterAdd)
         db.session.commit()
         db.session.add_all([
             Assignment(class_id=getFkValue(Class,
