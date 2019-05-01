@@ -1,5 +1,35 @@
 {% extends "basePage.html" %}
 {% block title %}Class Assignments{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#assignmentTable').DataTable();
+            $('td:nth-child(1), th:nth-child(1)').hide();
+            $('td:nth-child(4), th:nth-child(4)').hide();
+            $('#assignmentTable tbody').on('click', 'tr', function(){
+                var rowdata = table.row(this).data();
+                console.log(rowdata);
+                $("#assignment_id").val(table.row(this).data()[0]);
+                $("#assignment_name").val(table.row(this).data()[1]);
+                $("#max_points").val(table.row(this).data()[2]);
+                $("textarea#assignment_description").text(table.row(this).data()[3]);
+                $("#AddAssignment").hide();
+                $("#UpdateAssignment").show();
+                $("#DeleteAssignment").show();
+                $("#assignmentModal").modal("show");
+            });
+            $(".trigger_modal").click(function(){
+                $("#assignment_id").val('');
+                $("#assignment_name").val('');
+                $("#max_points").val('');
+                $("textarea#assignment_description").text('');
+                $("#AddAssignment").show();
+                $("#UpdateAssignment").hide();
+                $("#DeleteAssignment").hide();
+                $('#assignmentModal').modal("show");
+            });
+        });
+    </script>
 {% block body %}
     <div class="jumbotron text-center">
         <h1>Assignments for {{assignments.class_name}}: {{assignments.class_semester}}, {{assignments.class_year}}</h1>
@@ -84,33 +114,4 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-        $(document).ready(function() {
-            var table = $('#assignmentTable').DataTable();
-            $('td:nth-child(1), th:nth-child(1)').hide();
-            $('td:nth-child(4), th:nth-child(4)').hide();
-            $('#assignmentTable tbody').on('click', 'tr', function(){
-                var rowdata = table.row(this).data();
-                console.log(rowdata);
-                $("#assignment_id").val(table.row(this).data()[0]);
-                $("#assignment_name").val(table.row(this).data()[1]);
-                $("#max_points").val(table.row(this).data()[2]);
-                $("textarea#assignment_description").text(table.row(this).data()[3]);
-                $("#AddAssignment").hide();
-                $("#UpdateAssignment").show();
-                $("#DeleteAssignment").show();
-                $("#assignmentModal").modal("show");
-            })
-            $(".trigger_modal").click(function(){
-                $("#assignment_id").val('');
-                $("#assignment_name").val('');
-                $("#max_points").val('');
-                $("textarea#assignment_description").text('');
-                $("#AddAssignment").show();
-                $("#UpdateAssignment").hide();
-                $("#DeleteAssignment").hide();
-                $('#assignmentModal').modal("show");
-    });
-        } );
-    </script>
 {% endblock %}

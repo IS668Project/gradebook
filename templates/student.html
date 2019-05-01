@@ -1,5 +1,42 @@
 {% extends "basePage.html" %}
 {% block title %}Students{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#studentTable').DataTable();
+            $('#studentTable tbody').on('click', 'tr', function(){
+                var rowdata = table.row(this).data();
+                $("#student_id").val(table.row(this).data()[0]);
+                $("#first_name").val(table.row(this).data()[1]);
+                $("#last_name").val(table.row(this).data()[2]);
+                $("#email_address").val(table.row(this).data()[3]);
+                var major = table.row(this).data()[4];
+                var i;
+                for(i=0; i < major_id.length; i++){
+                    if (major_id[i].text == major){
+                        major_id[i].selected = true;
+                        break;
+                    }
+                }
+                $("#AddStudent").hide();
+                $("#UpdateStudent").show();
+                $("#DeleteStudent").show();
+                $("#studentModal").modal("show");
+            });
+            $(".trigger_modal").click(function(){
+                $("#student_id").val('');
+                $("#first_name").val('');
+                $("#last_name").val('');
+                $("#email_address").val('');
+                major_id[0].selected = true;
+                $("#AddStudent").show();
+                $("#UpdateStudent").hide();
+                $("#DeleteStudent").hide();
+                $('#studentModal').modal("show");
+            });
+        });
+    </script>
+{% endblock %}
 {% block body %}
     <div class="jumbotron text-center">
         <h1>Students</h1>
@@ -101,39 +138,4 @@
                 </div>
             </div>
         </div>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var table = $('#studentTable').DataTable();
-            $('#studentTable tbody').on('click', 'tr', function(){
-                var rowdata = table.row(this).data();
-                $("#student_id").val(table.row(this).data()[0]);
-                $("#first_name").val(table.row(this).data()[1]);
-                $("#last_name").val(table.row(this).data()[2]);
-                $("#email_address").val(table.row(this).data()[3]);
-                var major = table.row(this).data()[4];
-                var i;
-                for(i=0; i < major_id.length; i++){
-                    if (major_id[i].text == major){
-                        major_id[i].selected = true;
-                        break;
-                    }
-                }
-                $("#AddStudent").hide();
-                $("#UpdateStudent").show();
-                $("#DeleteStudent").show();
-                $("#studentModal").modal("show");
-            })
-            $(".trigger_modal").click(function(){
-                $("#student_id").val('');
-                $("#first_name").val('');
-                $("#last_name").val('');
-                $("#email_address").val('');
-                major_id[0].selected = true;
-                $("#AddStudent").show();
-                $("#UpdateStudent").hide();
-                $("#DeleteStudent").hide();
-                $('#studentModal').modal("show");
-    });
-        } );
-    </script>
 {% endblock %}

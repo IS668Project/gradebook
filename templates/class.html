@@ -1,5 +1,39 @@
 {% extends "basePage.html" %}
 {% block title %}Classes{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#classTable').DataTable();
+            $('td:nth-child(6), th:nth-child(6)').hide();
+            $('#classTable tbody').on('click', 'tr', function(){
+                var rowdata = table.row(this).data();
+                console.log(rowdata);
+                $("#class_id").val(table.row(this).data()[0]);
+                $("#class_abbrv").val(table.row(this).data()[1]);
+                $("#class_name").val(table.row(this).data()[2]);
+                $("#class_semester").val(table.row(this).data()[3]);
+                $("#class_year").val(table.row(this).data()[4]);
+                $("textarea#class_description").text(table.row(this).data()[5]);
+                $("#AddClass").hide();
+                $("#UpdateClass").show();
+                $("#DeleteClass").show();
+                $("#classModal").modal("show");
+            });
+            $(".trigger_modal").click(function(){
+                $("#class_id").val('');
+                $("#class_abbrv").val('');
+                $("#class_name").val('');
+                $("#class_semester").val('');
+                $("#class_year").val('');
+                $("textarea#class_description").text('');
+                $("#AddClass").show();
+                $("#UpdateClass").hide();
+                $("#DeleteClass").hide();
+                $('#classModal').modal("show");
+            });
+        });
+    </script>
+{% endblock %}
 {% block body %}
     <div class="jumbotron text-center">
         <h1>Classes</h1>
@@ -82,7 +116,7 @@
                                     <div class="col-md-5.ml-auto">
                                        <div class="col-md-5.ml-auto">
                                             <input type="text" class="class_semester" id="class_semester" name="class_semester" placeholder="Enter Class Semester">
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +128,7 @@
                                     <div class="col-md-5.ml-auto">
                                        <div class="col-md-5.ml-auto">
                                             <input type="number" class="class_year" id="class_year" name="class_year" placeholder="Enter Class Year">
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -114,36 +148,4 @@
                 </div>
             </div>
         </div>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var table = $('#classTable').DataTable();
-            $('td:nth-child(6), th:nth-child(6)').hide();
-            $('#classTable tbody').on('click', 'tr', function(){
-                var rowdata = table.row(this).data();
-                console.log(rowdata);
-                $("#class_id").val(table.row(this).data()[0]);
-                $("#class_abbrv").val(table.row(this).data()[1]);
-                $("#class_name").val(table.row(this).data()[2]);
-                $("#class_semester").val(table.row(this).data()[3]);
-                $("#class_year").val(table.row(this).data()[4]);
-                $("textarea#class_description").text(table.row(this).data()[5]);
-                $("#AddClass").hide();
-                $("#UpdateClass").show();
-                $("#DeleteClass").show();
-                $("#classModal").modal("show");
-            })
-            $(".trigger_modal").click(function(){
-                $("#class_id").val('');
-                $("#class_abbrv").val('');
-                $("#class_name").val('');
-                $("#class_semester").val('');
-                $("#class_year").val('');
-                $("textarea#class_description").text('');
-                $("#AddClass").show();
-                $("#UpdateClass").hide();
-                $("#DeleteClass").hide();
-                $('#classModal').modal("show");
-    });
-        } );
-    </script>
 {% endblock %}
