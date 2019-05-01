@@ -55,7 +55,7 @@ def dbQuery(func):
                 attemptCount += 1
                 sleep(2)
                 continue
-    return wrapper.__wrapped__
+    return wrapper
 
 @dbTransaction
 def insertRow(model, **kwargs):
@@ -249,7 +249,8 @@ class ClassRoster(db.Model):
                                              ondelete='CASCADE'))
 
     def __repr__(self):
-        return ("<class_rosters('class_roster_id', 'student_id'={},\
+        return ("<class_rosters('class_roster_id'={}, \
+                 'student_id'={},\
                  'class_id'={})>".format(self.class_roster_id,
                                          self.student_id, 
                                          self.class_id))
