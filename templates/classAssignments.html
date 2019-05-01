@@ -1,6 +1,6 @@
-{% extends "formPopup.html" %}
+{% extends "basePage.html" %}
 {% block title %}Class Assignments{% endblock %}
-{% block pagebody %}
+{% block body %}
     <div class="jumbotron text-center">
         <h1>Assignments for {{assignments.class_name}}: {{assignments.class_semester}}, {{assignments.class_year}}</h1>
     </div>
@@ -72,10 +72,10 @@
                         <button type="submit" name="send" id="AddAssignment" value="AddAssignment" class="btn btn-primary">
                             Add Assignment
                         </button>
-                        <button type="submit" name="send" id="UpdateAssignment" value="UpdateAssignment" class="btn btn-primary">
+                        <button type="submit" name="send" id="UpdateAssignment" value="UpdateAssignment" class="btn btn-secondary">
                             Update Assignment
                         </button>
-                        <button type="submit" name="send" id="DeleteAssignment" value="DeleteAssignment" class="btn btn-primary">
+                        <button type="submit" name="send" id="DeleteAssignment" value="DeleteAssignment" cclass="btn btn-danger" >
                             Delete Assignment
                         </button>
                     </form>

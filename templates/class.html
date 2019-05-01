@@ -1,6 +1,6 @@
-{% extends "formPopup.html" %}
+{% extends "basePage.html" %}
 {% block title %}Classes{% endblock %}
-{% block pagebody %}
+{% block body %}
     <div class="jumbotron text-center">
         <h1>Classes</h1>
     </div>
@@ -102,10 +102,10 @@
                         <button type="submit" name="send" id="AddClass" value="AddClass" class="btn btn-primary">
                             Add Class
                         </button>
-                        <button type="submit" name="send" id="UpdateClass" value="UpdateClass" class="btn btn-primary" style="display: none;">
+                        <button type="submit" name="send" id="UpdateClass" value="UpdateClass" class="btn btn-secondary" style="display: none;">
                             Update Class
                         </button>
-                        <button type="submit" name="send" id="DeleteClass" value="DeleteClass" class="btn btn-primary" style="display: none;">
+                        <button type="submit" name="send" id="DeleteClass" value="DeleteClass" class="btn btn-danger"  style="display: none;">
                             Delete Class
                         </button>
                     </form>

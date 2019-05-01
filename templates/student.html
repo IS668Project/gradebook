@@ -1,6 +1,6 @@
-{% extends "formPopup.html" %}
+{% extends "basePage.html" %}
 {% block title %}Students{% endblock %}
-{% block pagebody %}
+{% block body %}
     <div class="jumbotron text-center">
         <h1>Students</h1>
     </div>
@@ -89,10 +89,10 @@
                         <button type="submit" name="send" id="AddStudent" value="AddStudent" class="btn btn-primary">
                             Add Student
                         </button>
-                        <button type="submit" name="send" id="UpdateStudent" value="UpdateStudent" class="btn btn-primary" style="display: none;">
+                        <button type="submit" name="send" id="UpdateStudent" value="UpdateStudent" class="btn btn-secondary" style="display: none;">
                             Update Student
                         </button>
-                        <button type="submit" name="send" id="DeleteStudent" value="DeleteStudent" class="btn btn-primary" style="display: none;">
+                        <button type="submit" name="send" id="DeleteStudent" value="DeleteStudent" class="btn btn-danger">
                             Delete Student
                         </button>
                     </form>
