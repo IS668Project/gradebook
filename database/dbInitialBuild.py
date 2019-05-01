@@ -1,6 +1,8 @@
+import sys
+sys.path.insert(0, '/home/IS668ProjectGradeBook/mysite')
+from dbHelper import addAssignmentsNewStudent, dbTransaction, getFkValue
 from flask import Flask
 from appsSharedModels import *
-from database.dbHelper import *
 from databaseConfig import testDBEndPoint, prodDBEndPoint
 
 def create_app():
@@ -11,7 +13,6 @@ def create_app():
     db.init_app(app)
     return app
 
-@dbTransaction
 def createInitialData():
         db.session.add_all([
             Major(major_name='Information Systems'),
