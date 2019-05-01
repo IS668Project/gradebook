@@ -151,8 +151,8 @@ def assignmentView(classId=''):
 @login_required
 def classRosterView(classId=''):
     if request.method == "GET":
-        roster, notEnrolledStudents = getClassRoster(request.args.get('class_id'))
-        return render_template('classRoster.html', roster=roster, notEnrolledStudents=notEnrolledStudents) 
+        roster, notEnrolledStudents, classData = getClassRoster(request.args.get('class_id'))
+        return render_template('classRoster.html', roster=roster, notEnrolledStudents=notEnrolledStudents, classData=classData) 
     elif request.form['send'] == "AddStudents":
         for student in request.form['studentSelect']:
             insertRow(ClassRoster, student_id=student, class_id=request.args('class_id'))

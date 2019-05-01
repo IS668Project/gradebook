@@ -102,7 +102,8 @@ def getClassRoster(classId):
     results = ClassRoster.query.filter_by(class_id=classId).join(Student).add_entity(Student).join(Class).add_entity(Class).all()
     subquery = ClassRoster.query.with_entities(ClassRoster.student_id).all()
     studentIds = Student.query.filter(Student.student_id.notin_(subquery)).all()
-    return (results, studentIds)
+    classData = Class.query.get(classId)
+    return (results, studentIds, classData)
 
 class dbTools:
     def getFkValue(self, table, att_name, value):
