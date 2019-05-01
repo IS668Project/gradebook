@@ -1,9 +1,6 @@
 import functools
-from appsSharedModels import *
-from flask_sqlalchemy import SQLAlchemy, sqlalchemy
+from database.appsSharedModels import *
 from time import sleep
-
-db = SQLAlchemy()
 
 def dbTransaction(func):
     """
@@ -24,8 +21,7 @@ def dbTransaction(func):
                 func(*args, **kwargs)
                 db.session.commit()
                 return
-            #except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
-            except:
+            except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
                 db.session.rollback()
                 attemptCount += 1
                 sleep(2)
@@ -45,7 +41,10 @@ def dbQuery(func):
                 attemptCount += 1
                 sleep(2)
                 continue
-    return wrapper.__wrapped__
+    try:
+        return wrapper.__wrapped__
+    except AttributeError:
+        return wrapper
 
 @dbTransaction
 def insertRow(model, **kwargs):
@@ -65,7 +64,7 @@ def deleteRow(model, rowId):
 
 @dbTransaction
 def addAssignmentToRoster(assignment_id, classId):
-    roster = dbQuery(ClassRoster.query.filter_by(class_id=classId).all())
+    roster = ClassRoster.query.filter_by(class_id=classId).all()
     for student in roster:
         insert = AssignmentGrade(student_id=student.student_id, assignment_id=assignment_id)
         db.session.add(insert)

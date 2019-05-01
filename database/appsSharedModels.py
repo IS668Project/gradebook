@@ -187,14 +187,13 @@ class AssignmentGrade(db.Model):
 
 class UserAccess(db.Model):
     __tablename__ = 'user_access'
+    user_access_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id',
                                                      onupdate='CASCADE',
-                                                     ondelete='CASCADE'),
-                                                     primary_key=True)
+                                                     ondelete='CASCADE'))
     class_id = db.Column(db.Integer,
                                db.ForeignKey('classes.class_id',
-                               onupdate='CASCADE', ondelete='CASCADE'),
-                               primary_key=True)
+                               onupdate='CASCADE', ondelete='CASCADE'))
 
     def __repr__(self):
         return ("<user_access('user_id'={},\
