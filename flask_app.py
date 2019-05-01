@@ -154,11 +154,11 @@ def classRosterView(classId=''):
         roster, notEnrolledStudents, classData = getClassRoster(request.args.get('class_id'))
         return render_template('classRoster.html', roster=roster, notEnrolledStudents=notEnrolledStudents, classData=classData) 
     elif request.form['send'] == "AddStudents":
-        for student in request.form['studentSelect']:
-            insertRow(ClassRoster, student_id=student, class_id=request.args('class_id'))
+        for student in request.form.getlist('studentSelect'):
+            insertRow(ClassRoster, student_id=student, class_id=request.form['classId'])
     elif request.form['send'] == "DeleteStudents":
         for student in request.form['studentRemove']:
             deleteRow(ClassRoster, request.form['class_roster_id'])
-    return redirect(url_for('assignmentView', class_id=request.form['class_id']))
+    return redirect(url_for('classRosterView', class_id=request.form['classId']))
 
 

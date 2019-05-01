@@ -7,16 +7,19 @@
     <div class="container">
         <div class="row">
             <div class="col-4">
-                <form class="form-horizontal" method="POST" action="/classroster">
+                <form class="form-horizontal" method="POST" action="/class_roster">
                     <div class="form-group">
                         <label for="studentSelect">Enroll Students</label>
-                        <select multiple class="form-control" id="studentSelect" style="max-height: 300px; overflow: scroll;">
-                            {%for student in nonEnrolledStudents %}
+                        <select multiple class="form-control" id="studentSelect" name="studentSelect" style="max-height: 300px; overflow: scroll;">
+                            {%for student in notEnrolledStudents %}
                                 <option value="{{student.student_id}}">
                                     {{student.first_name}} {{student.last_name}}
                                 </option>
                             {% endfor %}
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" id="classId" name="classId" value={{classData.class_id}}>
                     </div>
                     <button type="submit" name="send" id="AddStudents" value="AddStudents" class="btn btn-primary">
                     Add Students To Class
