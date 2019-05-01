@@ -38,11 +38,11 @@
                         <tbody>
                             {% for student in roster %}
                                 <tr>
-                                    <td>{{roster.Class.class_id}}</td>
-                                    <td>{{roster.Student.first_name}}</td>
-                                    <td>{{roster.Student.last_name}}</td>
-                                    <td><a href="mailto:{{roster.Student.email_address}}">{{roster.Student.email_address}}</a></td>
-                                    <td>{{roster.Student.student_id}}</td>
+                                    <td>{{student.Class.class_id}}</td>
+                                    <td>{{student.Student.first_name}}</td>
+                                    <td>{{student.Student.last_name}}</td>
+                                    <td><a href="mailto:{{student.Student.email_address}}">{{student.Student.email_address}}</a></td>
+                                    <td>{{student.Student.student_id}}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
