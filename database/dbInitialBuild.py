@@ -147,6 +147,10 @@ def createInitialData():
                                                  'IS668'))])
         db.session.commit()
 
+        rosters = dbQuery(ClassRoster.query.all())
+        for student in rosters:
+          addAssignmentsNewStudent(student.student_id, student.class_id)
+
 if __name__ == '__main__':
     print('WARNING, this script wipes out everything in the db before \n \
           recreating tables and populating with initial data found\n \

@@ -133,11 +133,12 @@ def assignmentView(classId=''):
         return render_template('classAssignments.html', assignments=data)
     elif request.form['send'] == "AddAssignment":
         insertRow(Assignment,
-                  class_id=int(request.form['class_id']),
+                  class_id=request.form['class_id'],
                   name=request.form['assignment_name'],
-                  max_points=float(request.form['max_points']),
+                  max_points=request.form['max_points'],
                   description=request.form['assignment_description'])
-
+        assignId = getAssignmentId(request.form['assignment_name'], request.form['class_id'])
+        addAssignmentToRoster(assignId, request.form['class_id'])
     elif request.form['send'] == "UpdateAssignment":
         updateRow(Assignment, int(request.form['assignment_id']),
                   class_id=int(request.form['class_id']),
@@ -157,6 +158,7 @@ def classRosterView(classId=''):
     elif request.form['send'] == "AddStudents":
         for student in request.form.getlist('studentSelect'):
             insertRow(ClassRoster, student_id=student, class_id=request.form['classId'])
+            addAssignmentsNewStudent(student,request.form['classId'])
     elif request.form['send'] == "DeleteStudents":
         for rosterId in request.form.getlist('class_roster_id'):
             deleteRow(ClassRoster, rosterId)

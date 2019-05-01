@@ -33,6 +33,7 @@ def dbTransaction(func):
         while attemptCount < 4:
             try:
                 func(*args, **kwargs)
+                db.session.commit()
                 return
             #except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
             except:
@@ -61,20 +62,31 @@ def dbQuery(func):
 def insertRow(model, **kwargs):
     insert = model(**kwargs)
     db.session.add(insert)
-    db.session.commit()
 
 @dbTransaction
 def updateRow(model, rowId, **kwargs):
     update = model.query.get(rowId)
     for key, value in kwargs.items():
         setattr(update, key, value)
-    db.session.commit()
 
 @dbTransaction
 def deleteRow(model, rowId):
     deletion = model.query.get(rowId)
     db.session.delete(deletion)
-    db.session.commit()
+
+@dbTransaction
+def addAssignmentToRoster(assignment_id, classId):
+    roster = dbQuery(ClassRoster.query.filter_by(class_id=classId).all())
+    for student in roster:
+        insert = AssignmentGrade(student_id=student.student_id, assignment_id=assignment_id)
+        db.session.add(insert)
+
+@dbTransaction
+def addAssignmentsNewStudent(studentId, classId):
+    classAssignments = Assignment.query.filter_by(class_id=classId).all()
+    for assignment in classAssignments:
+        insert = AssignmentGrade(student_id=studentId, assignment_id=assignment.assignment_id)
+        db.session.add(insert)
 
 #queries used by the flask app
 @dbQuery
@@ -98,12 +110,22 @@ def getClassAssignments(classId):
     return results
 
 @dbQuery
+def getAssignmentId(assignmentName, classId):
+    results = Assignment.query.filter_by(name=assignmentName, class_id=classId).first()
+    return results.assignment_id
+
+@dbQuery
 def getClassRoster(classId):
     results = ClassRoster.query.filter_by(class_id=classId).join(Student).add_entity(Student).join(Class).add_entity(Class).all()
     subquery = ClassRoster.query.with_entities(ClassRoster.student_id).filter_by(class_id=classId).all()
     studentIds = Student.query.filter(Student.student_id.notin_(subquery)).all()
     classData = Class.query.get(classId)
     return (results, studentIds, classData)
+
+@dbQuery
+def getClassGrades(classId):
+    results = Assignment.query.filter_by(class_id=classId).join(AssignmentGrade).add_entity(AssignmentGrade).join(Student).add_entity(Student).all()
+    return results
 
 class dbTools:
     def getFkValue(self, table, att_name, value):
@@ -264,9 +286,16 @@ class Assignment(db.Model):
     name = db.Column(db.String(40), nullable=False)
     max_points = db.Column(db.Integer, default=0, nullable=False)
     description = db.Column(db.String(400))
-    assingment_grade = db.relationship('AssignmentGrade',
+    assignment_grade = db.relationship('AssignmentGrade',
                                         backref='Assignment',
                                         lazy = True)
+
+    def __init__(self, class_id, name, max_points, description):
+        self.class_id = class_id
+        self.name = name
+        self.max_points = max_points
+        self.description = description
+        AssignmentGrade.populateAssignmentGrades(self.assignment_id, self.class_id)
 
     def __repr__(self):
         return ("<assignments('assignment_id'={}, 'class_id'={},\
@@ -280,16 +309,15 @@ class Assignment(db.Model):
 
 class AssignmentGrade(db.Model):
     __tablename__ = 'assignment_grades'
+    assign_grade_id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, 
                             db.ForeignKey('students.student_id',
                                            onupdate='CASCADE',
-                                           ondelete='CASCADE'),
-                                            primary_key=True)
+                                           ondelete='CASCADE'))
     assignment_id = db.Column(db.Integer, 
                                db.ForeignKey('assignments.assignment_id',
                                               onupdate='CASCADE',
-                                              ondelete='CASCADE'),
-                                              primary_key=True)
+                                              ondelete='CASCADE'))
     comments = db.Column(db.String(400))
     score = db.Column(db.Float(2), default=0, nullable=False)
 
