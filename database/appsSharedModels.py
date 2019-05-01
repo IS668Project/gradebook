@@ -56,7 +56,7 @@ def dbQuery(func):
                 attemptCount += 1
                 sleep(2)
                 continue
-    return wrapper
+    return wrapper.__wrapped__
 
 @dbTransaction
 def insertRow(model, **kwargs):
