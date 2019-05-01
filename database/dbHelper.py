@@ -116,6 +116,7 @@ def getClassGrades(classId):
     results = Assignment.query.filter_by(class_id=classId).join(AssignmentGrade).add_entity(AssignmentGrade).join(Student).add_entity(Student).all()
     return results
 
+@dbQuery
 def getFkValue(table, att_name, value):
     """
         Function to return the primary key id for a table
