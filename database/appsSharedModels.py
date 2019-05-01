@@ -99,8 +99,10 @@ def getClassAssignments(classId):
 
 @dbQuery
 def getClassRoster(classId):
-    results = Class.query.get(classId)
-    return results
+    results = ClassRoster.query.filter_by(class_id=classId).join(Student).add_entity(Student).join(Class).add_entity(Class).all()
+    subquery = ClassRoster.query.with_entities(ClassRoster.student_id).all()
+    studentIds = Student.query.filter(Student.student_id.notin_(subquery)).all()
+    return (results, student_ids)
 
 class dbTools:
     def getFkValue(self, table, att_name, value):
@@ -149,10 +151,12 @@ class Student(db.Model):
     majors = db.relationship('Major', backref='Student')
 
     def __repr__(self):
-        return ("<students('first_name'={}, 'last_name'={},\
-                 'major_id'={}, 'email_address'={},\
+        return ("<students('student_id'={}, 'first_name'={}, \
+                 'last_name'={}, 'major_id'={}, \
+                 'email_address'={},\
                  'assignment_grades'={}, class_roster={}\
-                 'majors'={})>".format(self.first_name,
+                 'majors'={})>".format(self.student_id,
+                                       self.first_name,
                                        self.last_name,
                                        self.major_id, 
                                        self.email_address,
@@ -234,20 +238,20 @@ class User(UserMixin, db.Model):
 
 class ClassRoster(db.Model):
     __tablename__ = 'class_rosters'
+    class_roster_id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('students.student_id',
                                                         onupdate='CASCADE',
-                                                        ondelete='CASCADE'),
-                                                        primary_key=True)
+                                                        ondelete='CASCADE'))
     class_id = db.Column(db.Integer, 
                               db.ForeignKey('classes.class_id',
                                              onupdate='CASCADE',
-                                             ondelete='CASCADE'),
-                                             primary_key=True)
+                                             ondelete='CASCADE'))
 
     def __repr__(self):
-        return ("<class_rosters('student_id'={},\
-                 'class_id'={})>".format(self.student_id, 
-                                             self.class_id))
+        return ("<class_rosters('class_roster_id', 'student_id'={},\
+                 'class_id'={})>".format(self.class_roster_id,
+                                         self.student_id, 
+                                         self.class_id))
 
 class Assignment(db.Model):
     __tablename__ = 'assignments'
