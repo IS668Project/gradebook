@@ -1,21 +1,8 @@
-{% extends "basePage.html" %}
+{% extends "homebase.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
 <!-- dashboard navbar -->
-<div class="container-fluid">
-	<ul class="nav nav-tabs">
-	  <li class="nav-item">
-		<a class="nav-link active" href="/">Home</a>
-	  </li>
-	  <li class="nav-item">
-		<a class="nav-link" href="https://is668projectgradebook.pythonanywhere.com/contact_information">Contacts</a>
-	  </li>
-	  <li class="nav-item">
-		<a class="nav-link" href="https://is668projectgradebook.pythonanywhere.com/training">Training Guides</a>
-	  </li>
-	</ul>
-</div>
-
+{% block nav %}
 </div>
 <div class="container-fluid">
 	<div class="tab-content" id="myTabContent">
@@ -32,7 +19,7 @@
 	<h5 class="card-title">Gradebook Information: </h5>
     <p class="card-text">The JS2 Gradebook was build to help teachers and student enter and review grades.  </p>
     <h5 class="card-title">School News: </h5>
-    <p class="card-text">UMBC is a great place to advance you education.  Sign up today.</p>
+    <p class="card-text">UMBC is a great place to advance your education.  Sign up today!</p>
 	</br>
 	<h5 class="card-title">News and Information: </h5>
     <p class="card-text">No more TEST!  </p>
@@ -41,4 +28,5 @@
     <p class="card-text"><small class="text-muted">Last updated April 28, 2019</small></p>
   </div>
 </div>
+{% endblock %}
 {% endblock %}
