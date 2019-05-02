@@ -18,8 +18,10 @@
                     <tr>
                         <th data-field="student_id" data-sortable="false">Student Id</th>
                         <th data-field="studentName" data-sortable="false">Student Name</th>
-                        {% for key, value in header.iteritems() %}
-                            <th data-field="{{key}}" value="{{value}}"data-sortable="true">{{key}}</th>
+                        {% header in headerList %}
+                            <th data-field="{{header.name}}" value="{{header.id}}"data-sortable="true">
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="{{header.dueDate}}">{{header.name}}</a>
+                            </th>
                         {% endfor %}
                     </tr>
                 </thead>
