@@ -1,22 +1,44 @@
 {% extends "basePage.html" %}
-{% block title %}Student{% endblock %}
+{% block title %}Gradebook{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#gradebookTable').DataTable();
+        });
+    </script>
+{% endblock %}
 {% block body %}
-    <div id="studentInfo">
-        <form id="studentInfo" action="https://IS668ProjectGradeBook.pythonanywhere.com/student" method="POST" target="_self">
-            First Name <input type="text" name="first_name" required="True" value={{studentData.first_name | replace("None","")}}><br>
-            Last Name<input type="text" name="last_name" required="True" value={{studentData.last_name | replace("None","")}}><br>
-            Major <input list="majors"><br>
-                    <datalist id="majors">
-                        {% for major in majorData %}
-                            {% if studentData.major_id == major.id %}
-                                <option selected value={{major.major_name}}>{{major.major}} </option>
-                            {% else %}
-                                <option value={{major.major_name}}>{{major.major}} </option>
-                            {% endif %}
+    <div class="jumbotron text-center">
+        <h1>Gradebook For {{classData.class_name}}: {{classData.class_semester}}, {{classData.class_year}}</h1>
+    </div>
+    <div class="container">
+        <form class="form-horizontal" name="gradebookForm" id="gradebookForm" action="/gradebook" method="POST">
+            <table id="gradebookTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="student_name" data-sort-order="desc">
+                <thead>
+                    <tr>
+                        <th data-field="student_id" data-sortable="false">Student Id</th>
+                        <th data-field="studentName" data-sortable="false">Student Name</th>
+                        {% for key, value in header.iteritems() %}
+                            <th data-field="{{key}}" value="{{value}}"data-sortable="true">{{key}}</th>
                         {% endfor %}
-                    </datalist>
-            Email <input type="text" name="email_address" required="True" value={{studentData.email_address | replace("None","")}}><br>
-            <input type="submit"><br>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in studentList %}
+                        <tr>
+                            <td name="student_id" value="{{student.student_id}}">
+                                {{student.name}}
+                            </td>
+                            {% key, value in scores.iteritems() %}
+                            <td name="{{key}}">
+                                <input type="number" value="{{value}}">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="hidden" value="{{classData.class_id}}" name="classId">
+            <button type="submit" class="btn btn-primary" name="send" value="UpdateGrades">Update Grades</button>
         </form>
     </div>
 {% endblock %}

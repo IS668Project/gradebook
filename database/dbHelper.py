@@ -121,9 +121,9 @@ def getClassRoster(classId):
 @dbQuery
 def getClassGrades(classId):
     AssignmentNames = Assignment.query.filter_by(class_id=classId).order_by(Assignment.assignment_due_date).all()
-    header = ['Student Name']
+    header = {}
     for assignment in AssignmentNames:
-        header.append({assignment.name: assignment.assignment_id})
+        header[assignment.name]= assignment.assignment_id
     StudentData = Student.query.join(AssignmentGrade). \
                                      join(Assignment).filter_by(class_id=1). \
                                      order_by(Student.last_name, Student.first_name,
@@ -131,14 +131,20 @@ def getClassGrades(classId):
     studentList=[]
     for student in StudentData:
         studentData={}
-        studentData['Name'] = ' '.join((student.first_name,
+        studentData['name'] = ' '.join((student.first_name,
                                         student.last_name))
+        studentData['studentId'] = student.student_id
         studentGrades = {}
         for grades in student.assignment_grades:
             studentGrades[grades.assignment_id] = grades.score
-        studentData['Scores'] = studentGrades
+        studentData['scores'] = studentGrades
         studentList.append(studentData)
     return header, studentList
+
+@dbQuery
+def getClassInfo(classId):
+    results = Class.query.get(classId)
+    return results
 
 #@dbQuery
 def getFkValue(table, att_name, value):

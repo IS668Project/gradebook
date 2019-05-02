@@ -97,6 +97,11 @@ def classView():
 @app.route('/gradebook', methods=["GET", "POST"])
 @login_required
 def gradebookView():
+    if request.method == "GET":
+        header, studentList = getClassGrades(request.args.get('class_id'))
+        classData = getClassInfo(request.args.get('class_id'))
+        return render_template('gradebook.html', header=header,
+                               studentList=studentList, classData=classData)
     return 'place holder for gradebookView'
 
 @app.route('/student', methods=["GET", "POST"])
