@@ -83,7 +83,7 @@ def createInitialData():
         db.session.add_all([
             Assignment(class_id=1, name='Discussion',
                        max_points=25, description='Discussions',
-                       assignment_due_date=datetime.strptime('05/19/2019', '%m/%d/%Y')),
+                       assignment_due_date=datetime.strptime('09/19/2019', '%m/%d/%Y')),
             Assignment(class_id=1, name='Midterm', max_points=25,
                        description='Midterm',
                        assignment_due_date=datetime.strptime('04/16/2019', '%m/%d/%Y')),
