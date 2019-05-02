@@ -29,7 +29,7 @@
                         </th>
                         {% for header in headerList %}
                             <th data-field="{{header.name}}" value="{{header.id}}"data-sortable="true">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="{{header.dueDate}}">{{header.name}}</a>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}">{{header.name}}</a>
                             </th>
                         {% endfor %}
                         <th data-field="totalScore" data-sortable="true">

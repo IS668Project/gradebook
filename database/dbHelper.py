@@ -153,7 +153,11 @@ def getClassGrades(classId):
         studentData['scores'] = studentGrades
         studentData['totalPoints'] = totalPoints
         studentData['studentScore'] = studentScore
-        studentData['gradePercent'] = float(studentScore) / totalPoints * 100
+        try:
+            percent = float(studentScore) / totalPoints * 100
+        except ZeroDivisionError:
+            percent = 0
+        studentData['gradePercent'] = percent
         studentData['letterGrade'] = getLetterGrade(studentData['gradePercent'])
         studentList.append(studentData)
     return headerList, studentList
