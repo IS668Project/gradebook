@@ -98,9 +98,9 @@ def classView():
 @login_required
 def gradebookView():
     if request.method == "GET":
-        header, studentList = getClassGrades(request.args.get('class_id'))
+        headerList, studentList = getClassGrades(request.args.get('class_id'))
         classData = getClassInfo(request.args.get('class_id'))
-        return render_template('gradebook.html', header=header,
+        return render_template('gradebook.html', headerList=headerList,
                                studentList=studentList, classData=classData)
     return 'place holder for gradebookView'
 

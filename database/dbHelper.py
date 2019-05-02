@@ -122,11 +122,14 @@ def getClassRoster(classId):
 def getClassGrades(classId):
     AssignmentNames = Assignment.query.filter_by(class_id=classId).order_by(Assignment.assignment_due_date).all()
     headerList = []
+    totalPoints = 0
     for assignment in AssignmentNames:
         header = {}
-        header['name'] = [assignment.name]
+        header['name'] = assignment.name
         header['id'] = assignment.assignment_id
         header['dueDate'] = assignment.assignment_due_date
+        header['maxPoints'] = assignment.max_points
+        totalPoints += assignment.max_points
         headerList.append(header)
     StudentData = Student.query.join(AssignmentGrade). \
                                      join(Assignment).filter_by(class_id=1). \
@@ -134,6 +137,7 @@ def getClassGrades(classId):
                                      Assignment.assignment_due_date).all()
     studentList=[]
     for student in StudentData:
+        studentScore = 0
         studentData={}
         studentData['name'] = ' '.join((student.first_name,
                                         student.last_name))
@@ -141,9 +145,34 @@ def getClassGrades(classId):
         studentGrades = {}
         for grades in student.assignment_grades:
             studentGrades[grades.assignment_id] = grades.score
+            studentScore += grades.score
         studentData['scores'] = studentGrades
+        studentData['totalPoints'] = totalPoints
+        studentData['studentScore'] = studentScore
+        studentData['gradePercent'] = float(studentScore) / totalPoints * 100
+        studentData['letterGrade'] = getLetterGrade(studentData['gradePercent'])
         studentList.append(studentData)
     return headerList, studentList
+
+def getLetterGrade(gradePercent):
+    if gradePercent >= 94:
+        return 'A'
+    elif gradePercent >= 90:
+        return 'A-'
+    elif gradePercent >= 84:
+        return 'B'
+    elif gradePercent >= 80:
+        return 'B-'
+    elif gradePercent >= 74:
+        return 'C'
+    elif gradePercent >= 70:
+        return 'C-'
+    elif gradePercent >= 64:
+        return 'D'
+    elif gradePercent >= 60:
+        return 'D-'
+    else:
+        return 'F'
 
 @dbQuery
 def getClassInfo(classId):

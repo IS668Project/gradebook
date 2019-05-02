@@ -28,6 +28,18 @@
                                 <a href="#" data-toggle="tooltip" data-placement="top" title="{{header.dueDate}}">{{header.name}}</a>
                             </th>
                         {% endfor %}
+                        <th data-field="totalScore" data-sortable="true">
+                            Total Score
+                        </th>
+                        <th data-field="maxPoints" data-sortable="true">
+                            Total Possible Points
+                        </th>
+                        <th data-field="gradePercent" data-sortable="true">
+                            Percentage
+                        </th>
+                        <th data-field="letterGrade" data-sortable="true">
+                            Letter Grade
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,10 +50,22 @@
                                 {{student.name}}
                             </td>
                             {% for key, value in student.scores.items() %}
-                            <td name="{{key}}">
-                                <input type="number" value="{{value}}">
-                            </td>
+                                <td name="{{key}}">
+                                    <input type="number" value="{{value}}">
+                                </td>
                             {% endfor %}
+                            <td name="totalPoints">
+                                {{student.totalPoints}}
+                            </td>
+                            <td name="totalScore">
+                                {{student.studentScore}}
+                            </td>
+                            <td name="gradePercent">
+                                {{student.gradePercent}}%
+                            </td>
+                            <td name="letterGrade">
+                                {{student.letterGrade}}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
