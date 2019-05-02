@@ -1,8 +1,21 @@
-{% extends "homebase.html" %}
-
+{% extends "basePage.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-{% block nav %}
+<!-- dashboard navbar -->
+<div class="container-fluid">
+	<ul class="nav nav-tabs">
+	  <li class="nav-item">
+		<a class="nav-link active" href="/">Home</a>
+	  </li>
+	  <li class="nav-item">
+		<a class="nav-link" href="https://is668projectgradebook.pythonanywhere.com/contact_information">Contacts</a>
+	  </li>
+	  <li class="nav-item">
+		<a class="nav-link" href="https://is668projectgradebook.pythonanywhere.com/training">Training Guides</a>
+	  </li>
+	</ul>
+</div>
+
 </div>
 <div class="container-fluid">
 	<div class="tab-content" id="myTabContent">
@@ -28,4 +41,4 @@
     <p class="card-text"><small class="text-muted">Last updated April 28, 2019</small></p>
   </div>
 </div>
-
+{% endblock %}
