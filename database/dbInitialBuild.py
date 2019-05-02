@@ -1,6 +1,7 @@
 import sys
 sys.path.insert(0, '/home/IS668ProjectGradeBook/mysite')
 from dbHelper import addAssignmentsNewStudent, dbTransaction, getFkValue
+from datetime import datetime
 from flask import Flask
 from appsSharedModels import *
 from databaseConfig import testDBEndPoint, prodDBEndPoint
@@ -81,13 +82,17 @@ def createInitialData():
         db.session.commit()
         db.session.add_all([
             Assignment(class_id=1, name='Discussion',
-                       max_points=25, description='Discussions'),
+                       max_points=25, description='Discussions',
+                       assignment_due_data=datetime.strptime('05/19/2019', '%m/%d/%Y')),
             Assignment(class_id=1, name='Midterm', max_points=25,
-                       description='Midterm'),
+                       description='Midterm',
+                       assignment_due_data=datetime.strptime('04/16/2019', '%m/%d/%Y')),
             Assignment(class_id=1, name='Project', max_points=25,
-                       description='Project'),
+                       description='Project',
+                       assignment_due_data=datetime.strptime('05/22/2019', '%m/%d/%Y')),
             Assignment(class_id=1 ,name='Final', max_points=25,
-                       description='Final')])
+                       description='Final',
+                       assignment_due_data=datetime.strptime('05/19/2019', '%m/%d/%Y'))])
         db.session.commit()
         db.session.add_all([
             UserAccess(user_id=getFkValue(User, User.first_name, 'John'),
