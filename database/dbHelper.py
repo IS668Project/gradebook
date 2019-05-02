@@ -142,9 +142,13 @@ def getClassGrades(classId):
         studentData['name'] = ' '.join((student.first_name,
                                         student.last_name))
         studentData['studentId'] = student.student_id
-        studentGrades = {}
+        studentGrades = []
         for grades in student.assignment_grades:
-            studentGrades[grades.assignment_id] = grades.score
+            gradesDict ={}
+            gradesDict['assign_id'] = grades.assignment_id
+            gradesDict['assign_score'] = grades.score
+            gradesDict['assign_grade_id'] = grades.assign_grade_id
+            studentGrades.append(gradesDict)
             studentScore += grades.score
         studentData['scores'] = studentGrades
         studentData['totalPoints'] = totalPoints
@@ -173,6 +177,14 @@ def getLetterGrade(gradePercent):
         return 'D-'
     else:
         return 'F'
+
+@dbQuery
+def checkGradeChange(assignGradeId='', score=''):
+    check = AssignmentGrade.query.get(assignGradeId)
+    if check.assign_grade_id == score:
+        return
+    updateRow(AssignmentGrade, assignGradeId, score=score)
+    return
 
 @dbQuery
 def getClassInfo(classId):

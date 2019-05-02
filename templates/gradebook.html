@@ -5,6 +5,10 @@
         $(document).ready(function() {
             var table = $('#gradebookTable').DataTable();
             $('td:nth-child(1), th:nth-child(1)').hide();
+            $('#gradebookForm').on('submit', function(e){
+                console.log($(this).serialize());
+                e.preventDefault();
+            });
         });
     </script>
 {% endblock %}
@@ -13,7 +17,7 @@
         <h1>Gradebook For {{classData.class_name}}: {{classData.class_semester}}, {{classData.class_year}}</h1>
     </div>
     <div class="container">
-        <form class="form-horizontal" name="gradebookForm" id="gradebookForm" action="/gradebook" method="POST">
+        <form class="form-horizontal" name="gradebookForm" id="gradebookForm" action="/gradebook" method="PUT">
             <table id="gradebookTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="student_name" data-sort-order="desc">
                 <thead>
                     <tr>
@@ -49,9 +53,9 @@
                             <td>
                                 {{student.name}}
                             </td>
-                            {% for key, value in student.scores.items() %}
-                                <td name="{{key}}">
-                                    <input type="number" value="{{value}}">
+                            {% for score in student.scores %}
+                                <td>
+                                    <input name="grade,{{student.student_id}}, {{score.assign_id}}, {{score.assign_grade_id}}" type="number" value="{{score.assign_score}}">
                                 </td>
                             {% endfor %}
                             <td name="totalPoints">

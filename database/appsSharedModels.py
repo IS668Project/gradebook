@@ -184,9 +184,10 @@ class AssignmentGrade(db.Model):
     score = db.Column(db.Float(2), default=0, nullable=False)
 
     def __repr__(self):
-        return ("<assignment_grades('student_id'={}, 'assignment_id'={},\
-                 'score'={})>".format(self.student_id, self.assignment_id,
-                 self.score))
+        return ("<assignment_grades('assign_grade_id'={}, \
+                 student_id'={}, 'assignment_id'={},\
+                 'score'={})>".format(self.assign_grade_id, self.student_id,
+                                      self.assignment_id, self.score))
 
 class UserAccess(db.Model):
     __tablename__ = 'user_access'

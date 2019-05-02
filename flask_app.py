@@ -94,7 +94,7 @@ def classView():
         deleteRow(Class, int(request.form['class_id']))
     return redirect(url_for('classView'))
 
-@app.route('/gradebook', methods=["GET", "POST"])
+@app.route('/gradebook', methods=["GET", "PUT"])
 @login_required
 def gradebookView():
     if request.method == "GET":
@@ -102,7 +102,15 @@ def gradebookView():
         classData = getClassInfo(request.args.get('class_id'))
         return render_template('gradebook.html', headerList=headerList,
                                studentList=studentList, classData=classData)
-    return 'place holder for gradebookView'
+    elif request.method == "PUT":
+        data = request.form.to_dict()
+        for key, value in data:
+            if key[:5] == 'grade':
+                args = key.split(',')
+                #refactor this later to track on front end
+                checkGradeChange(assignGradeId=int(args(3)),
+                                 score=value)
+    return redirect(url_for('gradebookView', class_id=request.form['classId']))
 
 @app.route('/student', methods=["GET", "POST"])
 @login_required
