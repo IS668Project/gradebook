@@ -83,16 +83,16 @@ def createInitialData():
         db.session.add_all([
             Assignment(class_id=1, name='Discussion',
                        max_points=25, description='Discussions',
-                       assignment_due_data=datetime.strptime('05/19/2019', '%m/%d/%Y')),
+                       assignment_due_date=datetime.strptime('05/19/2019', '%m/%d/%Y')),
             Assignment(class_id=1, name='Midterm', max_points=25,
                        description='Midterm',
-                       assignment_due_data=datetime.strptime('04/16/2019', '%m/%d/%Y')),
+                       assignment_due_date=datetime.strptime('04/16/2019', '%m/%d/%Y')),
             Assignment(class_id=1, name='Project', max_points=25,
                        description='Project',
-                       assignment_due_data=datetime.strptime('05/22/2019', '%m/%d/%Y')),
+                       assignment_due_date=datetime.strptime('05/22/2019', '%m/%d/%Y')),
             Assignment(class_id=1 ,name='Final', max_points=25,
                        description='Final',
-                       assignment_due_data=datetime.strptime('05/19/2019', '%m/%d/%Y'))])
+                       assignment_due_date=datetime.strptime('05/19/2019', '%m/%d/%Y'))])
         db.session.commit()
         db.session.add_all([
             UserAccess(user_id=getFkValue(User, User.first_name, 'John'),

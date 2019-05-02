@@ -152,7 +152,7 @@ class Assignment(db.Model):
     name = db.Column(db.String(40), nullable=False)
     max_points = db.Column(db.Integer, default=0, nullable=False)
     description = db.Column(db.String(400))
-    assignment_due_data = db.Column(db.DateTime)
+    assignment_due_date = db.Column(db.DateTime)
     assignment_grade = db.relationship('AssignmentGrade',
                                         backref='Assignment',
                                         lazy = True)
@@ -160,12 +160,14 @@ class Assignment(db.Model):
     def __repr__(self):
         return ("<assignments('assignment_id'={}, 'class_id'={},\
                  'name'={},'max_points'={}, 'description'={},\
-                 assingment_grade={})>".format(self.assignment_id,
+                 assignment_grade={}, \
+                 assignment_due_date={})>".format(self.assignment_id,
                                                self.class_id, 
                                                self.name, 
                                                self.max_points,
                                                self.description,
-                                               self.assingment_grade))
+                                               self.assignment_grade,
+                                               self.assignment_due_date))
 
 class AssignmentGrade(db.Model):
     __tablename__ = 'assignment_grades'
