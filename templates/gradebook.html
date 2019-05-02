@@ -1,5 +1,7 @@
 {% extends "basePage.html" %}
 {% block title %}Gradebook{% endblock %}
+{% block css %}
+.th{width: }
 {% block js %}
     <script type="text/javascript">
         $(document).ready(function() {
@@ -29,14 +31,14 @@
                         </th>
                         {% for header in headerList %}
                             <th data-field="{{header.name}}" value="{{header.id}}"data-sortable="true">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}">{{header.name}}</a>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}, Max Point {{header.max_points}}">{{header.name}}</a>
                             </th>
                         {% endfor %}
                         <th data-field="totalScore" data-sortable="true">
-                            Total Score
+                            Total Possible Points
                         </th>
                         <th data-field="maxPoints" data-sortable="true">
-                            Total Possible Points
+                            Total Score
                         </th>
                         <th data-field="gradePercent" data-sortable="true">
                             Percentage

@@ -11,6 +11,7 @@ from database.dbHelper import *
 from datetime import datetime
 from time import sleep
 
+
 #app set up
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
@@ -23,15 +24,18 @@ login_manager.login_view = 'https://is668projectgradebook.pythonanywhere.com/log
 login_manager.init_app(app)
 db.init_app(app)
 
+
 @app.route('/')
 @login_required
 def home():
     return render_template('home.html')
 
+
 @login_manager.user_loader
 @dbQuery
 def load_user(username):
     return User.query.filter_by(user_name=username).first()
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -45,31 +49,37 @@ def login():
             login_user(user)
             return redirect(url_for('home'))
 
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
+
 @app.route('/changePassword', methods=['GET', 'POST'])
 @login_required
 def changePassword():
     return 'place holder for changePassword'
+
 
 @app.route('/home', methods=["GET", "POST"])
 @login_required
 def homeView():
     return render_template('home.html')
 
+
 @app.route('/contact_information', methods=["GET", "POST"])
 @login_required
 def contact_informationView():
     return render_template('contact_information.html')
 
+
 @app.route('/training', methods=["GET", "POST"])
 @login_required
 def trainingView():
     return render_template('training.html')
+
 
 @app.route('/class', methods=["GET", "POST"])
 @login_required
@@ -94,6 +104,7 @@ def classView():
         deleteRow(Class, int(request.form['class_id']))
     return redirect(url_for('classView'))
 
+
 @app.route('/gradebook', methods=["GET", "PUT"])
 @login_required
 def gradebookView():
@@ -111,6 +122,7 @@ def gradebookView():
                 checkGradeChange(assignGradeId=int(args(3)),
                                  score=value)
     return redirect(url_for('gradebookView', class_id=request.form['classId']))
+
 
 @app.route('/student', methods=["GET", "POST"])
 @login_required
@@ -139,6 +151,7 @@ def studentView():
         deleteRow(Student, int(request.form['student_id']))
     return redirect(url_for('studentView'))
 
+
 @app.route('/assignments', methods=["GET", "POST"])
 @login_required
 def assignmentView(classId=''):
@@ -163,6 +176,7 @@ def assignmentView(classId=''):
         deleteRow(Assignment, int(request.form['assignment_id']))
     return redirect(url_for('assignmentView', class_id=request.form['class_id']))
 
+
 @app.route('/class_roster', methods=["GET", "POST"])
 @login_required
 def classRosterView(classId=''):
@@ -176,8 +190,5 @@ def classRosterView(classId=''):
     elif request.form['send'] == "DeleteStudents":
         for rosterId in request.form.getlist('class_roster_id'):
             deleteRow(ClassRoster, rosterId)
+            deleteStudentAssignments(rosterId)
     return redirect(url_for('classRosterView', class_id=request.form['classId']))
-
-
-
-
