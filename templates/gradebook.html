@@ -4,6 +4,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#gradebookTable').DataTable();
+            $('td:nth-child(1), th:nth-child(1)').hide();
         });
     </script>
 {% endblock %}
@@ -17,8 +18,8 @@
                 <thead>
                     <tr>
                         <th data-field="student_id" data-sortable="false">Student Id</th>
-                        <th data-field="studentName" data-sortable="false">Student Name</th>
-                        {% for key, value in header.iteritems() %}
+                        <th data-field="studentName" data-sortable="true">Student Name</th>
+                        {% for key, value in header.items() %}
                             <th data-field="{{key}}" value="{{value}}"data-sortable="true">{{key}}</th>
                         {% endfor %}
                     </tr>
@@ -26,13 +27,15 @@
                 <tbody>
                     {% for student in studentList %}
                         <tr>
-                            <td name="student_id" value="{{student.student_id}}">
+                            <td name="student_id" value="{{student.student_id}}"></td>
+                            <td>
                                 {{student.name}}
                             </td>
-                            {% key, value in scores.iteritems() %}
+                            {% for key, value in student.scores.items() %}
                             <td name="{{key}}">
                                 <input type="number" value="{{value}}">
                             </td>
+                            {% endfor %}
                         </tr>
                     {% endfor %}
                 </tbody>
