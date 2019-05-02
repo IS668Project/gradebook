@@ -4,6 +4,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#gradebookTable').DataTable();
+            $('td:nth-child(1), th:nth-child(1)').hide();
         });
     </script>
 {% endblock %}
@@ -16,23 +17,31 @@
             <table id="gradebookTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="student_name" data-sort-order="desc">
                 <thead>
                     <tr>
-                        <th data-field="student_id" data-sortable="false">Student Id</th>
-                        <th data-field="studentName" data-sortable="false">Student Name</th>
-                        {% for key, value in header.iteritems() %}
-                            <th data-field="{{key}}" value="{{value}}"data-sortable="true">{{key}}</th>
+                        <th data-field="student_id" data-sortable="false">
+                            Student Id
+                        </th>
+                        <th data-field="studentName" data-sortable="false">
+                            Student Name
+                        </th>
+                        {% for header in headerList %}
+                            <th data-field="{{header.name}}" value="{{header.id}}"data-sortable="true">
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="{{header.dueDate}}">{{header.name}}</a>
+                            </th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for student in studentList %}
                         <tr>
-                            <td name="student_id" value="{{student.student_id}}">
+                            <td name="student_id" value="{{student.student_id}}"></td>
+                            <td>
                                 {{student.name}}
                             </td>
-                            {% key, value in scores.iteritems() %}
+                            {% for key, value in student.scores.items() %}
                             <td name="{{key}}">
                                 <input type="number" value="{{value}}">
                             </td>
+                            {% endfor %}
                         </tr>
                     {% endfor %}
                 </tbody>

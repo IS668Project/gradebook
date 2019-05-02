@@ -121,9 +121,13 @@ def getClassRoster(classId):
 @dbQuery
 def getClassGrades(classId):
     AssignmentNames = Assignment.query.filter_by(class_id=classId).order_by(Assignment.assignment_due_date).all()
-    header = {}
+    headerList = []
     for assignment in AssignmentNames:
-        header[assignment.name]= assignment.assignment_id
+        header = {}
+        header['name'] = [assignment.name]
+        header['id'] = assignment.assignment_id
+        header['dueDate'] = assignment.assignment_due_date
+        headerList.append(header)
     StudentData = Student.query.join(AssignmentGrade). \
                                      join(Assignment).filter_by(class_id=1). \
                                      order_by(Student.last_name, Student.first_name,
@@ -139,7 +143,7 @@ def getClassGrades(classId):
             studentGrades[grades.assignment_id] = grades.score
         studentData['scores'] = studentGrades
         studentList.append(studentData)
-    return header, studentList
+    return headerList, studentList
 
 @dbQuery
 def getClassInfo(classId):
