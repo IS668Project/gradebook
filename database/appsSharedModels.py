@@ -152,6 +152,7 @@ class Assignment(db.Model):
     name = db.Column(db.String(40), nullable=False)
     max_points = db.Column(db.Integer, default=0, nullable=False)
     description = db.Column(db.String(400))
+    assignment_due_data = db.Column(db.DateTime)
     assignment_grade = db.relationship('AssignmentGrade',
                                         backref='Assignment',
                                         lazy = True)

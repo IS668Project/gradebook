@@ -21,7 +21,8 @@ def dbTransaction(func):
                 func(*args, **kwargs)
                 db.session.commit()
                 return
-            except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
+            except (sqlalchemy.exc.OperationalError,
+                    sqlalchemy.exc.InvalidRequestError) as oe:
                 db.session.rollback()
                 attemptCount += 1
                 sleep(2)
@@ -36,7 +37,8 @@ def dbQuery(func):
             try:
                 func(*args, **kwargs)
                 return func(*args, **kwargs)
-            except (sqlalchemy.exc.OperationalError, sqlalchemy.exc.InvalidRequestError) as oe:
+            except (sqlalchemy.exc.OperationalError, 
+                    sqlalchemy.exc.InvalidRequestError) as oe:
                 db.session.rollback()
                 attemptCount += 1
                 sleep(2)
@@ -66,14 +68,16 @@ def deleteRow(model, rowId):
 def addAssignmentToRoster(assignment_id, classId):
     roster = ClassRoster.query.filter_by(class_id=classId).all()
     for student in roster:
-        insert = AssignmentGrade(student_id=student.student_id, assignment_id=assignment_id)
+        insert = AssignmentGrade(student_id=student.student_id, \
+                                 assignment_id=assignment_id)
         db.session.add(insert)
 
 @dbTransaction
 def addAssignmentsNewStudent(studentId, classId):
     classAssignments = Assignment.query.filter_by(class_id=classId).all()
     for assignment in classAssignments:
-        insert = AssignmentGrade(student_id=studentId, assignment_id=assignment.assignment_id)
+        insert = AssignmentGrade(student_id=studentId, \
+                                 assignment_id=assignment.assignment_id)
         db.session.add(insert)
 
 #queries used by the flask app
@@ -99,20 +103,41 @@ def getClassAssignments(classId):
 
 @dbQuery
 def getAssignmentId(assignmentName, classId):
-    results = Assignment.query.filter_by(name=assignmentName, class_id=classId).first()
+    results = Assignment.query.filter_by(name=assignmentName, \
+                                         class_id=classId).first()
     return results.assignment_id
 
 @dbQuery
 def getClassRoster(classId):
-    results = ClassRoster.query.filter_by(class_id=classId).join(Student).add_entity(Student).join(Class).add_entity(Class).all()
-    subquery = ClassRoster.query.with_entities(ClassRoster.student_id).filter_by(class_id=classId).all()
-    studentIds = Student.query.filter(Student.student_id.notin_(subquery)).all()
+    results = ClassRoster.query.filter_by(class_id=classId).join(Student). \
+              add_entity(Student).join(Class).add_entity(Class).all()
+    subquery = ClassRoster.query.with_entities(ClassRoster.student_id). \
+                                               filter_by(class_id=classId).all()
+    studentIds = Student.query.filter(Student.student_id. \
+                                      notin_(subquery)).all()
     classData = Class.query.get(classId)
     return (results, studentIds, classData)
 
 @dbQuery
 def getClassGrades(classId):
-    results = Assignment.query.filter_by(class_id=classId).join(AssignmentGrade).add_entity(AssignmentGrade).join(Student).add_entity(Student).all()
+    AssignmentNames = Assignment.query.filter_by(class_id=classId).order_by(assignment_due_date).all()
+    header = ['Student Name']
+    for assignment in AssignmentNames:
+        header.append({assignment.name: assignment.assignment_id})
+    StudentData = Student.query.join(AssignmentGrade).add_entity(AssignmentGrade). \
+                                     join(Assignment).filter_by(class_id=classId). \
+                                     order_by(Student.last_name, Student.first_name,
+                                     Assignment.assignment_due_date).all()
+    studentList=[]
+    for student in StudentData:
+        studentData={}
+        studentData['Name'] = ' '.join((student.Student.first_name,
+                                        student.Student.last_name))
+        studentGrades = []
+        for grades in student.Student.assignment_grades:
+            studentGrades.append({grades.assignment_id:grades.score})
+        studentData['Scores'] = studentGrades
+        studentList.append(studentData)
     return results
 
 #@dbQuery
