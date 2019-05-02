@@ -80,22 +80,14 @@ def createInitialData():
         db.session.add_all(rosterAdd)
         db.session.commit()
         db.session.add_all([
-            Assignment(class_id=getFkValue(Class,
-                                                 Class.class_abbrv,
-                                                 'IS668'),
-                        name='Discussion', max_points=25, description='Discussions'),
-            Assignment(class_id=getFkValue(Class,
-                                                 Class.class_abbrv,
-                                                 'IS668'),
-                        name='Midterm', max_points=25, description='Midterm'),
-            Assignment(class_id=getFkValue(Class,
-                                                 Class.class_abbrv,
-                                                 'IS668'),
-                        name='Project', max_points=25, description='Project'),
-            Assignment(class_id=getFkValue(Class,
-                                                 Class.class_abbrv,
-                                                 'IS668'),
-                        name='Final', max_points=25, description='Final')])
+            Assignment(class_id=1, name='Discussion',
+                       max_points=25, description='Discussions'),
+            Assignment(class_id=1, name='Midterm', max_points=25,
+                       description='Midterm'),
+            Assignment(class_id=1, name='Project', max_points=25,
+                       description='Project'),
+            Assignment(class_id=1 ,name='Final', max_points=25,
+                       description='Final')])
         db.session.commit()
         db.session.add_all([
             UserAccess(user_id=getFkValue(User, User.first_name, 'John'),
