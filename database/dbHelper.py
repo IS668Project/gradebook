@@ -119,6 +119,15 @@ def getClassRoster(classId):
     return (results, studentIds, classData)
 
 @dbQuery
+def deleteRosterAssignment(rosterId):
+    rosterObj = ClassRoster.query.get(rosterId)
+    AssignmentsList = AssignmentGrade.query.filter_by(student_id=rosterObj.student_id) \
+                                  .join(Student).join(Assignment).filter_by(class_id=rosterObj.class_id) \
+                                  .all()
+    for assignment in AssignmentsList:
+        deleteRow(AssignmentGrade, assignment.assign_grade_id)
+
+@dbQuery
 def getClassGrades(classId):
     AssignmentNames = Assignment.query.filter_by(class_id=classId).order_by(Assignment.assignment_due_date).all()
     headerList = []

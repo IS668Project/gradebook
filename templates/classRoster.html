@@ -1,5 +1,39 @@
 {% extends "basePage.html" %}
 {% block title %}Class Roster{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            //set up data table with checkboxes
+            var table = $('#rosterTable').DataTable({
+                'columnDefs':[
+                    {
+                        'targets':0,
+                        'checkboxes': true
+                    }
+                ],
+                'select': {
+                    'style': 'multi'
+                    },
+                'order': [[3, 'asc']]
+                });
+            $('td:nth-child(2), th:nth-child(2)').hide();
+            $('td:nth-child(6), th:nth-child(6)').hide();
+            //Handle form submission event
+            $('#rosterForm').on('submit', function(e){
+                var form = this;
+                var rows_selected = table.column(0).checkboxes.selected();
+                $.each(rows_selected, function(index, rowId){
+                    $(form).append(
+                        $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'class_roster_id')
+                        .val(rowId));
+                });
+                //e.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}
 {% block body %}
     <div class="jumbotron text-center">
         <h1>Roster for {{classData.class_name}}: {{classData.class_semester}}, {{classData.class_year}}</h1>
@@ -64,36 +98,4 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            //set up data table with checkboxes
-            var table = $('#rosterTable').DataTable({
-                'columnDefs':[
-                    {
-                        'targets':0,
-                        'checkboxes': true
-                    }
-                ],
-                'select': {
-                    'style': 'multi'
-                    },
-                'order': [[3, 'asc']]
-                });
-            $('td:nth-child(2), th:nth-child(2)').hide();
-            $('td:nth-child(6), th:nth-child(6)').hide();
-            //Handle form submission event
-            $('#rosterForm').on('submit', function(e){
-                var form = this;
-                var rows_selected = table.column(0).checkboxes.selected();
-                $.each(rows_selected, function(index, rowId){
-                    $(form).append(
-                        $('<input>')
-                        .attr('type', 'hidden')
-                        .attr('name', 'class_roster_id')
-                        .val(rowId));
-                });
-                //e.preventDefault();
-            });
-        });
-    </script>
 {% endblock %}

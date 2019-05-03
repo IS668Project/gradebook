@@ -175,6 +175,7 @@ def classRosterView(classId=''):
             addAssignmentsNewStudent(student,request.form['classId'])
     elif request.form['send'] == "DeleteStudents":
         for rosterId in request.form.getlist('class_roster_id'):
+            deleteRosterAssignment(rosterId)
             deleteRow(ClassRoster, rosterId)
     return redirect(url_for('classRosterView', class_id=request.form['classId']))
 
