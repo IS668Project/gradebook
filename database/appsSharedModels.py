@@ -182,6 +182,7 @@ class AssignmentGrade(db.Model):
                                               ondelete='CASCADE'))
     comments = db.Column(db.String(400))
     score = db.Column(db.Float(2), default=0, nullable=False)
+    assignment = db.relationship('Assignment', back_populates='assignment_grade')
 
     def __repr__(self):
         return ("<assignment_grades('assign_grade_id'={}, \

@@ -154,7 +154,7 @@ def getClassGrades(classId):
         totalPoints += assignment.max_points
         headerList.append(header)
     StudentData = Student.query.join(AssignmentGrade). \
-                                     join(Assignment).filter_by(class_id=1). \
+                                     join(Assignment).filter_by(class_id=classId). \
                                      order_by(Student.last_name, Student.first_name,
                                      Assignment.assignment_due_date).all()
     studentList=[]

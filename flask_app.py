@@ -105,23 +105,21 @@ def classView():
     return redirect(url_for('classView'))
 
 
-@app.route('/gradebook', methods=["GET", "PUT"])
-@login_required
+@app.route('/gradebook', methods=["GET", "POST"])
+#@login_required
 def gradebookView():
     if request.method == "GET":
         headerList, studentList = getClassGrades(request.args.get('class_id'))
         classData = getClassInfo(request.args.get('class_id'))
         return render_template('gradebook.html', headerList=headerList,
                                studentList=studentList, classData=classData)
-    elif request.method == "PUT":
+    elif request.method == "POST":
         data = request.form.to_dict()
-        for key, value in data:
+        for key, value in data.items():
             if key[:5] == 'grade':
                 args = key.split(',')
-                #refactor this later to track on front end
-                checkGradeChange(assignGradeId=int(args(3)),
-                                 score=value)
-    return redirect(url_for('gradebookView', class_id=request.form['classId']))
+                updateRow(AssignmentGrade, int(args[1]), score=value)
+    return redirect(url_for('gradebookView', class_id=request.form['class_id']))
 
 
 @app.route('/student', methods=["GET", "POST"])

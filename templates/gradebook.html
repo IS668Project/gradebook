@@ -1,7 +1,5 @@
 {% extends "basePage.html" %}
 {% block title %}Gradebook{% endblock %}
-{% block css %}
-.th{width: }
 {% block js %}
     <script type="text/javascript">
         $(document).ready(function() {
@@ -33,12 +31,19 @@
                 $(newData).each(function(i, v) {
                     var key = Object.keys(v)[0];
                     if(origData[key] != v[key]) {
-                        submitData[key] = v[key];
+                        submitData['grade,'+key] = v[key];
                     }
                 });
-                console.log(submitData);
-
-                console.log($(submitData).serialize());
+                if (Object.keys(submitData).length > 0){
+                    submitData['class_id'] = "{{classData.class_id}}";
+                    $.ajax({
+                        type: "POST",
+                        url: "/gradebook",
+                        data: submitData,
+                        dataType: "json",
+                    });
+                    location.reload();
+                }
             });
         });
     </script>
@@ -60,7 +65,7 @@
                         </th>
                         {% for header in headerList %}
                             <th data-field="{{header.name}}" value="{{header.id}}"data-sortable="true">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}, Max Point {{header.max_points}}">{{header.name}}</a>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}, Max Points: {{header.maxPoints}}">{{header.name}}</a>
                             </th>
                         {% endfor %}
                         <th data-field="totalScore" data-sortable="true">
@@ -86,7 +91,7 @@
                             </td>
                             {% for score in student.scores %}
                                 <td>
-                                    <input name="grade,{{score.assign_grade_id}}" type="number" value="{{score.assign_score}}">
+                                    <input name="grade,{{score.assign_grade_id}}" type="number" value="{{score.assign_score}}" max=>
                                 </td>
                             {% endfor %}
                             <td name="totalPoints">
@@ -106,7 +111,7 @@
                 </tbody>
             </table>
             <input type="hidden" value="{{classData.class_id}}" name="classId">
-            <button type="submit" class="btn btn-success" name="send" value="UpdateGrades">Update Grades</button>
+            <button type="submit" class="btn btn-success" id="UpdateGrades" name="send" value="UpdateGrades">Update Grades</button>
         </form>
     </div>
 {% endblock %}
