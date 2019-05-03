@@ -1,20 +1,6 @@
-{% extends "basePage.html" %}
-{% block title %}Training Guide{% endblock %}
-{% block body %}
-<div class="container-fluid">
-	<ul class="nav nav-tabs">
-	  <li class="nav-item">
-		<a class="nav-link active" href="/">Home</a>
-	  </li>
-	  <li class="nav-item">
-		<a class="nav-link" href="https://is668projectgradebook.pythonanywhere.com/contact_information">Contacts</a>
-	  </li>
-	  <li class="nav-item">
-		<a class="nav-link" href="https://is668projectgradebook.pythonanywhere.com/training">Training Guides</a>
-	  </li>
-	</ul>
-</div>
-
+{% extends "homebase.html" %}
+{% block hometitle %}Home{% endblock %}
+{% block pagebody %}
     <div class="jumbotron">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -24,6 +10,6 @@
     </div>
 <div class="container">
 	<p>Please click on the buttons below to access the appropiate training guide.</p>
-	<a class="btn btn-primary" href="add%20a%20student.pdf" role="button">Add A Student</a>
+	<a class="btn btn-primary" href="/static/images/add%20a%20student.pdf" role="button">Add A Student</a>
 </div>
  {% endblock %}
