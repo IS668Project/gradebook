@@ -63,12 +63,13 @@
                         <td style="display:none;">{{class.class_description}}</td>
                         <td><button class="btn btn-primary"><a style="color:white;" href="/assignments?class_id={{class.class_id}}">Assignments</a></button></td>
                         <td><button class="btn btn-primary"><a style="color:white;" href="/class_roster?class_id={{class.class_id}}">Class Roster</a></button></td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/gradebook?class_id={{class.class_id}}">Class Roster</a></button></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <button class="btn btn-primary"><a class="trigger_modal">Add New Class</a></button>
+    <button class="btn btn-success"><a class="trigger_modal">Add New Class</a></button>
     <div class="modal fade" id="classModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -132,7 +133,7 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <button type="submit" name="send" id="AddClass" value="AddClass" class="btn btn-primary">
+                        <button type="submit" name="send" id="AddClass" value="AddClass" class="btn btn-success">
                             Add Class
                         </button>
                         <button type="submit" name="send" id="UpdateClass" value="UpdateClass" class="btn btn-secondary" style="display: none;">

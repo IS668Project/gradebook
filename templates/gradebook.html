@@ -15,7 +15,6 @@
                     }
                 });
             });
-            console.log(origData); 
             var table = $('#gradebookTable').DataTable();
             $('td:nth-child(1), th:nth-child(1)').hide();
             $('#gradebookForm').on('submit', function(e){
@@ -33,15 +32,13 @@
                 });
                 $(newData).each(function(i, v) {
                     var key = Object.keys(v)[0];
-                    console.log(origData[key]);
                     if(origData[key] != v[key]) {
                         submitData[key] = v[key];
                     }
                 });
                 console.log(submitData);
-                console.log(newData);
 
-                console.log($(this).serialize());
+                console.log($(submitData).serialize());
             });
         });
     </script>
@@ -109,7 +106,7 @@
                 </tbody>
             </table>
             <input type="hidden" value="{{classData.class_id}}" name="classId">
-            <button type="submit" class="btn btn-primary" name="send" value="UpdateGrades">Update Grades</button>
+            <button type="submit" class="btn btn-success" name="send" value="UpdateGrades">Update Grades</button>
         </form>
     </div>
 {% endblock %}
