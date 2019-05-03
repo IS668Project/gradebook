@@ -1,5 +1,7 @@
 {% extends "basePage.html" %}
 <!-- dashboard navbar -->
+{% block title %}{% block hometitle %}{% endblock %}{% endblock %}
+{% block body %}
 <div class="container-fluid">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
 	  <li class="nav-item">
@@ -13,5 +15,5 @@
 	  </li>
 	</ul>
 </div>
-{% block nav %} {% endblock %}
+{% block pagebody %} {% endblock %}
 {% endblock %}

@@ -2,17 +2,17 @@ import functools
 from database.appsSharedModels import *
 from time import sleep
 
+"""
+    mySQL is throwing operational errors quite frequently
+    The two functions below are intended as a decorator, takes the sql action
+    and tries to complete. If it fails due to session being down
+    (OperationalError or InvalidRequestError) rolls back, waits 2 seconds, and then retries. 
+    Will try 4 times.
+    @param func : function to be run
+    @return wrapper: wrapper function containing the execution
+    function
+"""
 def dbTransaction(func):
-    """
-        mySQL is throwing operational errors quite frequenlty
-        This is intended as a decorator, takes the sql action
-        and tries to complete. If it fails due to session being down
-        (OperationalError) waits 2 seconds and then retries. Will try
-        4 times.
-        @param func : function to be run
-        @return wrapper: wrapper funciton containing the executed
-        function
-    """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         attemptCount=1
@@ -48,6 +48,8 @@ def dbQuery(func):
     except AttributeError:
         return wrapper
 
+
+#generic functions for add, update, delete
 @dbTransaction
 def insertRow(model, **kwargs):
     insert = model(**kwargs)
@@ -64,6 +66,8 @@ def deleteRow(model, rowId):
     deletion = model.query.get(rowId)
     db.session.delete(deletion)
 
+
+#model specific functions for add, update, delete
 @dbTransaction
 def addAssignmentToRoster(assignment_id, classId):
     roster = ClassRoster.query.filter_by(class_id=classId).all()
@@ -80,7 +84,16 @@ def addAssignmentsNewStudent(studentId, classId):
                                  assignment_id=assignment.assignment_id)
         db.session.add(insert)
 
-#queries used by the flask app
+@dbTransaction
+def deleteStudentAssignments(rosterId):
+    assignments = ClassRoster.query.filter_by(class_roster_id=rosterId). \
+                              join(Assignment).join(AssignmentGrade). \
+                              add_columns(AssignmentGrade.assign_grade_id)
+    for assignment in assignments:
+        deleteRow(AssignmentGrade, assignment.assign_grade_id)
+
+
+#queries used flask app processing
 @dbQuery
 def getStudents():
     results = Student.query.order_by('last_name', 'first_name').all()
@@ -172,24 +185,20 @@ def getClassGrades(classId):
     return headerList, studentList
 
 def getLetterGrade(gradePercent):
-    if gradePercent >= 94:
-        return 'A'
-    elif gradePercent >= 90:
-        return 'A-'
-    elif gradePercent >= 84:
-        return 'B'
-    elif gradePercent >= 80:
-        return 'B-'
-    elif gradePercent >= 74:
-        return 'C'
-    elif gradePercent >= 70:
-        return 'C-'
-    elif gradePercent >= 64:
-        return 'D'
-    elif gradePercent >= 60:
-        return 'D-'
-    else:
+    if gradePercent < 60:
         return 'F'
+    grades = ['A', 'A-', 'B', 'B-', 'C', 'C-', 'D', 'D-', 'F']
+    threshold = 100
+    mode = 1
+    for grade in grades:
+        if mode == 1:
+            threshold -= 6
+            mode = 2
+        else:
+            threshold -= 4
+            mode = 1
+        if gradePercent >= threshold:
+            return grade
 
 @dbQuery
 def checkGradeChange(assignGradeId='', score=''):
@@ -204,7 +213,6 @@ def getClassInfo(classId):
     results = Class.query.get(classId)
     return results
 
-#@dbQuery
 def getFkValue(table, att_name, value):
     """
         Function to return the primary key id for a table
