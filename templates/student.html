@@ -113,7 +113,7 @@
                                         <select class="form-control" id="major_id" name="major_id">
                                             <option selected disabled>--Select Major--</option>
                                             {% for major in majorData %}
-                                                <option value={{major.major_id}}>
+                                                <option value="{{major.major_id}}">
                                                     {{major.major_name}}
                                                 </option>
                                             {% endfor %}

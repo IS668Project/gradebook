@@ -1,17 +1,17 @@
 """
     File for interactions with MySQL database instance in PythonAnywhere.
     We are using flask_sqlalchemy for everything, inlcuding initial build
-    and population. See dbInitialBuild.py for 
+    and population. See dbInitialBuild.py for
     table creation and initial data population
     usage: no direct usage, meant for import only
 """
-from flask_sqlalchemy import SQLAlchemy, sqlalchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, \
      check_password_hash
-from time import sleep
 
 db = SQLAlchemy()
+
 
 class Major(db.Model):
     __tablename__ = 'majors'
@@ -23,14 +23,16 @@ class Major(db.Model):
                 'major_name'={},>".format(self.major_id, 
                                           self.major_name))
 
+
 class Student(db.Model):
     __tablename__ = 'students'
     student_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     major_id = db.Column(db.Integer, db.ForeignKey('majors.major_id',
-                          onupdate='CASCADE', ondelete='RESTRICT'),
-                          nullable=False)
+                                                   onupdate='CASCADE',
+                                                   ondelete='RESTRICT'),
+                         nullable=False)
     email_address = db.Column(db.String(100), nullable=False)
     assignment_grades = db.relationship('AssignmentGrade',
                                         backref='Student',
@@ -47,11 +49,12 @@ class Student(db.Model):
                  'majors'={})>".format(self.student_id,
                                        self.first_name,
                                        self.last_name,
-                                       self.major_id, 
+                                       self.major_id,
                                        self.email_address,
                                        self.assignment_grades,
                                        self.class_roster,
                                        self.majors))
+
 
 class Class(db.Model):
     __tablename__ = 'classes'
@@ -68,13 +71,18 @@ class Class(db.Model):
         return ("<classes('class_name'={}, class_abbrv={}, \
                  class_semester={}, class_description={}, 'assignment'={}\
                  'class_roster'={})>".format(self.class_name,
-                                                self.class_abbrv, 
-                                                self.class_semester,
-                                                self.class_description,
-                                                self.assignment,
-                                                self.class_roster))
+                                             self.class_abbrv,
+                                             self.class_semester,
+                                             self.class_description,
+                                             self.assignment,
+                                             self.class_roster))
+
 
 class User(UserMixin, db.Model):
+    """
+        User is both model and UserMixin from flask_login.
+        Custom __init__ for password hash/salt
+    """
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
@@ -85,7 +93,8 @@ class User(UserMixin, db.Model):
     user_access = db.relationship('UserAccess', backref='User',
                                   lazy=True)
 
-    def __init__(self, first_name, last_name, user_name, user_password, email_address):
+    def __init__(self, first_name, last_name, user_name,
+                 user_password, email_address):
         self.first_name = first_name
         self.last_name = last_name
         self.user_name = user_name
@@ -98,7 +107,8 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         """
-            takes in string, converts to salted hash, compares to salted hash in db, 
+            takes in string, converts to salted hash,
+            compares to salted hash in db,
             returns true/false
         """
         return check_password_hash(self.user_password, password)
@@ -112,9 +122,9 @@ class User(UserMixin, db.Model):
                  'email_address'={},\
                  'user_access'={})>".format(self.user_id, self.first_name,
                                             self.last_name, self.user_name,
-                                            self.user_access, 
-                                            self.user_password, 
-                                            self.email_address, 
+                                            self.user_access,
+                                            self.user_password,
+                                            self.email_address,
                                             self.user_access))
 
     def canIsee(self, classId):
@@ -129,19 +139,20 @@ class ClassRoster(db.Model):
     __tablename__ = 'class_rosters'
     class_roster_id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('students.student_id',
-                                                        onupdate='CASCADE',
-                                                        ondelete='CASCADE'))
-    class_id = db.Column(db.Integer, 
-                              db.ForeignKey('classes.class_id',
-                                             onupdate='CASCADE',
-                                             ondelete='CASCADE'))
+                                                     onupdate='CASCADE',
+                                                     ondelete='CASCADE'))
+    class_id = db.Column(db.Integer,
+                         db.ForeignKey('classes.class_id',
+                                       onupdate='CASCADE',
+                                       ondelete='CASCADE'))
 
     def __repr__(self):
         return ("<class_rosters('class_roster_id'={}, \
                  'student_id'={},\
                  'class_id'={})>".format(self.class_roster_id,
-                                         self.student_id, 
+                                         self.student_id,
                                          self.class_id))
+
 
 class Assignment(db.Model):
     __tablename__ = 'assignments'
@@ -154,35 +165,37 @@ class Assignment(db.Model):
     description = db.Column(db.String(400))
     assignment_due_date = db.Column(db.DateTime)
     assignment_grade = db.relationship('AssignmentGrade',
-                                        backref='Assignment',
-                                        lazy = True)
+                                       backref='Assignment',
+                                       lazy=True)
 
     def __repr__(self):
         return ("<assignments('assignment_id'={}, 'class_id'={},\
                  'name'={},'max_points'={}, 'description'={},\
                  assignment_grade={}, \
                  assignment_due_date={})>".format(self.assignment_id,
-                                               self.class_id, 
-                                               self.name, 
-                                               self.max_points,
-                                               self.description,
-                                               self.assignment_grade,
-                                               self.assignment_due_date))
+                                                  self.class_id,
+                                                  self.name,
+                                                  self.max_points,
+                                                  self.description,
+                                                  self.assignment_grade,
+                                                  self.assignment_due_date))
+
 
 class AssignmentGrade(db.Model):
     __tablename__ = 'assignment_grades'
     assign_grade_id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, 
-                            db.ForeignKey('students.student_id',
-                                           onupdate='CASCADE',
-                                           ondelete='CASCADE'))
-    assignment_id = db.Column(db.Integer, 
-                               db.ForeignKey('assignments.assignment_id',
-                                              onupdate='CASCADE',
-                                              ondelete='CASCADE'))
+    student_id = db.Column(db.Integer,
+                           db.ForeignKey('students.student_id',
+                                         onupdate='CASCADE',
+                                         ondelete='CASCADE'))
+    assignment_id = db.Column(db.Integer,
+                              db.ForeignKey('assignments.assignment_id',
+                                            onupdate='CASCADE',
+                                            ondelete='CASCADE'))
     comments = db.Column(db.String(400))
     score = db.Column(db.Float(2), default=0, nullable=False)
-    assignment = db.relationship('Assignment', back_populates='assignment_grade')
+    assignment = db.relationship('Assignment',
+                                 backref='AssignmentGrade')
 
     def __repr__(self):
         return ("<assignment_grades('assign_grade_id'={}, \
@@ -190,17 +203,18 @@ class AssignmentGrade(db.Model):
                  'score'={})>".format(self.assign_grade_id, self.student_id,
                                       self.assignment_id, self.score))
 
+
 class UserAccess(db.Model):
     __tablename__ = 'user_access'
     user_access_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id',
-                                                     onupdate='CASCADE',
-                                                     ondelete='CASCADE'))
+                                                  onupdate='CASCADE',
+                                                  ondelete='CASCADE'))
     class_id = db.Column(db.Integer,
-                               db.ForeignKey('classes.class_id',
-                               onupdate='CASCADE', ondelete='CASCADE'))
+                         db.ForeignKey('classes.class_id',
+                                       onupdate='CASCADE', ondelete='CASCADE'))
 
     def __repr__(self):
         return ("<user_access('user_id'={},\
                  'class_id'={})>".format(self.user_id,
-                 self.class_id))
+                                         self.class_id))

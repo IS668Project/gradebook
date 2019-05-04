@@ -4,6 +4,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var origData = {};
+            //build array of grade data upon page load
+            //used for determining what data to send during post
             $('#gradebookTable tr').each(function() {
                 $(this).find("input").each(function() {
                     if ($(this).attr('name').slice(0,5) == 'grade') {
@@ -15,10 +17,14 @@
             });
             var table = $('#gradebookTable').DataTable();
             $('td:nth-child(1), th:nth-child(1)').hide();
+            /* over-rides form post call. builds array of all grades,
+               compares to array built during page load.
+               submits ajax post only containing modified data, reload page */
             $('#gradebookForm').on('submit', function(e){
                 e.preventDefault();
                 var newData = [];
                 var submitData = {};
+                //build array of data again
                 $('#gradebookTable tr').each(function() {
                     $(this).find("input").each(function() {
                         if ($(this).attr('name').slice(0,5) == 'grade') {
@@ -28,12 +34,15 @@
                         }
                     });
                 });
+                //compare modified with orig, append any changed data
+                //to submit array
                 $(newData).each(function(i, v) {
                     var key = Object.keys(v)[0];
                     if(origData[key] != v[key]) {
                         submitData['grade,'+key] = v[key];
                     }
                 });
+                //if modified data send post ajax with modified data
                 if (Object.keys(submitData).length > 0){
                     submitData['class_id'] = "{{classData.class_id}}";
                     $.ajax({
@@ -53,7 +62,7 @@
         <h1>Gradebook For {{classData.class_name}}: {{classData.class_semester}}, {{classData.class_year}}</h1>
     </div>
     <div class="container">
-        <form class="form-horizontal" name="gradebookForm" id="gradebookForm" action="/gradebook" method="PUT">
+        <form class="form-horizontal" name="gradebookForm" id="gradebookForm" action="/gradebook" method="POST">
             <table id="gradebookTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="student_name" data-sort-order="desc">
                 <thead>
                     <tr>

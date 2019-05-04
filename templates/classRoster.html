@@ -16,9 +16,10 @@
                     },
                 'order': [[3, 'asc']]
                 });
+            //hide id columns from page display
             $('td:nth-child(2), th:nth-child(2)').hide();
             $('td:nth-child(6), th:nth-child(6)').hide();
-            //Handle form submission event
+            //Handle form submission event, only send data for checked rows.
             $('#rosterForm').on('submit', function(e){
                 var form = this;
                 var rows_selected = table.column(0).checkboxes.selected();

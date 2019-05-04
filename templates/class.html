@@ -4,10 +4,11 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#classTable').DataTable();
+            //hide id columns
             $('td:nth-child(6), th:nth-child(6)').hide();
             $('#classTable tbody').on('click', 'tr', function(){
                 var rowdata = table.row(this).data();
-                console.log(rowdata);
+                //for current class modal launch populate fields with row data
                 $("#class_id").val(table.row(this).data()[0]);
                 $("#class_abbrv").val(table.row(this).data()[1]);
                 $("#class_name").val(table.row(this).data()[2]);
@@ -19,6 +20,7 @@
                 $("#DeleteClass").show();
                 $("#classModal").modal("show");
             });
+            //on modal launch for new entity clear all variables.
             $(".trigger_modal").click(function(){
                 $("#class_id").val('');
                 $("#class_abbrv").val('');
@@ -49,7 +51,8 @@
                     <th data-field="class_year" data-sortable="true">Class Year</th>
                     <th data-field="class_description" data-sortable="true">Class Description</th>
                     <th data-field="assignments" data-sortable="false">Assignments</th>
-                    <th data-field="assignments" data-sortable="false">Student Roster</th>
+                    <th data-field="class_roster" data-sortable="false">Student Roster</th>
+                    <th data-field="gradebook" data-sortable="false">Gradebook</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,7 +66,7 @@
                         <td style="display:none;">{{class.class_description}}</td>
                         <td><button class="btn btn-primary"><a style="color:white;" href="/assignments?class_id={{class.class_id}}">Assignments</a></button></td>
                         <td><button class="btn btn-primary"><a style="color:white;" href="/class_roster?class_id={{class.class_id}}">Class Roster</a></button></td>
-                        <td><button class="btn btn-primary"><a style="color:white;" href="/gradebook?class_id={{class.class_id}}">Class Roster</a></button></td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/gradebook?class_id={{class.class_id}}">Gradebook</a></button></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -148,4 +151,5 @@
                 </div>
             </div>
         </div>
+    </div>
 {% endblock %}

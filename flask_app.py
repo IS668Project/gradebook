@@ -1,18 +1,16 @@
 """
-    Gradebook Flask app file. Used to host website, manage server side computations.
+    Gradebook Flask app file. Used to host website, 
+    manage server side computations.
 """
-import json
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_fresh, login_required, login_user, LoginManager, logout_user
-from flask_sqlalchemy import SQLAlchemy
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
 from database.dbHelper import *
 from datetime import datetime
-from time import sleep
 
 
-#app set up
+# app set up
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
@@ -106,7 +104,7 @@ def classView():
 
 
 @app.route('/gradebook', methods=["GET", "POST"])
-#@login_required
+@login_required
 def gradebookView():
     if request.method == "GET":
         headerList, studentList = getClassGrades(request.args.get('class_id'))
@@ -180,7 +178,9 @@ def assignmentView(classId=''):
 def classRosterView(classId=''):
     if request.method == "GET":
         roster, notEnrolledStudents, classData = getClassRoster(request.args.get('class_id'))
-        return render_template('classRoster.html', roster=roster, notEnrolledStudents=notEnrolledStudents, classData=classData) 
+        return render_template('classRoster.html', 
+                               roster=roster, notEnrolledStudents=notEnrolledStudents,
+                               classData=classData) 
     elif request.form['send'] == "AddStudents":
         for student in request.form.getlist('studentSelect'):
             insertRow(ClassRoster, student_id=student, class_id=request.form['classId'])
