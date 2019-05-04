@@ -4,8 +4,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var origData = {};
-            //build array of grade data upon page load
-            //used for determining what data to send during post
+            /* build array of grade data upon page load
+               used for determining what data to send during post */
             $('#gradebookTable tr').each(function() {
                 $(this).find("input").each(function() {
                     if ($(this).attr('name').slice(0,5) == 'grade') {
@@ -34,8 +34,8 @@
                         }
                     });
                 });
-                //compare modified with orig, append any changed data
-                //to submit array
+                /* compare modified with orig, append any changed data
+                   to submit array */
                 $(newData).each(function(i, v) {
                     var key = Object.keys(v)[0];
                     if(origData[key] != v[key]) {
@@ -94,6 +94,7 @@
                 <tbody>
                     {% set listlen = studentList|length %}
                     {% for student in studentList %}
+                        <!-- to be used in setting tab order !-->
                         {% set i = loop.index %}
                         <tr>
                             <td name="student_id" value="{{student.student_id}}"></td>
@@ -101,6 +102,7 @@
                                 {{student.name}}
                             </td>
                             {% for score in student.scores %}
+                                <!-- set tab order to vertical instead of horizontal !-->
                                 {% set tab= i + (listlen * loop.index) %}
                                 <td>
                                     <input name="grade,{{score.assign_grade_id}}" type="number" value="{{score.assign_score}}" tabindex= {{tab}}>

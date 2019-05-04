@@ -4,6 +4,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#studentTable').DataTable();
+            //for current student modal launch populate fields with row data
             $('#studentTable tbody').on('click', 'tr', function(){
                 var rowdata = table.row(this).data();
                 $("#student_id").val(table.row(this).data()[0]);

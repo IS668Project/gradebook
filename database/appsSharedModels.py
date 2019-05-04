@@ -10,6 +10,8 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, \
      check_password_hash
 
+from dbHelper import dbQuery
+
 db = SQLAlchemy()
 
 
@@ -113,6 +115,7 @@ class User(UserMixin, db.Model):
         """
         return check_password_hash(self.user_password, password)
 
+    @dbQuery
     def get_id(self):
         return self.user_name
 
