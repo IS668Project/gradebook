@@ -1,14 +1,18 @@
 /* Popup box BEGIN */
 #pagetitle {
-  color: #ccc;
   background-color: #9ab0a6;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 30px;
-  margin: 0px;
+  width: auto;
   padding: 5px;
-  align: center;
+  text-align: center;
   text-transform: uppercase;
 }
+
+.pagetitleheader {
+  color: #ccc;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+}
+
 
 .hover_bkgr_fricc{
     background:rgba(0,0,0,.4);
