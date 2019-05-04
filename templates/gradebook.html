@@ -92,15 +92,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% set listlen = len(studentList) %}
-                    {% for i, student in studentList.enumerate() %}
+                    {% set listlen = studentList|length %}
+                    {% for student in studentList %}
+                        {% set i = loop.index %}
                         <tr>
                             <td name="student_id" value="{{student.student_id}}"></td>
                             <td>
                                 {{student.name}}
                             </td>
-                            {% for ci, score in student.scores.enumerate() %}
-                                {% set tab= {{i}} + ({{listlen}} * {{ci}}) %}
+                            {% for score in student.scores %}
+                                {% set tab= i + (listlen * loop.index) %}
                                 <td>
                                     <input name="grade,{{score.assign_grade_id}}" type="number" value="{{score.assign_score}}" tabindex= {{tab}}>
                                 </td>
