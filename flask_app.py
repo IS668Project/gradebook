@@ -7,7 +7,7 @@ from flask_login import current_user, login_fresh, login_required, login_user, L
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
 from database.dbHelper import *
-from datetime import datetime
+from datetime import date
 
 
 # app set up
@@ -158,6 +158,8 @@ def assignmentView(classId=''):
         insertRow(Assignment,
                   class_id=request.form['class_id'],
                   name=request.form['assignment_name'],
+                  assignment_due_date=date.strptime(request.form['due_date'],
+                                                        '%Y-%m-%d'),
                   max_points=request.form['max_points'],
                   description=request.form['assignment_description'])
         assignId = getAssignmentId(request.form['assignment_name'], request.form['class_id'])
@@ -166,6 +168,8 @@ def assignmentView(classId=''):
         updateRow(Assignment, int(request.form['assignment_id']),
                   class_id=int(request.form['class_id']),
                   name=request.form['assignment_name'],
+                  assignment_due_date=date.strptime(request.form['due_date'],
+                                                        '%Y-%m-%d'),
                   max_points=float(request.form['max_points']),
                   description=request.form['assignment_description'])
     elif request.form['send'] == "DeleteAssignment":
