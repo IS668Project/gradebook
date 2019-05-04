@@ -1,6 +1,8 @@
 import functools
 from database.appsSharedModels import *
 from flask_sqlalchemy import sqlalchemy
+
+from datetime import datetime
 from time import sleep
 
 """
@@ -130,6 +132,8 @@ def getClasses():
 @dbQuery
 def getClassAssignments(classId):
     results = Class.query.get(classId)
+    for assignment in results.assignment:
+        assignment.assignment_due_date = datetime.strftime('%Y-%m-%d')
     return results
 
 
