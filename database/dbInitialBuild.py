@@ -9,7 +9,6 @@ from databaseConfig import testDBEndPoint, prodDBEndPoint
 from dbHelper import addAssignmentsNewStudent, dbTransaction, getFkValue
 
 
-
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
@@ -116,7 +115,7 @@ def createInitialData():
 def populateGrades():
     rosters = ClassRoster.query.all()
     for student in rosters:
-        addAssignmentsNewStudent(student.student_id, student.class_id)
+        addAssignmentsNewStudent(student.student_id, student.class_id, dbInit=True)
 
 
 if __name__ == '__main__':

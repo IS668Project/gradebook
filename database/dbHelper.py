@@ -87,11 +87,16 @@ def addAssignmentToRoster(assignment_id, classId):
 
 
 @dbTransaction
-def addAssignmentsNewStudent(studentId, classId):
+def addAssignmentsNewStudent(studentId, classId, dbInit=False):
     classAssignments = Assignment.query.filter_by(class_id=classId).all()
     for assignment in classAssignments:
+        if dbInit:
+            grade = randint(60,100)
+        else:
+            grade = 0
         insert = AssignmentGrade(student_id=studentId,
-                                 assignment_id=assignment.assignment_id)
+                                 assignment_id=assignment.assignment_id,
+                                 score=grade)
         db.session.add(insert)
 
 

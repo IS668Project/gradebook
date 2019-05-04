@@ -24,6 +24,7 @@ db.init_app(app)
 
 
 @app.route('/')
+@dbQuery
 @login_required
 def home():
     return render_template('home.html')
@@ -49,6 +50,7 @@ def login():
 
 
 @app.route('/logout')
+@dbQuery
 @login_required
 def logout():
     logout_user()
@@ -56,30 +58,35 @@ def logout():
 
 
 @app.route('/changePassword', methods=['GET', 'POST'])
+@dbQuery
 @login_required
 def changePassword():
     return 'place holder for changePassword'
 
 
 @app.route('/home', methods=["GET", "POST"])
+@dbQuery
 @login_required
 def homeView():
     return render_template('home.html')
 
 
 @app.route('/contact_information', methods=["GET", "POST"])
+@dbQuery
 @login_required
 def contact_informationView():
     return render_template('contact_information.html')
 
 
 @app.route('/training', methods=["GET", "POST"])
+@dbQuery
 @login_required
 def trainingView():
     return render_template('training.html')
 
 
 @app.route('/class', methods=["GET", "POST"])
+@dbQuery
 @login_required
 def classView():
     if request.method == "GET":
@@ -104,6 +111,7 @@ def classView():
 
 
 @app.route('/gradebook', methods=["GET", "POST"])
+@dbQuery
 @login_required
 def gradebookView():
     if request.method == "GET":
@@ -121,6 +129,7 @@ def gradebookView():
 
 
 @app.route('/student', methods=["GET", "POST"])
+@dbQuery
 @login_required
 def studentView():
     majorData = dbQuery(Major.query.order_by('major_name').all())
@@ -149,6 +158,7 @@ def studentView():
 
 
 @app.route('/assignments', methods=["GET", "POST"])
+@dbQuery
 @login_required
 def assignmentView(classId=''):
     if request.method == "GET":
@@ -178,6 +188,7 @@ def assignmentView(classId=''):
 
 
 @app.route('/class_roster', methods=["GET", "POST"])
+@dbQuery
 @login_required
 def classRosterView(classId=''):
     if request.method == "GET":
