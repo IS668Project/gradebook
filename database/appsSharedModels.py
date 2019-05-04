@@ -10,7 +10,6 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, \
      check_password_hash
 
-from dbHelper import dbQuery
 
 db = SQLAlchemy()
 
@@ -115,7 +114,7 @@ class User(UserMixin, db.Model):
         """
         return check_password_hash(self.user_password, password)
 
-    @dbQuery
+    #@dbQuery
     def get_id(self):
         return self.user_name
 
@@ -203,8 +202,9 @@ class AssignmentGrade(db.Model):
     def __repr__(self):
         return ("<assignment_grades('assign_grade_id'={}, \
                  student_id'={}, 'assignment_id'={},\
-                 'score'={})>".format(self.assign_grade_id, self.student_id,
-                                      self.assignment_id, self.score))
+                 'score'={}, 'max_points'={})>".format(self.assign_grade_id, self.student_id,
+                                      self.assignment_id, self.score,
+                                      self.assignment.max_points))
 
 
 class UserAccess(db.Model):

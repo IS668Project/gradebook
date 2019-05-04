@@ -205,6 +205,7 @@ def getClassGrades(classId):
             gradesDict['assign_id'] = grades.assignment_id
             gradesDict['assign_score'] = grades.score
             gradesDict['assign_grade_id'] = grades.assign_grade_id
+            gradesDict['assign_max_points'] = grades.Assignment.max_points
             studentGrades.append(gradesDict)
             studentScore += grades.score
         studentData['scores'] = studentGrades

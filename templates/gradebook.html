@@ -55,6 +55,15 @@
                 }
             });
         });
+        function checkInput(gradeId) {
+            var input = document.getElementById(gradeId);
+            if (input.value > input.max) {
+                $(input).css("background-color", "red");
+                alert("Score entered exceeds max score for assignment.");
+            } else {
+                $(input).css("background-color", "transparent");
+            }
+        }
     </script>
 {% endblock %}
 {% block body %}
@@ -74,7 +83,7 @@
                         </th>
                         {% for header in headerList %}
                             <th data-field="{{header.name}}" value="{{header.id}}"data-sortable="true">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}, Max Points: {{header.maxPoints}}">{{header.name}}</a>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}, Max Points: {{header.maxPoints}}">{{header.name}} (Max Points: {{header.maxPoints}})</a>
                             </th>
                         {% endfor %}
                         <th data-field="totalScore" data-sortable="true">
@@ -105,7 +114,7 @@
                                 <!-- set tab order to vertical instead of horizontal !-->
                                 {% set tab= i + (listlen * loop.index) %}
                                 <td>
-                                    <input name="grade,{{score.assign_grade_id}}" type="number" value="{{score.assign_score}}" tabindex= {{tab}}>
+                                    <input id="{{score.assign_grade_id}}" name="grade,{{score.assign_grade_id}}" type="number" value="{{score.assign_score}}" tabindex= {{tab}} max="{{score.assign_max_points}}" min=0 onblur="checkInput({{score.assign_grade_id}})">
                                 </td>
                             {% endfor %}
                             <td name="totalPoints">
