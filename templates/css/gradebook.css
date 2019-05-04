@@ -1,3 +1,15 @@
+/* Page title bar BEGIN */
+.pagetitle {
+  background-color:#c0c0c0;
+  width: auto;
+  padding: 5px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #ccc;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+}
+
 /* Popup box BEGIN */
 .hover_bkgr_fricc{
     background:rgba(0,0,0,.4);
@@ -68,3 +80,4 @@ table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
 bottom: .5em;
 }
+
