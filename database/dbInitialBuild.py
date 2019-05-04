@@ -1,13 +1,13 @@
 import sys
+sys.path.insert(0, '/home/IS668ProjectGradeBook/mysite')
 
-from datetime import date
+from datetime import datetime
 from flask import Flask
 
 from appsSharedModels import *
 from databaseConfig import testDBEndPoint, prodDBEndPoint
 from dbHelper import addAssignmentsNewStudent, dbTransaction, getFkValue
 
-sys.path.insert(0, '/home/IS668ProjectGradeBook/mysite')
 
 
 def create_app():
@@ -86,16 +86,16 @@ def createInitialData():
         db.session.add_all([
             Assignment(class_id=1, name='Discussion',
                        max_points=25, description='Discussions',
-                       assignment_due_date=date.strptime('09/19/2019', '%m/%d/%Y')),
+                       assignment_due_date=datetime.strptime('09/19/2019', '%m/%d/%Y')),
             Assignment(class_id=1, name='Midterm', max_points=25,
                        description='Midterm',
-                       assignment_due_date=date.strptime('04/16/2019', '%m/%d/%Y')),
+                       assignment_due_date=datetime.strptime('04/16/2019', '%m/%d/%Y')),
             Assignment(class_id=1, name='Project', max_points=25,
                        description='Project',
-                       assignment_due_date=date.strptime('05/22/2019', '%m/%d/%Y')),
+                       assignment_due_date=datetime.strptime('05/22/2019', '%m/%d/%Y')),
             Assignment(class_id=1, name='Final', max_points=25,
                        description='Final',
-                       assignment_due_date=date.strptime('05/19/2019', '%m/%d/%Y'))])
+                       assignment_due_date=datetime.strptime('05/19/2019', '%m/%d/%Y'))])
         db.session.commit()
         db.session.add_all([
             UserAccess(user_id=getFkValue(User, User.first_name, 'John'),
