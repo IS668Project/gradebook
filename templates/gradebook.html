@@ -75,6 +75,28 @@
             <table id="gradebookTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="student_name" data-sort-order="desc">
                 <thead>
                     <tr>
+                        <th></th>
+                        <th>Due Date</th>
+                        {% for header in headerList %}
+                            <th>{{header.dueDate}}</th>
+                        {% endfor %}
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>Max Points</th>
+                        {% for header in headerList %}
+                            <th>{{header.maxPoints}}</th>
+                        {% endfor %}
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
                         <th data-field="student_id" data-sortable="false">
                             Student Id
                         </th>
@@ -83,7 +105,7 @@
                         </th>
                         {% for header in headerList %}
                             <th data-field="{{header.name}}" value="{{header.id}}"data-sortable="true">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}, Max Points: {{header.maxPoints}}">{{header.name}} (Max Points: {{header.maxPoints}})</a>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}, Max Points: {{header.maxPoints}}">{{header.name}}</a>
                             </th>
                         {% endfor %}
                         <th data-field="totalScore" data-sortable="true">

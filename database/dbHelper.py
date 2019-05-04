@@ -133,7 +133,7 @@ def getClasses():
 def getClassAssignments(classId):
     results = Class.query.get(classId)
     for assignment in results.assignment:
-        assignment.assignment_due_date = datetime.strftime('%Y-%m-%d')
+        assignment.assignment_due_date = assignment.assignment_due_date.strftime('%Y-%m-%d')
     return results
 
 
@@ -188,7 +188,7 @@ def getClassGrades(classId):
         header = {}
         header['name'] = assignment.name
         header['id'] = assignment.assignment_id
-        header['dueDate'] = assignment.assignment_due_date
+        header['dueDate'] = assignment.assignment_due_date.strftime('%Y-%m-%d')
         header['maxPoints'] = assignment.max_points
         totalPoints += assignment.max_points
         headerList.append(header)
