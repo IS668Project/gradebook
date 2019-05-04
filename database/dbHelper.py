@@ -3,6 +3,7 @@ from database.appsSharedModels import *
 from flask_sqlalchemy import sqlalchemy
 
 from datetime import datetime
+from random import randint
 from time import sleep
 
 """
@@ -91,7 +92,7 @@ def addAssignmentsNewStudent(studentId, classId, dbInit=False):
     classAssignments = Assignment.query.filter_by(class_id=classId).all()
     for assignment in classAssignments:
         if dbInit:
-            grade = randint(60,100)
+            grade = randint(13,25)
         else:
             grade = 0
         insert = AssignmentGrade(student_id=studentId,

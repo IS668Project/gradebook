@@ -28,7 +28,7 @@ def createInitialData():
         db.session.add_all([Student(first_name='John', last_name='Sullivan',
                                     major_id=getFkValue(Major, Major.major_name,
                                                         'Information Systems'),
-                                    email_address='johnsu1@umbc'),
+                                    email_address='johnsu1@umbc.edu'),
                             Student(first_name='Jessica', last_name='Stack',
                                     major_id=getFkValue(Major, Major.major_name,
                                                         'Information Systems'),
