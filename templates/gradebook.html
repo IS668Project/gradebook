@@ -104,8 +104,8 @@
                             Student Name
                         </th>
                         {% for header in headerList %}
-                            <th data-field="{{header.name}}" value="{{header.id}}"data-sortable="true">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Due Date: {{header.dueDate}}, Max Points: {{header.maxPoints}}">{{header.name}}</a>
+                            <th data-field="{{header.name}}" value="{{header.id}}" data-sortable="true">
+                                {{header.name}}
                             </th>
                         {% endfor %}
                         <th data-field="totalScore" data-sortable="true">
@@ -158,69 +158,5 @@
             <input type="hidden" value="{{classData.class_id}}" name="classId">
             <button type="submit" class="btn btn-success" id="UpdateGrades" name="send" value="UpdateGrades">Update Grades</button>
         </form>
-    </div>
-    <div class="modal fade" id="assignmentModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a href="#" data-dismiss="modal"> <small>Back</small></a> <span id="myModalLabel" style="margin-left:20px;"><font size="+2"><b>Assignment View</b></font></span>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" method="POST" action="/assignments" >
-                        <fieldset id="modal_form">
-                            <div class="form-group">
-                                <input type="number" class="form-cont" style="display: none;" id="assignment_id" name="assignment_id" readonly value=0>
-                            </div>
-                            <div class="form-group">
-                                <input type="number" class="form-cont" style="display: none;" id="class_id" name="class_id" readonly value={{assignments.class_id}}>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="assignment_name">Assignment Name</label>
-                                    </div>
-                                    <div class="col-md-5.ml-auto">
-                                        <input type="text" class="form-cont" id="assignment_name" name="assignment_name" placeholder="Enter Assignment Name">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4"><label for="due_date">Due Date</label></div>
-                                    <div class="col-md-5.ml-auto"><input type="date" class="form-cont" id="due_date" name="due_date" placeholder="Enter Due Date"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4"><label for="max_points">Max Points</label></div>
-                                    <div class="col-md-5.ml-auto"><input type="number" class="form-cont" id="max_points" name="max_points" placeholder="Enter Max Points"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="assignment_description">Assignment Description</label>
-                                    </div>
-                                    <div class="col-md-5.ml-auto">
-                                        <textarea class="form-cont" id="assignment_description" name="assignment_description" rows="5" cols="35"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <button type="submit" name="send" id="AddAssignment" value="AddAssignment" class="btn btn-success">
-                            Add Assignment
-                        </button>
-                        <button type="submit" name="send" id="UpdateAssignment" value="UpdateAssignment" class="btn btn-secondary">
-                            Update Assignment
-                        </button>
-                        <button type="submit" name="send" id="DeleteAssignment" value="DeleteAssignment" class="btn btn-danger" >
-                            Delete Assignment
-                        </button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
     </div>
 {% endblock %}
