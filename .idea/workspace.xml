@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6bb20be7-1afe-44d9-90c9-66485d12c9c8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/database/appsSharedModels.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/appsSharedModels.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/class.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/class.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/class.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="81" lean-forward="true" selection-start-line="74" selection-end-line="81" />
+            <state relative-caret-position="425">
+              <caret line="82" selection-start-line="82" selection-end-line="82" />
               <folding>
                 <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
               </folding>
@@ -404,8 +404,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/class.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="81" lean-forward="true" selection-start-line="74" selection-end-line="81" />
+        <state relative-caret-position="425">
+          <caret line="82" selection-start-line="82" selection-end-line="82" />
           <folding>
             <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
           </folding>
