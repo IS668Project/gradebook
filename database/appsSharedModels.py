@@ -1,6 +1,6 @@
 """
     File for interactions with MySQL database instance in PythonAnywhere.
-    We are using flask_sqlalchemy for everything, inlcuding initial build
+    We are using flask_sqlalchemy for everything, including initial build
     and population. See dbInitialBuild.py for
     table creation and initial data population
     usage: no direct usage, meant for import only

@@ -1,8 +1,8 @@
 /* Page title bar BEGIN */
 .pagetitle {
-  background-color:#b4b4b4 !important;
+  background-color: gray;
   width: auto;
-  padding: 5px;
+  padding: 20px;
   text-align: center;
   text-transform: uppercase;
   color: #ccc;
@@ -81,3 +81,12 @@ table.dataTable thead .sorting_desc_disabled:before {
 bottom: .5em;
 }
 
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: gray;
+   color: white;
+   text-align: center;
+}
