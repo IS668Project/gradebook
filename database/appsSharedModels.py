@@ -114,7 +114,6 @@ class User(UserMixin, db.Model):
         """
         return check_password_hash(self.user_password, password)
 
-    #@dbQuery
     def get_id(self):
         return self.user_name
 
@@ -147,13 +146,26 @@ class ClassRoster(db.Model):
                          db.ForeignKey('classes.class_id',
                                        onupdate='CASCADE',
                                        ondelete='CASCADE'))
+    student = db.relationship(Student, backref=ClassRoster)
+    course = db.relationship(Class, backref=ClassRoster)
 
     def __repr__(self):
         return ("<class_rosters('class_roster_id'={}, \
-                 'student_id'={},\
-                 'class_id'={})>".format(self.class_roster_id,
-                                         self.student_id,
-                                         self.class_id))
+                 'student_id'={}, 'first_name'={}, 'last_name'={},\
+                 'email_address'={}, 'class_id'={}, 'class_name'={}, \
+                 'class_abbrv'={} \
+                 'class_description'={}, class_semester={}, \
+                 'class_year'={})>".format(self.class_roster_id,
+                                           self.student_id,
+                                           self.student.first_name,
+                                           self.student.last_name,
+                                           self.student.email_address,
+                                           self.class_id,
+                                           self.course.class_name,
+                                           self.course.class_abbrv,
+                                           self.course.class_description,
+                                           self.course.class_semester,
+                                           self.course.class_year))
 
 
 class Assignment(db.Model):
@@ -202,9 +214,13 @@ class AssignmentGrade(db.Model):
     def __repr__(self):
         return ("<assignment_grades('assign_grade_id'={}, \
                  student_id'={}, 'assignment_id'={},\
-                 'score'={}, 'max_points'={})>".format(self.assign_grade_id, self.student_id,
-                                      self.assignment_id, self.score,
-                                      self.assignment.max_points))
+                 'score'={}, 'assignment_name'={}, \
+                 'max_points'={})>".format(self.assign_grade_id, 
+                                           self.student_id,
+                                           self.assignment_id,
+                                           self.score,
+                                           self.assignment.name,
+                                           self.assignment.max_points))
 
 
 class UserAccess(db.Model):
