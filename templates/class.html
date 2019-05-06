@@ -4,6 +4,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#classTable').DataTable();
+            $('.archive1').hide();
             //hide id columns
             $('td:nth-child(6), th:nth-child(6)').hide();
             $('#classTable tbody').on('click', 'tr', function(){
@@ -33,6 +34,18 @@
                 $("#DeleteClass").hide();
                 $('#classModal').modal("show");
             });
+            var visArchive = 0;
+            $("#archiveToggle").click(function(){
+                if (visArchive == 0) {
+                    ('.archive0').hide();
+                    ('.archive1').show();
+                    visArchive = 1;
+                } else {
+                    ('.archive0').show();
+                    ('.archive1').hide();
+                    visArchive = 0;
+                }
+            });
         });
     </script>
 {% endblock %}
@@ -41,6 +54,14 @@
         <h1>Classes</h1>
     </div>
     <div class="container">
+        <div id="archiveToggle" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="archiveOptions" id="notArchived" autocomplete="off">
+            </label>
+            <label class="btn btn-secondary active">
+                <input type="radio" name="archiveOptions" id="Archived" autocomplete="off">
+            </label>
+        </div>
         <table id="classTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_abbrv" data-sort-order="desc">
             <thead>
                 <tr>
@@ -57,7 +78,7 @@
             </thead>
             <tbody>
                 {% for class in classes %}
-                    <tr class="clickable-row" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                    <tr class="archive{{class.class_archived}}" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
                         <td>{{class.class_id}}</td>
                         <td>{{class.class_abbrv}}</td>
                         <td>{{class.class_name}}</td>

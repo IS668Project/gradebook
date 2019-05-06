@@ -4,6 +4,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#studentTable').DataTable();
+            $('.archive1').hide();
             //for current student modal launch populate fields with row data
             $('#studentTable tbody').on('click', 'tr', function(){
                 var rowdata = table.row(this).data();
@@ -35,6 +36,18 @@
                 $("#DeleteStudent").hide();
                 $('#studentModal').modal("show");
             });
+            var visArchive = 0;
+            $("#archiveToggle").click(function(){
+                if (visArchive == 0) {
+                    ('.archive0').hide();
+                    ('.archive1').show();
+                    visArchive = 1;
+                } else {
+                    ('.archive0').show();
+                    ('.archive1').hide();
+                    visArchive = 0;
+                }
+            });
         });
     </script>
 {% endblock %}
@@ -43,6 +56,14 @@
         <h1>Students</h1>
     </div>
     <div class="container">
+        <div id="archiveToggle" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="archiveOptions" id="notArchived" autocomplete="off">
+            </label>
+            <label class="btn btn-secondary active">
+                <input type="radio" name="archiveOptions" id="Archived" autocomplete="off">
+            </label>
+        </div>
         <table id="studentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
             <thead>
                 <tr>
@@ -55,7 +76,7 @@
             </thead>
             <tbody>
                 {% for student in students %}
-                    <tr class="clickable-row" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                    <tr class="archive{{student.student_archived}}" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
                         <td>{{student.student_id}}</td>
                         <td>{{student.first_name}}</td>
                         <td>{{student.last_name}}</td>
