@@ -104,11 +104,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="327" />
-    <option name="y" value="99" />
-    <option name="width" value="1069" />
-    <option name="height" value="948" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="275" />
+    <option name="y" value="140" />
+    <option name="width" value="1440" />
+    <option name="height" value="780" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
