@@ -17,10 +17,13 @@ app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = False
 app.secret_key = "E*2kd+2sMPSt<VgN,26y!"
+SESSION_TYPE = 'sqlalchemy'
 login_manager = LoginManager()
 login_manager.login_view = 'https://is668projectgradebook.pythonanywhere.com/login'
 login_manager.init_app(app)
 db.init_app(app)
+app.config.from_object(__name__)
+Session(app)
 
 # attempt to protect login required from network connection drops
 login_required = dbQuery(login_required)
