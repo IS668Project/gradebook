@@ -46,7 +46,7 @@ def login():
     if request.method == 'GET':
         return render_template('login.html', error=False)
     else:
-        user = dbquery(load_user(request.form['username']))
+        user = dbQuery(load_user(request.form['username']))
         if not user or not user.check_password(request.form['password']):
             return render_template('login.html', error=True)
         else:
