@@ -3,6 +3,7 @@
     manage server side computations.
 """
 from flask import Flask, flash, redirect, render_template, request, session, url_for
+#from flask.ext.session import Session
 from flask_login import current_user, login_fresh, login_required, login_user, LoginManager, logout_user
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
@@ -22,8 +23,8 @@ login_manager = LoginManager()
 login_manager.login_view = 'https://is668projectgradebook.pythonanywhere.com/login'
 login_manager.init_app(app)
 db.init_app(app)
-app.config.from_object(__name__)
-Session(app)
+#app.config.from_object(__name__)
+#Session(app)
 
 # attempt to protect login required from network connection drops
 login_required = dbQuery(login_required)

@@ -151,8 +151,8 @@ class ClassRoster(db.Model):
                          db.ForeignKey('classes.class_id',
                                        onupdate='CASCADE',
                                        ondelete='CASCADE'))
-    student = db.relationship(Student, backref=ClassRoster)
-    course = db.relationship(Class, backref=ClassRoster)
+    student = db.relationship(Student, backref='ClassRoster')
+    course = db.relationship(Class, backref='ClassRoster')
 
     def __repr__(self):
         return ("<class_rosters('class_roster_id'={}, \
