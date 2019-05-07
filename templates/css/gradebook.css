@@ -2,7 +2,7 @@
 .pagetitle {
   background-color: gainsboro;
   width: auto;
-  padding: 25px;
+  padding: 30px;
   text-align: center;
   text-transform: uppercase;
   color: black;
@@ -86,7 +86,7 @@ bottom: .5em;
    left: 0;
    bottom: 0;
    width: 100%;
-   background-color: gray;
-   color: white;
+   background-color: gainsboro;
+   color: black;
    text-align: center;
 }
