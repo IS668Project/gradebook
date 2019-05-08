@@ -74,7 +74,10 @@ def createInitialData():
                  email_address='dg89092@umbc.edu'),
             User(first_name='test', last_name='user',
                  user_name='test', user_password='test',
-                 email_address='test@umbc.edu')])
+                 email_address='test@umbc.edu'),
+            User(first_name='Aryeh', last_name='Katz',
+                 user_name='akatz', user_password='akatz',
+                 email_address='test@test.com')])
         db.session.commit()
         rosterAdd = []
         for student in Student.query.all():
@@ -83,18 +86,36 @@ def createInitialData():
         db.session.add_all(rosterAdd)
         db.session.commit()
         db.session.add_all([
-            Assignment(class_id=1, name='Discussion',
-                       max_points=25, description='Discussions',
-                       assignment_due_date=datetime.strptime('09/19/2019', '%m/%d/%Y')),
-            Assignment(class_id=1, name='Midterm', max_points=25,
-                       description='Midterm',
-                       assignment_due_date=datetime.strptime('04/16/2019', '%m/%d/%Y')),
-            Assignment(class_id=1, name='Project', max_points=25,
-                       description='Project',
-                       assignment_due_date=datetime.strptime('05/22/2019', '%m/%d/%Y')),
-            Assignment(class_id=1, name='Final', max_points=25,
-                       description='Final',
-                       assignment_due_date=datetime.strptime('05/19/2019', '%m/%d/%Y'))])
+                            Student(first_name='Blake', last_name='White',
+                                    major_id=getFkValue(Major, Major.major_name,
+                                                        'Information Systems'),
+                                    email_address='bwhite99@umbc.edu'),
+                            Student(first_name='Jerry', last_name='Rice',
+                                    major_id=getFkValue(Major, Major.major_name,
+                                                        'Information Systems'),
+                                    email_address='goat@umbc.edu'),
+                            Student(first_name='Samantha', last_name='Hielder',
+                                    major_id=getFkValue(Major, Major.major_name,
+                                                        'Information Systems'),
+                                    email_address='shield@umbc.edu'),
+                            Student(first_name='Kyle', last_name='Fergunsen',
+                                    major_id=getFkValue(Major, Major.major_name,
+                                                        'Information Systems'),
+                                    email_address='kferg@umbc.edu')])
+        db.session.commit()
+        db.session.add_all([
+                            Assignment(class_id=1, name='Discussion',
+                                       max_points=25, description='Discussions',
+                                       assignment_due_date=datetime.strptime('09/19/2019', '%m/%d/%Y')),
+                            Assignment(class_id=1, name='Midterm', max_points=25,
+                                       description='Midterm',
+                                       assignment_due_date=datetime.strptime('04/16/2019', '%m/%d/%Y')),
+                            Assignment(class_id=1, name='Project', max_points=25,
+                                       description='Project',
+                                       assignment_due_date=datetime.strptime('05/22/2019', '%m/%d/%Y')),
+                            Assignment(class_id=1, name='Final', max_points=25,
+                                       description='Final',
+                                       assignment_due_date=datetime.strptime('05/19/2019', '%m/%d/%Y'))])
         db.session.commit()
         db.session.add_all([
             UserAccess(user_id=getFkValue(User, User.first_name, 'John'),
@@ -108,7 +129,12 @@ def createInitialData():
             UserAccess(user_id=getFkValue(User, User.first_name, 'test'),
                        class_id=getFkValue(Class,
                                            Class.class_abbrv,
+                                           'IS668')),
+                UserAccess(user_id=getFkValue(User, User.first_name, 'Aryeh'),
+                       class_id=getFkValue(Class,
+                                           Class.class_abbrv,
                                            'IS668'))])
+
         db.session.commit()
 
 
