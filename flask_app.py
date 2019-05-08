@@ -28,6 +28,7 @@ db.init_app(app)
 
 # attempt to protect login required from network connection drops
 login_required = dbQuery(login_required)
+login_manager.user_loader = dbQuery(login_manager.user_loader)
 
 @app.route('/')
 @login_required

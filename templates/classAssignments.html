@@ -6,7 +6,7 @@
             var table = $('#assignmentTable').DataTable();
             //hide id columns
             $('td:nth-child(1), th:nth-child(1)').hide();
-            $('td:nth-child(4), th:nth-child(4)').hide();
+            $('td:nth-child(5), th:nth-child(5)').hide();
             //modal launch for current assignment, populate modal with applicable data
             $('#assignmentTable tbody').on('click', 'tr', function(){
                 var rowdata = table.row(this).data();
