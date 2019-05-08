@@ -34,7 +34,7 @@
                 $("#DeleteClass").hide();
                 $('#classModal').modal("show");
             });
-            var visArchive = 0;
+            /*var visArchive = 0;
             $("#archiveToggle").click(function(){
                 if (visArchive == 0) {
                     ('.archive0').hide();
@@ -45,7 +45,7 @@
                     ('.archive1').hide();
                     visArchive = 0;
                 }
-            });
+            }); */
         });
     </script>
 {% endblock %}
@@ -54,14 +54,6 @@
         <h1>Classes</h1>
     </div>
     <div class="container">
-        <div id="archiveToggle" class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-                <input type="radio" name="archiveOptions" id="notArchived" autocomplete="off">
-            </label>
-            <label class="btn btn-secondary active">
-                <input type="radio" name="archiveOptions" id="Archived" autocomplete="off">
-            </label>
-        </div>
         <table id="classTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_abbrv" data-sort-order="desc">
             <thead>
                 <tr>
@@ -78,7 +70,7 @@
             </thead>
             <tbody>
                 {% for class in classes %}
-                    <tr class="archive{{class.class_archived}}" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                    <tr class="archive{{class.class_archived}}">
                         <td>{{class.class_id}}</td>
                         <td>{{class.class_abbrv}}</td>
                         <td>{{class.class_name}}</td>
@@ -92,84 +84,92 @@
                 {% endfor %}
             </tbody>
         </table>
+        <button class="btn btn-success"><a class="trigger_modal">Add New Class</a></button>
     </div>
-<div class="container">
-    <button class="btn btn-success"><a class="trigger_modal">Add New Class</a></button>
     <div class="modal fade" id="classModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <a href="#" data-dismiss="modal"> <small>Back</small></a> <span id="myModalLabel" style="margin-left:20px;"><font size="+2"><b>Class View</b></font></span>
+                    <a href="#" data-dismiss="modal"> 
+                        <small>Back</small>
+                    </a> 
+                    <span id="myModalLabel" style="margin-left:20px;">
+                        <font size="+2">
+                            <b>Class View</b>
+                        </font>
+                    </span>
                 </div>
-            </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" method="POST" action="/class" >
-                        <fieldset id="modal_form">
-                            <div class="form-group">
-                                <input type="number" class="form-cont" id="class_id" name="class_id" style="display: none;" value=0 readonly>
+            <div class="modal-body">
+                <form class="form-horizontal" method="POST" action="/class" >
+                    <fieldset id="modal_form">
+                        <div class="form-group">
+                            <input type="number" class="form-cont" id="class_id" name="class_id" style="display: none;" value=0 readonly>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_abbrv">Class Abbreviation</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                    <input type="text" class="form-cont" id="class_abbrv" name="class_abbrv" placeholder="Enter Class Abbreviation">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="class_abbrv">Class Abbreviation</label>
-                                    </div>
-                                    <div class="col-md-5.ml-auto">
-                                        <input type="text" class="form-cont" id="class_abbrv" name="class_abbrv" placeholder="Enter Class Abbreviation">
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_name">Class Name</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                    <input type="text" class="form-cont" id="class_name" name="class_name" placeholder="Enter Class Name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_description">Class Description</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                    <textarea class="form-cont" id="class_description" name="class_description" rows="5" cols="35"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_semester">Semester</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                   <div class="col-md-5.ml-auto">
+                                        <input type="text" class="class_semester" id="class_semester" name="class_semester" placeholder="Enter Class Semester">
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4"><label for="class_name">Class Name</label></div>
-                                    <div class="col-md-5.ml-auto"><input type="text" class="form-cont" id="class_name" name="class_name" placeholder="Enter Class Name"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_year">Year</label>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="class_description">Class Description</label>
-                                    </div>
-                                    <div class="col-md-5.ml-auto">
-                                        <textarea class="form-cont" id="class_description" name="class_description" rows="5" cols="35"></textarea>
+                                <div class="col-md-5.ml-auto">
+                                   <div class="col-md-5.ml-auto">
+                                        <input type="number" class="class_year" id="class_year" name="class_year" placeholder="Enter Class Year">
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="class_semester">Semester</label>
-                                    </div>
-                                    <div class="col-md-5.ml-auto">
-                                       <div class="col-md-5.ml-auto">
-                                            <input type="text" class="class_semester" id="class_semester" name="class_semester" placeholder="Enter Class Semester">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="class_year">Year</label>
-                                    </div>
-                                    <div class="col-md-5.ml-auto">
-                                       <div class="col-md-5.ml-auto">
-                                            <input type="number" class="class_year" id="class_year" name="class_year" placeholder="Enter Class Year">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <button type="submit" name="send" id="AddClass" value="AddClass" class="btn btn-success">
-                            Add Class
-                        </button>
-                        <button type="submit" name="send" id="UpdateClass" value="UpdateClass" class="btn btn-secondary" style="display: none;">
-                            Update Class
-                        </button>
-                        <button type="submit" name="send" id="DeleteClass" value="DeleteClass" class="btn btn-danger"  style="display: none;">
-                            Delete Class
-                        </button>
-                    </form>
-                </div>
+                        </div>
+                    </fieldset>
+                    <button type="submit" name="send" id="AddClass" value="AddClass" class="btn btn-success">
+                        Add Class
+                    </button>
+                    <button type="submit" name="send" id="UpdateClass" value="UpdateClass" class="btn btn-secondary">
+                        Update Class
+                    </button>
+                    <button type="submit" name="send" id="DeleteClass" value="DeleteClass" class="btn btn-danger">
+                        Delete Class
+                    </button>
+                </form>
             </div>
         </div>
     </div>
