@@ -258,7 +258,7 @@ def getClassInfo(classId):
     results = Class.query.get(classId)
     return results
 
-
+# dbInitialBuild function only
 def getFkValue(table, att_name, value):
     """
         Function to return the primary key id for a table
