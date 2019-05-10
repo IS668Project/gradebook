@@ -201,3 +201,22 @@ def classRosterView(classId=''):
             deleteRow(ClassRoster, rosterId)
             deleteStudentAssignments(rosterId)
     return redirect(url_for('classRosterView', class_id=request.form['classId']))
+
+#
+# @app.route('/student_gradebook', methods=["GET", "POST"])
+# @login_required
+# def studentGradebookView(classId=''):
+#     if request.method == "GET":
+#         roster, notEnrolledStudents, classData = getClassRoster(request.args.get('class_id'))
+#         return render_template('studentGradebook.html',
+#                                roster=roster, notEnrolledStudents=notEnrolledStudents,
+#                                classData=classData)
+#     elif request.form['send'] == "AddStudents":
+#         for student in request.form.getlist('studentSelect'):
+#             insertRow(ClassRoster, student_id=student, class_id=request.form['classId'])
+#             addAssignmentsNewStudent(student,request.form['classId'])
+#     elif request.form['send'] == "DeleteStudents":
+#         for rosterId in request.form.getlist('class_roster_id'):
+#             deleteRow(ClassRoster, rosterId)
+#             deleteStudentAssignments(rosterId)
+#     return redirect(url_for('classRosterView', class_id=request.form['classId']))
