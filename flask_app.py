@@ -205,6 +205,7 @@ def classRosterView(classId=''):
 @app.route('/student_detail', methods=["GET"])
 @login_required
 def studentDetailView():
-    info = request.args.get('student_id')
-    return render_template('studentDetail.html', studentInfo=info)
+    studentId = request.args.get('student_id')
+    data = getStudentData(studentId)
+    return render_template('studentDetail.html', studentInfo=data)
 

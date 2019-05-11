@@ -17,14 +17,12 @@
         <div class="row">
             <div class="col">
                 Student Id: {{studentInfo.student_id}}<br>
-                First Name: {{studentInfo.first_name}} <br>
-                Last Name: {{studentInfo.last_name}} <br>
-            </div>
-            <div class="col">
-                Email Address: <a href="mailto:{{studentInfo.email_address"> {{studentInfo.email_address}}</a>
+                Name: {{studentInfo.first_name}} {{studentInfo.last_name}}<br>
+                Email Address: <a href="mailto:{{studentInfo.email_address}}"> {{studentInfo.email_address}}</a><br>
                 Major: {{studentInfo.majors.major_name}}<br>
             </div>
         </div>
+        <br>
         <table id="classEnrollment" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_abbrv" data-sort-order="desc">
             <thead>
                 <tr>
@@ -37,10 +35,10 @@
             <tbody>
                 {% for class in studentInfo.class_roster %}
                     <tr>
-                        <td>{{class.class_name}}</td>
-                        <td>{{class.class_abbr}}</td>
-                        <td>{{class.class_semester}}</td>
-                        <td>{{class.class_year}}</td>
+                        <td>{{class.course.class_name}}</td>
+                        <td>{{class.course.class_abbrv}}</td>
+                        <td>{{class.course.class_semester}}</td>
+                        <td>{{class.course.class_year}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -58,11 +56,16 @@
             <tbody>
                 {% for assignment in studentInfo.assignment_grades %}
                     <tr>
-                        <td>{{assignment.class_name}}</td>
-                        <td>{{assignment.assignment_name}}</td>
-                        <td>{{assignment.max_points}}</td>
+                        <td>{{assignment.Assignment.Class.class_name}}</td>
+                        <td>{{assignment.Assignment.name}}</td>
+                        <td>{{assignment.Assignment.max_points}}</td>
                         <td>{{assignment.score}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <br>
+        <br>
+        <br>
+    </div>
+{% endblock %}
