@@ -202,3 +202,9 @@ def classRosterView(classId=''):
             deleteStudentAssignments(rosterId)
     return redirect(url_for('classRosterView', class_id=request.form['classId']))
 
+@app.route('/student_detail', methods=["GET"])
+@login_required
+def studentDetailView():
+    info = request.args.get('student_id')
+    return render_template('studentDetail.html', studentInfo=info)
+

@@ -186,18 +186,26 @@ class Assignment(db.Model):
     assignment_grade = db.relationship('AssignmentGrade',
                                        backref='Assignment',
                                        lazy=True)
+    classRel = db.relationship('Class', backref='Assignment',
+                               lazy=True)
 
     def __repr__(self):
         return ("<assignments('assignment_id'={}, 'class_id'={},\
                  'name'={},'max_points'={}, 'description'={},\
-                 assignment_grade={}, \
-                 assignment_due_date={})>".format(self.assignment_id,
+                 'assignment_grade'={}, \
+                 'assignment_due_date'={} \
+                 'class_name'={},\
+                 'class_abbrv'={},\
+                 'class_id'={})>".format(self.assignment_id,
                                                   self.class_id,
                                                   self.name,
                                                   self.max_points,
                                                   self.description,
                                                   self.assignment_grade,
-                                                  self.assignment_due_date))
+                                                  self.assignment_due_date,
+                                                  self.classRel.class_name,
+                                                  self.classRel.class_abbrv,
+                                                  self.classRel.class_id))
 
 
 class AssignmentGrade(db.Model):
@@ -220,12 +228,18 @@ class AssignmentGrade(db.Model):
         return ("<assignment_grades('assign_grade_id'={}, \
                  student_id'={}, 'assignment_id'={},\
                  'score'={}, 'assignment_name'={}, \
-                 'max_points'={})>".format(self.assign_grade_id, 
+                 'max_points'={},\
+                 'class_name'={}, \
+                 'class_abbrv'={},\
+                 'class_id'={}>".format(self.assign_grade_id, 
                                            self.student_id,
                                            self.assignment_id,
                                            self.score,
                                            self.assignment.name,
-                                           self.assignment.max_points))
+                                           self.assignment.max_points,
+                                           self.assignment.classRel.class_name,
+                                           self.assignment.classRel.class_abbrv,
+                                           self.assignment.classRel.class_id))
 
 
 class UserAccess(db.Model):

@@ -75,6 +75,7 @@
                         <td>{{student.last_name}}</td>
                         <td><a href="mailto:{{student.email_address}}">{{student.email_address}}</a></td>
                         <td>{{student.majors.major_name}}</td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/student_detail?student_id={{student.student_id}}">Student Detail</a></button></td>
                     </tr>
                 {% endfor %}
             </tbody>
