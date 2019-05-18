@@ -3,16 +3,18 @@
 {% block js %}
     <script type="text/javascript">
         $(document).ready(function() {
-            var table = $('#studentTable').DataTable();
-            $('.archive1').hide();
+            var table = $('#studentTable').DataTable({
+                'order': [[3, 'asc']]
+            });
             //for current student modal launch populate fields with row data
-            $('#studentTable tbody').on('click', 'tr', function(){
+            $('#studentTable tbody').on('click', 'tr', function(e){
+                if (e.target.tagName == 'A') return;
                 var rowdata = table.row(this).data();
-                $("#student_id").val(table.row(this).data()[0]);
-                $("#first_name").val(table.row(this).data()[1]);
-                $("#last_name").val(table.row(this).data()[2]);
-                $("#email_address").val(table.row(this).data()[3]);
-                var major = table.row(this).data()[4];
+                $("#student_id").val(table.row(this).data()[1]);
+                $("#first_name").val(table.row(this).data()[2]);
+                $("#last_name").val(table.row(this).data()[3]);
+                $("#email_address").val(table.row(this).data()[4]);
+                var major = table.row(this).data()[5];
                 var i;
                 for(i=0; i < major_id.length; i++){
                     if (major_id[i].text == major){
@@ -36,18 +38,6 @@
                 $("#DeleteStudent").hide();
                 $('#studentModal').modal("show");
             });
-            var visArchive = 0;
-            $("#archiveToggle").click(function(){
-                if (visArchive == 0) {
-                    ('.archive0').hide();
-                    ('.archive1').show();
-                    visArchive = 1;
-                } else {
-                    ('.archive0').show();
-                    ('.archive1').hide();
-                    visArchive = 0;
-                }
-            });
         });
     </script>
 {% endblock %}
@@ -60,16 +50,19 @@
         <table id="studentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
             <thead>
                 <tr>
+                    <th data-field="editButton" data-sortable="false"></th>
                     <th data-field="student_id" data-sortable="true">Student ID</th>
                     <th data-field="first_name" data-sortable="true">First Name</th>
                     <th data-field="last_name" data-sortable="true">Last Name</th>
                     <th data-field="email_address" data-sortable="true">Email Address</th>
                     <th data-field="major" data-sortable="true">Major</th>
+                    <th data-field="student_detail" data-sortable="false"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for student in students %}
-                    <tr class="archive{{student.student_archived}}" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                    <tr data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                        <td><img class="editButton" src="/static/images/edit-button.png" alt="Edit"></img></td>
                         <td>{{student.student_id}}</td>
                         <td>{{student.first_name}}</td>
                         <td>{{student.last_name}}</td>

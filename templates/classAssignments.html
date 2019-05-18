@@ -5,16 +5,16 @@
         $(document).ready(function() {
             var table = $('#assignmentTable').DataTable();
             //hide id columns
-            $('td:nth-child(1), th:nth-child(1)').hide();
-            $('td:nth-child(5), th:nth-child(5)').hide();
+            $('td:nth-child(2), th:nth-child(2)').hide();
+            $('td:nth-child(6), th:nth-child(6)').hide();
             //modal launch for current assignment, populate modal with applicable data
             $('#assignmentTable tbody').on('click', 'tr', function(){
                 var rowdata = table.row(this).data();
-                $("#assignment_id").val(table.row(this).data()[0]);
-                $("#assignment_name").val(table.row(this).data()[1]);
-                $("#due_date").val(table.row(this).data()[2]);
-                $("#max_points").val(table.row(this).data()[3]);
-                $("textarea#assignment_description").text(table.row(this).data()[4]);
+                $("#assignment_id").val(table.row(this).data()[1]);
+                $("#assignment_name").val(table.row(this).data()[2]);
+                $("#due_date").val(table.row(this).data()[3]);
+                $("#max_points").val(table.row(this).data()[4]);
+                $("textarea#assignment_description").text(table.row(this).data()[5]);
                 $("#AddAssignment").hide();
                 $("#UpdateAssignment").show();
                 $("#DeleteAssignment").show();
@@ -43,6 +43,7 @@
         <table id="assignmentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
             <thead>
                 <tr>
+                    <th data-field="edit-button" data-sortable="true"></th>
                     <th data-field="assignment_id" data-sortable="true">Assignment ID</th>
                     <th data-field="assignment_name" data-sortable="true">Assignment Name</th>
                     <th data-field="assignment_due_date" data-sortable="true">Due Date</th>
@@ -53,6 +54,7 @@
             <tbody>
                 {% for assignment in assignments.assignment %}
                     <tr class="clickable-row" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                        <td><img class="editButton" src="/static/images/edit-button.png" alt="Edit"></td>
                         <td>{{assignment.assignment_id}}</td>
                         <td>{{assignment.name}}</td>
                         <td>{{assignment.assignment_due_date}}</td>
@@ -85,7 +87,7 @@
                                         <label for="assignment_name">Assignment Name</label>
                                     </div>
                                     <div class="col-md-5.ml-auto">
-                                        <input type="text" class="form-cont" id="assignment_name" name="assignment_name" placeholder="Enter Assignment Name">
+                                        <input type="text" class="form-cont" id="assignment_name" name="assignment_name" placeholder="Enter Assignment Name" required>
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +100,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4"><label for="max_points">Max Points</label></div>
-                                    <div class="col-md-5.ml-auto"><input type="number" class="form-cont" id="max_points" name="max_points" placeholder="Enter Max Points"></div>
+                                    <div class="col-md-5.ml-auto"><input type="number" class="form-cont" id="max_points" name="max_points" placeholder="Enter Max Points" required></div>
                                 </div>
                             </div>
                             <div class="form-group">

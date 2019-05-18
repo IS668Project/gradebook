@@ -19,13 +19,19 @@ def create_app():
 
 
 def createInitialData():
-        db.session.add_all([Major(major_name='Information Systems'),
+        db.session.add_all([
+                            Major(major_name='Information Systems'),
                             Major(major_name='Computer Science'),
                             Major(major_name='Computer Engineering'),
                             Major(major_name='Cyber Security'),
                             ])
         db.session.commit()
-        db.session.add_all([Student(first_name='John', last_name='Sullivan',
+        db.session.add_all([
+                            Student(first_name='Tom', last_name='Beagle',
+                                    major_id=getFkValue(Major, Major.major_name,
+                                                        'Computer Engineering'),
+                                    email_address='TomBeag@umbc.edu'),
+                            Student(first_name='John', last_name='Sullivan',
                                     major_id=getFkValue(Major, Major.major_name,
                                                         'Information Systems'),
                                     email_address='johnsu1@umbc.edu'),
@@ -46,10 +52,6 @@ def createInitialData():
                                     major_id=getFkValue(Major, Major.major_name,
                                                         'Computer Engineering'),
                                     email_address='claytom@umbc.edu'),
-                            Student(first_name='Tom', last_name='Beagle',
-                                    major_id=getFkValue(Major, Major.major_name,
-                                                        'Computer Engineering'),
-                                    email_address='TomBeag@umbc.edu'),
                             Student(first_name='Sally', last_name='Shoemaker',
                                     major_id=getFkValue(Major, Major.major_name,
                                                         'Cyber Security'),
@@ -66,18 +68,21 @@ def createInitialData():
                                       the technology used to implement it')])
         db.session.commit()
         db.session.add_all([
-            User(first_name='John', last_name='Sullivan',
-                 user_name='johnsu1', user_password='test',
-                 email_address='johnsu1@umbc.edu'),
-            User(first_name='Jessica', last_name='Stack',
-                 user_name='jessstack', user_password='test',
-                 email_address='dg89092@umbc.edu'),
-            User(first_name='test', last_name='user',
-                 user_name='test', user_password='test',
-                 email_address='test@umbc.edu'),
-            User(first_name='Aryeh', last_name='Katz',
-                 user_name='akatz', user_password='akatz',
-                 email_address='test@test.com')])
+                            User(first_name='John', last_name='Sullivan',
+                                 user_name='johnsu1', user_password='test',
+                                 email_address='johnsu1@umbc.edu'),
+                            User(first_name='admin', last_name='admin',
+                                 user_name='admin', user_password='admin',
+                                 email_address='admin@umbc.edu'),
+                            User(first_name='Jessica', last_name='Stack',
+                                 user_name='jessstack', user_password='test',
+                                 email_address='dg89092@umbc.edu'),
+                            User(first_name='test', last_name='user',
+                                 user_name='test', user_password='test',
+                                 email_address='test@umbc.edu'),
+                            User(first_name='Aryeh', last_name='Katz',
+                                 user_name='akatz', user_password='akatz',
+                                 email_address='test@test.com')])
         db.session.commit()
         rosterAdd = []
         for student in Student.query.all():
@@ -118,29 +123,28 @@ def createInitialData():
                                        assignment_due_date=datetime.strptime('05/19/2019', '%m/%d/%Y'))])
         db.session.commit()
         db.session.add_all([
-            UserAccess(user_id=getFkValue(User, User.first_name, 'John'),
-                       class_id=getFkValue(Class,
-                                           Class.class_abbrv,
-                                           'IS668')),
-            UserAccess(user_id=getFkValue(User, User.first_name, 'Jessica'),
-                       class_id=getFkValue(Class,
-                                           Class.class_abbrv,
-                                           'IS668')),
-            UserAccess(user_id=getFkValue(User, User.first_name, 'test'),
-                       class_id=getFkValue(Class,
-                                           Class.class_abbrv,
-                                           'IS668')),
-                UserAccess(user_id=getFkValue(User, User.first_name, 'Aryeh'),
-                       class_id=getFkValue(Class,
-                                           Class.class_abbrv,
-                                           'IS668'))])
+                            UserAccess(user_id=getFkValue(User, User.first_name, 'John'),
+                                       class_id=getFkValue(Class,
+                                                           Class.class_abbrv,
+                                                           'IS668')),
+                            UserAccess(user_id=getFkValue(User, User.first_name, 'Jessica'),
+                                       class_id=getFkValue(Class,
+                                                           Class.class_abbrv,
+                                                           'IS668')),
+                            UserAccess(user_id=getFkValue(User, User.first_name, 'test'),
+                                       class_id=getFkValue(Class,
+                                                           Class.class_abbrv,
+                                                           'IS668')),
+                            UserAccess(user_id=getFkValue(User, User.first_name, 'Aryeh'),
+                                       class_id=getFkValue(Class,
+                                                           Class.class_abbrv,
+                                                           'IS668'))])
 
         db.session.commit()
 
 
 def populateGrades():
-    rosters = ClassRoster.query.all()
-    for student in rosters:
+    for student in ClassRoster.query.all():
         addAssignmentsNewStudent(student.student_id, student.class_id, dbInit=True)
 
 
