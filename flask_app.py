@@ -2,8 +2,8 @@
     Gradebook Flask app file. Used to host website,
     manage server side computations.
 """
-from flask import Flask, redirect, render_template, request, url_for
-from flask_login import current_user, jsonify, login_required, login_user, logout_user, LoginManager
+from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user, LoginManager
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
 from database.dbHelper import *
@@ -67,9 +67,10 @@ def changePassword():
                                pwError=False)
     else:
         user = load_user(current_user.user_name)
-        if user.check_password(request.form['currentPassword']):
-            user.set_password(request.form['npassword'])
-            return jsonify(success=False)
+        if user.check_password(request.form['cPassword']):
+            user.set_password(request.form['nPassword'])
+            db.session.commit()
+            return jsonify(pwError=False)
         else:
             return jsonify(pwError=True)
 
