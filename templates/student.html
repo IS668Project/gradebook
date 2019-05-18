@@ -13,7 +13,7 @@
                 $("#student_id").val(table.row(this).data()[1]);
                 $("#first_name").val(table.row(this).data()[2]);
                 $("#last_name").val(table.row(this).data()[3]);
-                $("#email_address").val(table.row(this).data()[4]);
+                $("#email_address").val($.parseHTML(table.row(this).data()[4])[0].firstChild.data);
                 var major = table.row(this).data()[5];
                 var i;
                 for(i=0; i < major_id.length; i++){
