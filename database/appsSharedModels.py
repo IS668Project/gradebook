@@ -35,7 +35,6 @@ class Student(db.Model):
                                                    ondelete='RESTRICT'),
                          nullable=False)
     email_address = db.Column(db.String(100), nullable=False)
-    student_archived = db.Column(db.Integer, nullable=False, default=0)
     assignment_grades = db.relationship('AssignmentGrade',
                                         backref='Student',
                                         lazy=True)
@@ -46,14 +45,13 @@ class Student(db.Model):
     def __repr__(self):
         return ("<students('student_id'={}, 'first_name'={}, \
                  'last_name'={}, 'major_id'={}, \
-                 'email_address'={}, 'student_archived'={} \
+                 'email_address'={}, \
                  'assignment_grades'={}, class_roster={}\
                  'majors'={})>".format(self.student_id,
                                        self.first_name,
                                        self.last_name,
                                        self.major_id,
                                        self.email_address,
-                                       self.student_archived,
                                        self.assignment_grades,
                                        self.class_roster,
                                        self.majors))
@@ -67,19 +65,17 @@ class Class(db.Model):
     class_description = db.Column(db.String(3000))
     class_semester = db.Column(db.String(50))
     class_year = db.Column(db.Integer)
-    class_archived = db.Column(db.Integer, nullable=False, default=0)
     assignment = db.relationship('Assignment', backref='Class', lazy=True)
     class_roster = db.relationship('ClassRoster', backref='Class', lazy=True)
 
     def __repr__(self):
         return ("<classes('class_name'={}, class_abbrv={}, \
                  class_semester={}, class_description={}, \
-                 'class_archived'={} 'assignment'={}\
+                 'assignment'={}\
                  'class_roster'={})>".format(self.class_name,
                                              self.class_abbrv,
                                              self.class_semester,
                                              self.class_description,
-                                             self.class_archived,
                                              self.assignment,
                                              self.class_roster))
 

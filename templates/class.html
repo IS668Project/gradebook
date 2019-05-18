@@ -4,10 +4,10 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#classTable').DataTable();
-            $('.archive1').hide();
             //hide id columns
-            $('td:nth-child(6), th:nth-child(6)').hide();
+            $('td:nth-child(7), th:nth-child(7)').hide();
             $('#classTable tbody').on('click', 'tr', function(){
+                if (e.target.tagName == 'A') return;
                 var rowdata = table.row(this).data();
                 //for current class modal launch populate fields with row data
                 $("#class_id").val(table.row(this).data()[0]);
@@ -34,18 +34,6 @@
                 $("#DeleteClass").hide();
                 $('#classModal').modal("show");
             });
-            /*var visArchive = 0;
-            $("#archiveToggle").click(function(){
-                if (visArchive == 0) {
-                    ('.archive0').hide();
-                    ('.archive1').show();
-                    visArchive = 1;
-                } else {
-                    ('.archive0').show();
-                    ('.archive1').hide();
-                    visArchive = 0;
-                }
-            }); */
         });
     </script>
 {% endblock %}
@@ -58,6 +46,7 @@
         <table id="classTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_abbrv" data-sort-order="desc">
             <thead>
                 <tr>
+                    <th data-field="edit-button" data-sortable="true"></th>
                     <th data-field="class_id" data-sortable="true">Class ID</th>
                     <th data-field="class_abbrv" data-sortable="true">Class Abbreviation</th>
                     <th data-field="class_name" data-sortable="true">Class Name</th>
@@ -71,7 +60,8 @@
             </thead>
             <tbody>
                 {% for class in classes %}
-                    <tr class="archive{{class.class_archived}}">
+                    <tr>
+                        <td><img src="/static/images/edit-button.png" alt="Edit"></td>
                         <td>{{class.class_id}}</td>
                         <td>{{class.class_abbrv}}</td>
                         <td>{{class.class_name}}</td>
