@@ -3,7 +3,7 @@
     manage server side computations.
 """
 from flask import Flask, redirect, render_template, request, url_for
-from flask_login import login_required, login_user, logout_user, LoginManager
+from flask_login import current_user, login_required, login_user, logout_user, LoginManager
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
 from database.dbHelper import *
@@ -35,7 +35,6 @@ def home():
 
 
 @login_manager.user_loader
-@dbQuery
 def load_user(username):
     return User.query.filter_by(user_name=username).first()
 
@@ -63,7 +62,16 @@ def logout():
 @app.route('/changePassword', methods=['GET', 'POST'])
 @login_required
 def changePassword():
-    return 'place holder for changePassword'
+    if request.method == 'GET':
+        return render_template('changePassword.html',
+                               pwError=False)
+    else:
+        user = load_user(current_user.user_name)
+        if user.check_password(request.form['currentPassword']):
+            user.set_password(request.form['npassword'])
+            return(success=False)
+        else:
+            return(pwError=True)
 
 
 @app.route('/home', methods=["GET", "POST"])
