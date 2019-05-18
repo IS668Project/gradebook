@@ -5,16 +5,16 @@
         $(document).ready(function() {
             var table = $('#assignmentTable').DataTable();
             //hide id columns
-            $('td:nth-child(1), th:nth-child(1)').hide();
-            $('td:nth-child(5), th:nth-child(5)').hide();
+            $('td:nth-child(2), th:nth-child(2)').hide();
+            $('td:nth-child(6), th:nth-child(6)').hide();
             //modal launch for current assignment, populate modal with applicable data
             $('#assignmentTable tbody').on('click', 'tr', function(){
                 var rowdata = table.row(this).data();
-                $("#assignment_id").val(table.row(this).data()[0]);
-                $("#assignment_name").val(table.row(this).data()[1]);
-                $("#due_date").val(table.row(this).data()[2]);
-                $("#max_points").val(table.row(this).data()[3]);
-                $("textarea#assignment_description").text(table.row(this).data()[4]);
+                $("#assignment_id").val(table.row(this).data()[1]);
+                $("#assignment_name").val(table.row(this).data()[2]);
+                $("#due_date").val(table.row(this).data()[3]);
+                $("#max_points").val(table.row(this).data()[4]);
+                $("textarea#assignment_description").text(table.row(this).data()[5]);
                 $("#AddAssignment").hide();
                 $("#UpdateAssignment").show();
                 $("#DeleteAssignment").show();
@@ -54,7 +54,7 @@
             <tbody>
                 {% for assignment in assignments.assignment %}
                     <tr class="clickable-row" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
-                        <td><img src="/static/images/edit-button.png" alt="Edit"></td>
+                        <td><img class="editButton" src="/static/images/edit-button.png" alt="Edit"></td>
                         <td>{{assignment.assignment_id}}</td>
                         <td>{{assignment.name}}</td>
                         <td>{{assignment.assignment_due_date}}</td>

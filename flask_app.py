@@ -3,7 +3,7 @@
     manage server side computations.
 """
 from flask import Flask, redirect, render_template, request, url_for
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, LoginManager
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
 from database.dbHelper import *

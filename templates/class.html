@@ -3,19 +3,21 @@
 {% block js %}
     <script type="text/javascript">
         $(document).ready(function() {
-            var table = $('#classTable').DataTable();
+            var table = $('#classTable').DataTable({
+                'order': [[2, 'asc']]
+            });
             //hide id columns
             $('td:nth-child(7), th:nth-child(7)').hide();
-            $('#classTable tbody').on('click', 'tr', function(){
+            $('#classTable tbody').on('click', 'tr', function(e){
                 if (e.target.tagName == 'A') return;
                 var rowdata = table.row(this).data();
                 //for current class modal launch populate fields with row data
-                $("#class_id").val(table.row(this).data()[0]);
-                $("#class_abbrv").val(table.row(this).data()[1]);
-                $("#class_name").val(table.row(this).data()[2]);
-                $("#class_semester").val(table.row(this).data()[3]);
-                $("#class_year").val(table.row(this).data()[4]);
-                $("textarea#class_description").text(table.row(this).data()[5]);
+                $("#class_id").val(table.row(this).data()[1]);
+                $("#class_abbrv").val(table.row(this).data()[2]);
+                $("#class_name").val(table.row(this).data()[3]);
+                $("#class_semester").val(table.row(this).data()[4]);
+                $("#class_year").val(table.row(this).data()[5]);
+                $("textarea#class_description").text(table.row(this).data()[6]);
                 $("#AddClass").hide();
                 $("#UpdateClass").show();
                 $("#DeleteClass").show();
@@ -46,7 +48,7 @@
         <table id="classTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_abbrv" data-sort-order="desc">
             <thead>
                 <tr>
-                    <th data-field="edit-button" data-sortable="true"></th>
+                    <th data-field="edit-button" data-sortable="false"></th>
                     <th data-field="class_id" data-sortable="true">Class ID</th>
                     <th data-field="class_abbrv" data-sortable="true">Class Abbreviation</th>
                     <th data-field="class_name" data-sortable="true">Class Name</th>
@@ -61,7 +63,7 @@
             <tbody>
                 {% for class in classes %}
                     <tr>
-                        <td><img src="/static/images/edit-button.png" alt="Edit"></td>
+                        <td><img class="editButton" src="/static/images/edit-button.png" alt="Edit"></img></td>
                         <td>{{class.class_id}}</td>
                         <td>{{class.class_abbrv}}</td>
                         <td>{{class.class_name}}</td>
