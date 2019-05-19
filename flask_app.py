@@ -13,7 +13,8 @@ from datetime import datetime
 # app set up
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
-app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 100
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 100
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = False
 app.secret_key = "E*2kd+2sMPSt<VgN,26y!"

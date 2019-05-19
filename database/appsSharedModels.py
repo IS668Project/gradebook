@@ -5,10 +5,16 @@
     table creation and initial data population
     usage: no direct usage, meant for import only
 """
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy as _BaseSQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, \
      check_password_hash
+
+#re-writing class to include pre-ping, effort to fix timeouts
+class SQLAlchemy(_BaseSQLAlchemy):
+    def apply_pool_defaults(self, app, options):
+        super(SQLAlchemy, self).apply_pool_defaults(self, app, options)
+        options["pool_pre_ping"] = True
 
 
 db = SQLAlchemy()
