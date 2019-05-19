@@ -13,7 +13,7 @@ from werkzeug.security import generate_password_hash, \
 #re-writing class to include pre-ping, effort to fix timeouts
 class SQLAlchemy(_BaseSQLAlchemy):
     def apply_pool_defaults(self, app, options):
-        super(SQLAlchemy, self).apply_pool_defaults(self, app, options)
+        super(SQLAlchemy, self).apply_pool_defaults(app, options)
         options["pool_pre_ping"] = True
 
 
