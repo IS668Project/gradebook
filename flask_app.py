@@ -2,8 +2,8 @@
     Gradebook Flask app file. Used to host website,
     manage server side computations.
 """
-from flask import Flask, redirect, render_template, request, url_for
-from flask_login import login_required, login_user, logout_user, LoginManager
+from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user, LoginManager
 from database.databaseConfig import testDBEndPoint, prodDBEndPoint
 from database.appsSharedModels import *
 from database.dbHelper import *
@@ -13,7 +13,8 @@ from datetime import datetime
 # app set up
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
-app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 100
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 100
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = False
 app.secret_key = "E*2kd+2sMPSt<VgN,26y!"
@@ -35,7 +36,6 @@ def home():
 
 
 @login_manager.user_loader
-@dbQuery
 def load_user(username):
     return User.query.filter_by(user_name=username).first()
 
@@ -63,7 +63,17 @@ def logout():
 @app.route('/changePassword', methods=['GET', 'POST'])
 @login_required
 def changePassword():
-    return 'place holder for changePassword'
+    if request.method == 'GET':
+        return render_template('changePassword.html',
+                               pwError=False)
+    else:
+        user = load_user(current_user.user_name)
+        if user.check_password(request.form['cPassword']):
+            user.set_password(request.form['nPassword'])
+            db.session.commit()
+            return jsonify(pwError=False)
+        else:
+            return jsonify(pwError=True)
 
 
 @app.route('/home', methods=["GET", "POST"])
