@@ -43,6 +43,7 @@
         <h1>Assignments for {{assignments.class_name}}: {{assignments.class_semester}}, {{assignments.class_year}}</h1>
     </div>
      <div class="container">
+        <button class="btn btn-success" style="margin-bottom: 15px;"><a class="trigger_modal">Add New Assignment</a></button>
         <table id="assignmentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
             <thead>
                 <tr>
@@ -67,7 +68,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button class="btn btn-success"><a class="trigger_modal">Add New Assignment</a></button>
     </div>
      <div class="modal fade" id="assignmentModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
