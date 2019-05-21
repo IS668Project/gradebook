@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6bb20be7-1afe-44d9-90c9-66485d12c9c8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/css/gradebook.css" beforeDir="false" afterPath="$PROJECT_DIR$/templates/css/gradebook.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,7 +51,7 @@
         <entry file="file://$PROJECT_DIR$/templates/css/gradebook.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
-              <caret line="10" column="18" lean-forward="true" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+              <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -99,7 +99,6 @@
         <option value="$PROJECT_DIR$/templates/formPopup.html" />
         <option value="$PROJECT_DIR$/database/appsSharedModels.py" />
         <option value="$PROJECT_DIR$/templates/home.html" />
-        <option value="$PROJECT_DIR$/templates/css/gradebook.css" />
         <option value="$PROJECT_DIR$/templates/class.html" />
         <option value="$PROJECT_DIR$/templates/homebase.html" />
         <option value="$PROJECT_DIR$/templates/classRoster.html" />
@@ -112,6 +111,7 @@
         <option value="$PROJECT_DIR$/templates/studentGradebook.html" />
         <option value="$PROJECT_DIR$/templates/classAssignments.html" />
         <option value="$PROJECT_DIR$/templates/training.html" />
+        <option value="$PROJECT_DIR$/templates/css/gradebook.css" />
       </list>
     </option>
   </component>
@@ -498,7 +498,7 @@
     <entry file="file://$PROJECT_DIR$/templates/css/gradebook.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
-          <caret line="10" column="18" lean-forward="true" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
         </state>
       </provider>
     </entry>
