@@ -6,6 +6,8 @@ from datetime import datetime
 from random import randint
 from time import sleep
 
+from logs import gradebookLog
+
 """
     mySQL is throwing operational errors quite frequently
     The two functions below are intended as a decorator, takes the sql action
@@ -29,7 +31,8 @@ def dbTransaction(func):
                 db.session.commit()
                 return
             except (sqlalchemy.exc.OperationalError,
-                    sqlalchemy.exc.InvalidRequestError):
+                    sqlalchemy.exc.InvalidRequestError) as e:
+                gradebookLog.simpleLog('{}'.format(e))
                 db.session.rollback()
                 attemptCount += 1
                 sleep(2)
@@ -46,7 +49,8 @@ def dbQuery(func):
                 func(*args, **kwargs)
                 return func(*args, **kwargs)
             except (sqlalchemy.exc.OperationalError,
-                    sqlalchemy.exc.InvalidRequestError):
+                    sqlalchemy.exc.InvalidRequestError) as e:
+                gradebookLog.simpleLog('{}'.format(e))
                 db.session.rollback()
                 attemptCount += 1
                 sleep(2)
@@ -106,14 +110,14 @@ def deleteStudentAssignments(rosterId):
     """
         Used when removing a student from a class.
         Deletes all assignments for the student in the applicable class.
-        @param rosterId int     : id representing a single student 
+        @param rosterId int     : id representing a single student
                                   in a single class
     """
     assignments = ClassRoster.query.filter_by(class_roster_id=rosterId). \
-                              join(Assignment).join(AssignmentGrade). \
-                              add_columns(AssignmentGrade.assign_grade_id)
+                              join(Class).join(Assignment).join(AssignmentGrade). \
+                              add_columns(AssignmentGrade.assign_grade_id).all()
     for assignment in assignments:
-        deleteRow(AssignmentGrade, assignment.assign_grade_id)
+        deleteRow(AssignmentGrade, assignment[-1])
 
 
 """ queries used in flask app processing """
@@ -156,12 +160,12 @@ def getClassRoster(classId):
         Used to provide data for classroster template generation.
         @param classId int                   : PK for classes
         @return results db.model             : list of db model __repr__
-                                               object containing data needed 
+                                               object containing data needed
                                                for template for each student
         @return studentsNotEnrolled db.model : list of db model __repr__
-                                               object containing data needed 
+                                               object containing data needed
                                                for template for each student not enrolled
-        @return classData db.model           : db model __repr__ object 
+        @return classData db.model           : db model __repr__ object
                                                for applicable class being viewed.
     """
     results = ClassRoster.query.filter_by(class_id=classId).join(Student). \

@@ -9,6 +9,8 @@ from database.appsSharedModels import *
 from database.dbHelper import *
 from datetime import datetime
 
+from logs import gradebookLog
+
 
 # app set up
 app = Flask(__name__)
@@ -197,17 +199,17 @@ def assignmentView(classId=''):
 def classRosterView(classId=''):
     if request.method == "GET":
         roster, notEnrolledStudents, classData = getClassRoster(request.args.get('class_id'))
-        return render_template('classRoster.html', 
+        return render_template('classRoster.html',
                                roster=roster, notEnrolledStudents=notEnrolledStudents,
-                               classData=classData) 
+                               classData=classData)
     elif request.form['send'] == "AddStudents":
         for student in request.form.getlist('studentSelect'):
             insertRow(ClassRoster, student_id=student, class_id=request.form['classId'])
             addAssignmentsNewStudent(student,request.form['classId'])
     elif request.form['send'] == "DeleteStudents":
         for rosterId in request.form.getlist('class_roster_id'):
-            deleteRow(ClassRoster, rosterId)
             deleteStudentAssignments(rosterId)
+            deleteRow(ClassRoster, rosterId)
     return redirect(url_for('classRosterView', class_id=request.form['classId']))
 
 @app.route('/student_detail', methods=["GET"])
