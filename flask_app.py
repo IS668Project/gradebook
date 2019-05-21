@@ -14,7 +14,7 @@ from logs import gradebookLog
 
 # app set up
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
+app.config['SQLALCHEMY_DATABASE_URI'] = prodDBEndPoint
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 100
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 100
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

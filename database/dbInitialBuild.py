@@ -11,7 +11,7 @@ from dbHelper import addAssignmentsNewStudent, dbTransaction, getFkValue
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = testDBEndPoint
+    app.config['SQLALCHEMY_DATABASE_URI'] = prodDBEndPoint
     app.config['SQLALCHEMY_POOL_TIMEOUT'] = 200
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
