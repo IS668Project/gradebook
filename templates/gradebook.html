@@ -75,6 +75,7 @@
 
     <div class="container">
         <form class="form-horizontal" name="gradebookForm" id="gradebookForm" action="/gradebook" method="POST">
+            <button type="submit" class="btn btn-success" id="UpdateGrades" name="send" value="UpdateGrades" style="margin-bottom: .5em;">Update Grades</button>
             <table id="gradebookTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="student_name" data-sort-order="desc">
                 <thead>
                     <tr>
@@ -159,7 +160,6 @@
                 </tbody>
             </table>
             <input type="hidden" value="{{classData.class_id}}" name="classId">
-            <button type="submit" class="btn btn-success" id="UpdateGrades" name="send" value="UpdateGrades">Update Grades</button>
         </form>
     </div>
 {% endblock %}
