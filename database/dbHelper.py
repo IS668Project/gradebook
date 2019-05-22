@@ -173,7 +173,7 @@ def getClassRoster(classId):
     subquery = ClassRoster.query.with_entities(ClassRoster.student_id) \
                                 .filter_by(class_id=classId).all()
     studentsNotEnrolled = Student.query.filter(Student.student_id.
-                                      notin_(subquery)).all()
+                                      notin_(subquery)).order_by(Student.last_name, Student.first_name).all()
     classData = Class.query.get(classId)
     return (results, studentsNotEnrolled, classData)
 
