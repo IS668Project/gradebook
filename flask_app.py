@@ -22,7 +22,7 @@ app.config['DEBUG'] = False
 app.secret_key = "E*2kd+2sMPSt<VgN,26y!"
 SESSION_TYPE = 'sqlalchemy'
 login_manager = LoginManager()
-login_manager.login_view = 'https://is668projectgradebook.pythonanywhere.com/login'
+login_manager.login_view = 'https://jsulliv2.pythonanywhere.com/login'
 login_manager.init_app(app)
 db.init_app(app)
 
@@ -211,6 +211,7 @@ def classRosterView(classId=''):
             deleteStudentAssignments(rosterId)
             deleteRow(ClassRoster, rosterId)
     return redirect(url_for('classRosterView', class_id=request.form['classId']))
+
 
 @app.route('/student_detail', methods=["GET"])
 @login_required

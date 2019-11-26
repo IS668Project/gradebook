@@ -1,3 +1,3 @@
-testDBEndPoint ='mysql://IS668ProjectGrad:youGetAnA2019!@IS668ProjectGradeBook.mysql.pythonanywhere-services.com/IS668ProjectGrad$gradebook_test'
+testDBEndPoint ='mysql://jsulliv2:youGetAnA2019!@jsulliv2.mysql.pythonanywhere-services.com/jsulliv2$gradebook_test'
 
-prodDBEndPoint = 'mysql://IS668ProjectGrad:youGetAnA2019!@IS668ProjectGradeBook.mysql.pythonanywhere-services.com/IS668ProjectGrad$gradebook'
+prodDBEndPoint = 'mysql://jsulliv2:youGetAnA2019!@jsulliv2.mysql.pythonanywhere-services.com/jsulliv2$gradebook'

@@ -14,7 +14,7 @@ from werkzeug.security import generate_password_hash, \
 class SQLAlchemy(_BaseSQLAlchemy):
     def apply_pool_defaults(self, app, options):
         super(SQLAlchemy, self).apply_pool_defaults(app, options)
-        options["pool_pre_ping"] = True
+        # options["pool_pre_ping"] = True
 
 
 db = SQLAlchemy()
@@ -27,7 +27,7 @@ class Major(db.Model):
 
     def __repr__(self):
         return ("<majors('major_id'={}, \
-                'major_name'={},>".format(self.major_id, 
+                'major_name'={},>".format(self.major_id,
                                           self.major_name))
 
 
@@ -233,7 +233,7 @@ class AssignmentGrade(db.Model):
                  'max_points'={},\
                  'class_name'={}, \
                  'class_abbrv'={},\
-                 'class_id'={}>".format(self.assign_grade_id, 
+                 'class_id'={}>".format(self.assign_grade_id,
                                            self.student_id,
                                            self.assignment_id,
                                            self.score,
