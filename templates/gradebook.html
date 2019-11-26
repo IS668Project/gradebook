@@ -1,0 +1,165 @@
+{% extends "basePage.html" %}
+{% block title %}Gradebook{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var origData = {};
+            /* build array of grade data upon page load
+               used for determining what data to send during post */
+            $('#gradebookTable tr').each(function() {
+                $(this).find("input").each(function() {
+                    if ($(this).attr('name').slice(0,5) == 'grade') {
+                            var assign_grade_id = $(this).attr('name').slice(6);
+                            var value = $(this).val();
+                        origData[assign_grade_id] = value;
+                    }
+                });
+            });
+            var table = $('#gradebookTable').DataTable();
+            $('td:nth-child(1), th:nth-child(1)').hide();
+            /* over-rides form post call. builds array of all grades,
+               compares to array built during page load.
+               submits ajax post only containing modified data, reload page */
+            $('#gradebookForm').on('submit', function(e){
+                e.preventDefault();
+                var newData = [];
+                var submitData = {};
+                //build array of data again
+                $('#gradebookTable tr').each(function() {
+                    $(this).find("input").each(function() {
+                        if ($(this).attr('name').slice(0,5) == 'grade') {
+                            var assign_grade_id = $(this).attr('name').slice(6);
+                            var value = $(this).val();
+                            newData.push({[assign_grade_id]: value});
+                        }
+                    });
+                });
+                /* compare modified with orig, append any changed data
+                   to submit array */
+                $(newData).each(function(i, v) {
+                    var key = Object.keys(v)[0];
+                    if(origData[key] != v[key]) {
+                        submitData['grade,'+key] = v[key];
+                    }
+                });
+                //if modified data send post ajax with modified data
+                if (Object.keys(submitData).length > 0){
+                    submitData['class_id'] = "{{classData.class_id}}";
+                    $.ajax({
+                        type: "POST",
+                        url: "/gradebook",
+                        data: submitData,
+                        dataType: "json",
+                    });
+                    setTimeout(function (){
+                    location.reload();
+                    }, 1000);
+                }
+            });
+        });
+        function checkInput(gradeId) {
+            var input = document.getElementById(gradeId);
+            if (input.value > input.max) {
+                $(input).css("background-color", "red");
+                alert("Score entered exceeds max score for assignment.");
+            } else {
+                $(input).css("background-color", "transparent");
+            }
+        }
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="pagetitle">
+        <h1>Gradebook For {{classData.class_name}}: {{classData.class_semester}}, {{classData.class_year}}</h1>
+    </div>
+
+    <div class="container">
+        <form class="form-horizontal" name="gradebookForm" id="gradebookForm" action="/gradebook" method="POST">
+            <button type="submit" class="btn btn-success" id="UpdateGrades" name="send" value="UpdateGrades" style="margin-bottom: .5em;">Update Grades</button>
+            <table id="gradebookTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="student_name" data-sort-order="desc">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Due Date</th>
+                        {% for header in headerList %}
+                            <th>{{header.dueDate}}</th>
+                        {% endfor %}
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>Max Points</th>
+                        {% for header in headerList %}
+                            <th>{{header.maxPoints}}</th>
+                        {% endfor %}
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th data-field="student_id" data-sortable="false">
+                            Student Id
+                        </th>
+                        <th data-field="studentName" data-sortable="true">
+                            Student Name
+                        </th>
+                        {% for header in headerList %}
+                            <th data-field="{{header.name}}" value="{{header.id}}" data-sortable="false">
+                                {{header.name}}
+                            </th>
+                        {% endfor %}
+                        <th data-field="totalScore" data-sortable="true">
+                            Total Possible Points
+                        </th>
+                        <th data-field="maxPoints" data-sortable="true">
+                            Total Score
+                        </th>
+                        <th data-field="gradePercent" data-sortable="true">
+                            Percentage
+                        </th>
+                        <th data-field="letterGrade" data-sortable="true">
+                            Letter Grade
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set listlen = studentList|length %}
+                    {% for student in studentList %}
+                        <!-- to be used in setting tab order !-->
+                        {% set i = loop.index %}
+                        <tr>
+                            <td name="student_id" value="{{student.student_id}}"></td>
+                            <td>
+                                {{student.name}}
+                            </td>
+                            {% for score in student.scores %}
+                                <!-- set tab order to vertical instead of horizontal !-->
+                                {% set tab= i + (listlen * loop.index) %}
+                                <td>
+                                    <input id="{{score.assign_grade_id}}" name="grade,{{score.assign_grade_id}}" type="number" value="{{score.assign_score}}" tabindex= {{tab}} max="{{score.assign_max_points}}" min=0 onblur="checkInput({{score.assign_grade_id}})">
+                                </td>
+                            {% endfor %}
+                            <td name="totalPoints">
+                                {{student.totalPoints}}
+                            </td>
+                            <td name="totalScore">
+                                {{student.studentScore}}
+                            </td>
+                            <td name="gradePercent">
+                                {{student.gradePercent}}%
+                            </td>
+                            <td name="letterGrade">
+                                {{student.letterGrade}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="hidden" value="{{classData.class_id}}" name="classId">
+        </form>
+    </div>
+{% endblock %}

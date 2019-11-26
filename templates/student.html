@@ -1,0 +1,150 @@
+{% extends "basePage.html" %}
+{% block title %}Students{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#studentTable').DataTable({
+                'order': [[3, 'asc']]
+            });
+            //for current student modal launch populate fields with row data
+            $('#studentTable tbody').on('click', 'tr', function(e){
+                if (e.target.tagName == 'A') return;
+                var rowdata = table.row(this).data();
+                $("#student_id").val(table.row(this).data()[1]);
+                $("#first_name").val(table.row(this).data()[2]);
+                $("#last_name").val(table.row(this).data()[3]);
+                $("#email_address").val($.parseHTML(table.row(this).data()[4])[0].firstChild.data);
+                var major = table.row(this).data()[5];
+                var i;
+                for(i=0; i < major_id.length; i++){
+                    if (major_id[i].text == major){
+                        major_id[i].selected = true;
+                        break;
+                    }
+                }
+                $("#AddStudent").hide();
+                $("#UpdateStudent").show();
+                $("#DeleteStudent").show();
+                $("#studentModal").modal("show");
+            });
+            $(".trigger_modal").click(function(){
+                $("#student_id").val('');
+                $("#first_name").val('');
+                $("#last_name").val('');
+                $("#email_address").val('');
+                major_id[0].selected = true;
+                $("#AddStudent").show();
+                $("#UpdateStudent").hide();
+                $("#DeleteStudent").hide();
+                $('#studentModal').modal("show");
+            });
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="pagetitle">
+        <h1>Students</h1>
+    </div>
+
+    <div class="container">
+        <button class="btn btn-success" style="margin-bottom: 15px;"><a class="trigger_modal">Add New Student</a></button>
+        <table id="studentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
+            <thead>
+                <tr>
+                    <th data-field="editButton" data-sortable="false"></th>
+                    <th data-field="student_id" data-sortable="true">Student ID</th>
+                    <th data-field="first_name" data-sortable="true">First Name</th>
+                    <th data-field="last_name" data-sortable="true">Last Name</th>
+                    <th data-field="email_address" data-sortable="true">Email Address</th>
+                    <th data-field="major" data-sortable="true">Major</th>
+                    <th data-field="student_detail" data-sortable="false"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                        <td><img class="editButton" src="/static/images/edit-button.png" alt="Edit"></img></td>
+                        <td>{{student.student_id}}</td>
+                        <td>{{student.first_name}}</td>
+                        <td>{{student.last_name}}</td>
+                        <td><a href="mailto:{{student.email_address}}">{{student.email_address}}</a></td>
+                        <td>{{student.majors.major_name}}</td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/student_detail?student_id={{student.student_id}}">Student Detail</a></button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="studentModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" data-dismiss="modal"> <small>Back</small></a> <span id="myModalLabel" style="margin-left:20px;"><font size="+2"><b>Student View</b></font></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" method="POST" action="/student" >
+                        <fieldset id="modal_form">
+                            <div class="form-group">
+                                <input type="number" class="form-cont" id="student_id" name="student_id" style="display: none;" value=0 readonly>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="first_name">First Name</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <input type="text" class="form-cont" id="first_name" name="first_name" placeholder="Enter First Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4"><label for="last_name">Last Name</label></div>
+                                    <div class="col-md-5.ml-auto"><input type="text" class="form-cont" id="last_name" name="last_name" placeholder="Enter Last Name"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="email_address">Email Address</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <input type="email" class="form-cont" id="email_address" name="email_address" placeholder="Enter Email Address">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="majors">Major</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <select class="form-control" id="major_id" name="major_id">
+                                            <option selected disabled>--Select Major--</option>
+                                            {% for major in majorData %}
+                                                <option value="{{major.major_id}}">
+                                                    {{major.major_name}}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <button type="submit" name="send" id="AddStudent" value="AddStudent" class="btn btn-success">
+                            Add Student
+                        </button>
+                        <button type="submit" name="send" id="UpdateStudent" value="UpdateStudent" class="btn btn-secondary" style="display: none;">
+                            Update Student
+                        </button>
+                        <button type="submit" name="send" id="DeleteStudent" value="DeleteStudent" class="btn btn-danger">
+                            Delete Student
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

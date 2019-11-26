@@ -1,0 +1,71 @@
+{% extends "basePage.html" %}
+{% block title %}Student Detail{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var classtable = $('#classEnrollment').DataTable();
+            var assignementtable = $('#assignmentInfo').DataTable();
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="pagetitle">
+        <h1>Student Detail</h1>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                Student Id: {{studentInfo.student_id}}<br>
+                Name: {{studentInfo.first_name}} {{studentInfo.last_name}}<br>
+                Email Address: <a href="mailto:{{studentInfo.email_address}}"> {{studentInfo.email_address}}</a><br>
+                Major: {{studentInfo.majors.major_name}}<br>
+            </div>
+        </div>
+        <br>
+        <table id="classEnrollment" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_abbrv" data-sort-order="desc">
+            <thead>
+                <tr>
+                    <th data-field="class_name" data-sortable="true">Class Name</th>
+                    <th data-field="class_abbr" data-sortable="true">Class Abbreviation</th>
+                    <th data-field="class_semester" data-sortable="true">Class Semester</th>
+                    <th data-field="class_year" data-sortable="true">Class Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for class in studentInfo.class_roster %}
+                    <tr>
+                        <td>{{class.course.class_name}}</td>
+                        <td>{{class.course.class_abbrv}}</td>
+                        <td>{{class.course.class_semester}}</td>
+                        <td>{{class.course.class_year}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br><br>
+        <table id="assignmentInfo" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_name" data-sort-order="desc">
+            <thead>
+                <tr>
+                    <th data-field="class_name" data-sortable="true">Class Name</th>
+                    <th data-field="assignment_name" data-sortable="true">Assignment Name</th>
+                    <th data-field="max_points" data-sortable="true">Max Points</th>
+                    <th data-field="grade" data-sortable="true">Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in studentInfo.assignment_grades %}
+                    <tr>
+                        <td>{{assignment.Assignment.Class.class_name}}</td>
+                        <td>{{assignment.Assignment.name}}</td>
+                        <td>{{assignment.Assignment.max_points}}</td>
+                        <td>{{assignment.score}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <br>
+    </div>
+{% endblock %}

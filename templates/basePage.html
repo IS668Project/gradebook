@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css" rel="stylesheet" />
+    <script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js"></script>
+    <script src="/static/js/gradebook.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/gradebook.css">
+    {% block css %}{% endblock %}
+    {% block js %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a class="navbar-brand" href="#">JS2 Gradebook</a>
+            <ul class="navbar-nav">
+                <li class="nav-item active"><a class="nav-link" href="{{url_for('homeView')}}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('classView')}}">Class</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{url_for('studentView')}}">Student</a></li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                    {% if current_user.is_authenticated %}
+                        <li><a class="nav-link" href="{{url_for('logout')}}">Log out</a></li>
+                        <li><a class="nav-link" href="{{url_for('changePassword')}}">Change password</a></li>
+                    {% else %}
+                        <li><a class="nav-link" href="{{url_for('login')}}">Log in</a></li>
+                    {% endif %}
+            </ul>
+        </div>
+    </nav>
+<div class="footer">
+  <p>Published by the JS2 Group, Inc.  Copyright. </p>
+</div>
+    {% block body %}{% endblock %}
+
+</body>
+</html>

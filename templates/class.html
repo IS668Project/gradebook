@@ -1,0 +1,168 @@
+{% extends "basePage.html" %}
+{% block title %}Classes{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#classTable').DataTable({
+                'order': [[2, 'asc']]
+            });
+            //hide id columns
+            $('td:nth-child(7), th:nth-child(7)').hide();
+            $('#classTable tbody').on('click', 'tr', function(e){
+                if (e.target.tagName == 'A') return;
+                var rowdata = table.row(this).data();
+                //for current class modal launch populate fields with row data
+                $("#class_id").val(table.row(this).data()[1]);
+                $("#class_abbrv").val(table.row(this).data()[2]);
+                $("#class_name").val(table.row(this).data()[3]);
+                $("#class_semester").val(table.row(this).data()[4]);
+                $("#class_year").val(table.row(this).data()[5]);
+                $("textarea#class_description").text(table.row(this).data()[6]);
+                $("#AddClass").hide();
+                $("#UpdateClass").show();
+                $("#DeleteClass").show();
+                $("#classModal").modal("show");
+            });
+            //on modal launch for new entity clear all variables.
+            $(".trigger_modal").click(function(){
+                $("#class_id").val('');
+                $("#class_abbrv").val('');
+                $("#class_name").val('');
+                $("#class_semester").val('');
+                $("#class_year").val('');
+                $("textarea#class_description").text('');
+                $("#AddClass").show();
+                $("#UpdateClass").hide();
+                $("#DeleteClass").hide();
+                $('#classModal').modal("show");
+            });
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="pagetitle">
+        <h1>Classes</h1>
+    </div>
+    <div class="container">
+        <button class="btn btn-success" style="margin-bottom: 15px"><a class="trigger_modal">Add New Class</a></button>
+        <table id="classTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="class_abbrv" data-sort-order="desc">
+            <thead>
+                <tr>
+                    <th data-field="edit-button" data-sortable="false"></th>
+                    <th data-field="class_id" data-sortable="true">Class ID</th>
+                    <th data-field="class_abbrv" data-sortable="true">Class Abbreviation</th>
+                    <th data-field="class_name" data-sortable="true">Class Name</th>
+                    <th data-field="class_semester" data-sortable="true">Class Semester</th>
+                    <th data-field="class_year" data-sortable="true">Class Year</th>
+                    <th data-field="class_description" data-sortable="true">Class Description</th>
+                    <th data-field="assignments" data-sortable="false">Assignments</th>
+                    <th data-field="class_roster" data-sortable="false">Student Roster</th>
+                    <th data-field="gradebook" data-sortable="false">Gradebook</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for class in classes %}
+                    <tr>
+                        <td><img class="editButton" src="/static/images/edit-button.png" alt="Edit"></img></td>
+                        <td>{{class.class_id}}</td>
+                        <td>{{class.class_abbrv}}</td>
+                        <td>{{class.class_name}}</td>
+                        <td>{{class.class_semester}}</td>
+                        <td>{{class.class_year}}</td>
+                        <td style="display:none;">{{class.class_description}}</td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/assignments?class_id={{class.class_id}}">Assignments</a></button></td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/class_roster?class_id={{class.class_id}}">Class Roster</a></button></td>
+                        <td><button class="btn btn-primary"><a style="color:white;" href="/gradebook?class_id={{class.class_id}}">Gradebook</a></button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="classModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" data-dismiss="modal"> 
+                        <small>Back</small>
+                    </a> 
+                    <span id="myModalLabel" style="margin-left:20px;">
+                        <font size="+2">
+                            <b>Class View</b>
+                        </font>
+                    </span>
+                </div>
+            <div class="modal-body">
+                <form class="form-horizontal" method="POST" action="/class" >
+                    <fieldset id="modal_form">
+                        <div class="form-group">
+                            <input type="number" class="form-cont" id="class_id" name="class_id" style="display: none;" value=0 readonly>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_abbrv">Class Abbreviation</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                    <input type="text" class="form-cont" id="class_abbrv" name="class_abbrv" placeholder="Enter Class Abbreviation">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_name">Class Name</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                    <input type="text" class="form-cont" id="class_name" name="class_name" placeholder="Enter Class Name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_description">Class Description</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                    <textarea class="form-cont" id="class_description" name="class_description" rows="5" cols="35"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_semester">Semester</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                   <div class="col-md-5.ml-auto">
+                                        <input type="text" class="class_semester" id="class_semester" name="class_semester" placeholder="Enter Class Semester">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="class_year">Year</label>
+                                </div>
+                                <div class="col-md-5.ml-auto">
+                                   <div class="col-md-5.ml-auto">
+                                        <input type="number" class="class_year" id="class_year" name="class_year" placeholder="Enter Class Year">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <button type="submit" name="send" id="AddClass" value="AddClass" class="btn btn-success">
+                        Add Class
+                    </button>
+                    <button type="submit" name="send" id="UpdateClass" value="UpdateClass" class="btn btn-secondary">
+                        Update Class
+                    </button>
+                    <button type="submit" name="send" id="DeleteClass" value="DeleteClass" class="btn btn-danger">
+                        Delete Class
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

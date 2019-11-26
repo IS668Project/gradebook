@@ -1,0 +1,136 @@
+{% extends "basePage.html" %}
+{% block title %}Class Assignments{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#assignmentTable').DataTable();
+            //hide id columns
+            $('td:nth-child(2), th:nth-child(2)').hide();
+            $('td:nth-child(6), th:nth-child(6)').hide();
+            //modal launch for current assignment, populate modal with applicable data
+            $('#assignmentTable tbody').on('click', 'tr', function(){
+                var rowdata = table.row(this).data();
+                $("#assignment_id").val(table.row(this).data()[1]);
+                $("#assignment_name").val(table.row(this).data()[2]);
+                var date = table.row(this).data()[3];
+                var dArray = date.split("/");
+                var nDate = [dArray[2], dArray[0], dArray[1]].join('-');
+                $("#due_date").val(nDate);
+                $("#max_points").val(table.row(this).data()[4]);
+                $("textarea#assignment_description").text(table.row(this).data()[5]);
+                $("#AddAssignment").hide();
+                $("#UpdateAssignment").show();
+                $("#DeleteAssignment").show();
+                $("#assignmentModal").modal("show");
+            });
+            //clear variables for new assignment modal launch
+            $(".trigger_modal").click(function(){
+                $("#assignment_id").val('');
+                $("#assignment_name").val('');
+                $("#due_date").val('');
+                $("#max_points").val('');
+                $("textarea#assignment_description").text('');
+                $("#AddAssignment").show();
+                $("#UpdateAssignment").hide();
+                $("#DeleteAssignment").hide();
+                $('#assignmentModal').modal("show");
+            });
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="pagetitle">
+        <h1>Assignments for {{assignments.class_name}}: {{assignments.class_semester}}, {{assignments.class_year}}</h1>
+    </div>
+     <div class="container">
+        <button class="btn btn-success" style="margin-bottom: 15px;"><a class="trigger_modal">Add New Assignment</a></button>
+        <table id="assignmentTable" data-classes="table table-hover table-condensed" data-toggle="table" data-sort-name="last_name" data-sort-order="desc">
+            <thead>
+                <tr>
+                    <th data-field="edit-button" data-sortable="true"></th>
+                    <th data-field="assignment_id" data-sortable="true">Assignment ID</th>
+                    <th data-field="assignment_name" data-sortable="true">Assignment Name</th>
+                    <th data-field="assignment_due_date" data-sortable="true">Due Date</th>
+                    <th data-field="max_points" data-sortable="true">Max Points</th>
+                    <th data-field="description" data-sortable="true">Assignment Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assignments.assignment %}
+                    <tr class="clickable-row" data-toggle="modal" data-target="#editModal" style="cursor:pointer">
+                        <td><img class="editButton" src="/static/images/edit-button.png" alt="Edit"></td>
+                        <td>{{assignment.assignment_id}}</td>
+                        <td>{{assignment.name}}</td>
+                        <td>{{assignment.assignment_due_date}}</td>
+                        <td>{{assignment.max_points}}</td>
+                        <td>{{assignment.description}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+     <div class="modal fade" id="assignmentModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" data-dismiss="modal"> <small>Back</small></a> <span id="myModalLabel" style="margin-left:20px;"><font size="+2"><b>Assignment View</b></font></span>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" method="POST" action="/assignments" >
+                        <fieldset id="modal_form">
+                            <div class="form-group">
+                                <input type="number" class="form-cont" style="display: none;" id="assignment_id" name="assignment_id" readonly value=0>
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-cont" style="display: none;" id="class_id" name="class_id" readonly value={{assignments.class_id}}>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="assignment_name">Assignment Name</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <input type="text" class="form-cont" id="assignment_name" name="assignment_name" placeholder="Enter Assignment Name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4"><label for="due_date">Due Date</label></div>
+                                    <div class="col-md-5.ml-auto"><input type="date" class="form-cont" id="due_date" name="due_date" placeholder="Enter Due Date"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4"><label for="max_points">Max Points</label></div>
+                                    <div class="col-md-5.ml-auto"><input type="number" class="form-cont" id="max_points" name="max_points" placeholder="Enter Max Points" required></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="assignment_description">Assignment Description</label>
+                                    </div>
+                                    <div class="col-md-5.ml-auto">
+                                        <textarea class="form-cont" id="assignment_description" name="assignment_description" rows="5" cols="35"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <button type="submit" name="send" id="AddAssignment" value="AddAssignment" class="btn btn-success">
+                            Add Assignment
+                        </button>
+                        <button type="submit" name="send" id="UpdateAssignment" value="UpdateAssignment" class="btn btn-secondary">
+                            Update Assignment
+                        </button>
+                        <button type="submit" name="send" id="DeleteAssignment" value="DeleteAssignment" class="btn btn-danger" >
+                            Delete Assignment
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
