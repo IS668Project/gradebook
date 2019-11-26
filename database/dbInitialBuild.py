@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '/home/IS668ProjectGradeBook/mysite')
+sys.path.insert(0, '/home/jsulliv2/gradebook')
 
 from datetime import datetime
 from flask import Flask
